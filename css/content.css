@@ -2445,3 +2445,238 @@
 	margin: 0;
 	max-width: 300px;
 }
+
+/* ── Pricing rows — cliquables + flèche + sous-titre ────────── */
+.pricing-row-link {
+	text-decoration: none;
+	display: block;
+}
+
+.pricing-row-sub {
+	font-style: normal;
+	font-size: 0.68em;
+	opacity: 0.45;
+	font-weight: 400;
+}
+
+.pricing-row-arrow {
+	display: inline-block;
+	font-size: 0.75em;
+	opacity: 0;
+	transform: translateX(-6px);
+	transition: opacity 0.25s ease, transform 0.25s ease;
+	color: #8c6144;
+	margin-left: 6px;
+}
+
+.pricing-row:hover .pricing-row-arrow {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.pricing-row-link:hover .pricing-row-title {
+	color: rgba(255,255,255,1);
+}
+
+/* Pricing note — plus lisible */
+.pricing-note {
+	margin-top: 48px;
+	padding: 20px 28px;
+	border: 1px solid rgba(255,255,255,0.1);
+	border-radius: 8px;
+	font-size: 13px;
+	color: rgba(255,255,255,0.55);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	background: rgba(255,255,255,0.03);
+}
+
+.pricing-note i {
+	color: #8c6144;
+	font-size: 15px;
+	flex-shrink: 0;
+}
+
+.pricing-note-link {
+	color: rgba(255,255,255,0.75);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	text-decoration-color: rgba(255,255,255,0.25);
+	transition: color 0.25s ease;
+}
+
+.pricing-note-link:hover {
+	color: #8c6144;
+}
+
+/* ── Tarifs CTA split ────────────────────────────────────────── */
+.tarifs-cta-split {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	min-height: 72vh;
+}
+
+.tarifs-cta-img {
+	position: relative;
+	overflow: hidden;
+}
+
+.tarifs-cta-img img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	filter: grayscale(100%) brightness(0.55);
+	transition: filter 0.6s ease;
+}
+
+.tarifs-cta-split:hover .tarifs-cta-img img {
+	filter: grayscale(80%) brightness(0.65);
+}
+
+.tarifs-cta-content {
+	background: #111;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 80px;
+}
+
+.tarifs-cta-eyebrow {
+	display: block;
+	font-size: 10px;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.28);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 28px;
+}
+
+.tarifs-cta-headline {
+	font-size: clamp(44px, 5vw, 76px);
+	line-height: 0.95;
+	color: #fff;
+	margin: 0 0 32px;
+}
+
+.tarifs-cta-pitch {
+	font-size: 14px;
+	line-height: 1.75;
+	color: rgba(255,255,255,0.38);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	max-width: 420px;
+	margin: 0 0 44px;
+}
+
+.tarifs-cta-actions {
+	display: flex;
+	align-items: center;
+	gap: 36px;
+	flex-wrap: wrap;
+}
+
+.tarifs-cta-link-sec {
+	font-size: 12px;
+	letter-spacing: 0.1em;
+	color: rgba(255,255,255,0.3);
+	text-decoration: none;
+	font-family: 'Poppins', sans-serif;
+	transition: color 0.3s ease;
+}
+
+.tarifs-cta-link-sec:hover {
+	color: rgba(255,255,255,0.75);
+}
+
+@media only screen and (max-width: 1024px) {
+	.tarifs-cta-split { grid-template-columns: 1fr; min-height: auto; }
+	.tarifs-cta-img { height: 45vw; }
+	.tarifs-cta-content { padding: 60px; }
+}
+
+@media only screen and (max-width: 767px) {
+	.tarifs-cta-img { height: 55vw; }
+	.tarifs-cta-content { padding: 40px 24px; }
+	.pricing-note { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ── About — section intro personnelle ──────────────────────── */
+.about-intro-wrap {
+	display: grid;
+	grid-template-columns: 280px 1fr;
+	gap: 80px;
+	align-items: start;
+}
+
+.about-intro-label {
+	display: block;
+	font-size: 10px;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.28);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 20px;
+}
+
+.about-intro-title {
+	font-size: clamp(60px, 8vw, 120px);
+	line-height: 0.9;
+	color: #fff;
+	margin: 0;
+}
+
+.about-intro-text {
+	font-size: 15px;
+	line-height: 1.8;
+	color: rgba(255,255,255,0.5);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	margin: 0 0 20px;
+}
+
+.about-intro-text strong {
+	color: rgba(255,255,255,0.85);
+	font-weight: 500;
+}
+
+.about-intro-text:last-of-type {
+	margin-bottom: 0;
+}
+
+.about-intro-actions {
+	margin-top: 36px;
+}
+
+.about-intro-vto {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 11px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: #8c6144;
+	text-decoration: none;
+	font-family: 'Poppins', sans-serif;
+	font-weight: 500;
+	border-bottom: 1px solid rgba(140,97,68,0.3);
+	padding-bottom: 4px;
+	transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.about-intro-vto:hover {
+	color: rgba(255,255,255,0.8);
+	border-color: rgba(255,255,255,0.2);
+}
+
+@media only screen and (max-width: 1024px) {
+	.about-intro-wrap { grid-template-columns: 200px 1fr; gap: 48px; }
+}
+
+@media only screen and (max-width: 767px) {
+	.about-intro-wrap { grid-template-columns: 1fr; gap: 32px; }
+	.about-intro-title { font-size: clamp(52px, 14vw, 80px); }
+}
