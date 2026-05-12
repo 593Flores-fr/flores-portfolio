@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  FLORES — Template Email (référence D.A.)                    ║
+  ║  À connecter via EmailJS ou service d'envoi personnalisé.    ║
+  ║  Variables à remplacer : {{name}}, {{email}}, {{service}},   ║
+  ║  {{message}}, {{date}}                                       ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouveau message — Flores Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: #0a0a0a;
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #fff;
+    padding: 40px 20px;
+  }
+
+  .email-wrapper {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .email-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 40px;
+  }
+
+  .email-logo {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    font-weight: 500;
+  }
+
+  .email-badge {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8c6144;
+    background: rgba(140,97,68,0.12);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(140,97,68,0.25);
+  }
+
+  /* Titre */
+  .email-title {
+    font-size: 48px;
+    font-weight: 300;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+
+  .email-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+  }
+
+  /* Meta infos */
+  .email-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .email-meta-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+
+  .email-meta-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .email-meta-value {
+    font-size: 14px;
+    color: #fff;
+    font-weight: 400;
+  }
+
+  .email-meta-value a {
+    color: #8c6144;
+    text-decoration: none;
+  }
+
+  /* Service tag */
+  .email-service-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #8c6144;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-bottom: 32px;
+  }
+
+  /* Bulle message */
+  .email-bubble-wrap {
+    margin-bottom: 32px;
+  }
+
+  .email-bubble-from {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+  }
+
+  .email-bubble {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0 18px 18px 18px;
+    padding: 24px 28px;
+    position: relative;
+  }
+
+  .email-bubble::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: 2px;
+    height: 40px;
+    background: #8c6144;
+    border-radius: 2px;
+  }
+
+  .email-bubble-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.75);
+    font-weight: 300;
+    white-space: pre-wrap;
+  }
+
+  /* Fichiers */
+  .email-files {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+  }
+
+  .email-files-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .email-file-item {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .email-file-item:last-child { border-bottom: none; }
+
+  /* CTA */
+  .email-cta {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .email-cta-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .email-cta-note {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* Footer */
+  .email-footer {
+    text-align: center;
+    padding-top: 24px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+
+  <!-- Header -->
+  <div class="email-header">
+    <span class="email-logo">Flores — Portfolio</span>
+    <span class="email-badge">Nouveau message</span>
+  </div>
+
+  <!-- Titre -->
+  <h1 class="email-title">Nouveau<br>contact.</h1>
+  <p class="email-subtitle">Reçu le {{date}} via flores-portfolio.fr</p>
+
+  <!-- Meta -->
+  <div class="email-meta">
+    <div class="email-meta-item">
+      <span class="email-meta-label">Nom</span>
+      <span class="email-meta-value">{{name}}</span>
+    </div>
+    <div class="email-meta-item">
+      <span class="email-meta-label">Email</span>
+      <span class="email-meta-value"><a href="mailto:{{email}}">{{email}}</a></span>
+    </div>
+  </div>
+
+  <!-- Service -->
+  <span class="email-service-tag">{{service}}</span>
+
+  <!-- Message bulle -->
+  <div class="email-bubble-wrap">
+    <p class="email-bubble-from">Message de {{name}}</p>
+    <div class="email-bubble">
+      <p class="email-bubble-text">{{message}}</p>
+    </div>
+  </div>
+
+  <!-- Fichiers joints (si présents) -->
+  <div class="email-files">
+    <span class="email-files-label">Fichiers joints</span>
+    <div class="email-file-item">📎 fichier-reference-1.jpg</div>
+    <div class="email-file-item">📎 moodboard.png</div>
+  </div>
+
+  <!-- CTA répondre -->
+  <div class="email-cta">
+    <a href="mailto:{{email}}" class="email-cta-btn">Répondre à {{name}}</a>
+    <p class="email-cta-note">Ce message a été envoyé depuis le formulaire de contact flores-portfolio.fr</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="email-footer">
+    Flores · Graphiste & Développeur Web · France<br>
+    © 2024 — Ne pas répondre directement à cet email système.
+  </div>
+
+</div>
+</body>
+</html>
