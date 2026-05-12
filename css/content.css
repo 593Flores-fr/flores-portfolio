@@ -2983,6 +2983,39 @@
 	.page-contact #hero-caption.height-title { height: 45vh; }
 }
 
+/* ── About — hero masqué, sidebar sticky ────────────────────── */
+.page-about #hero { display: none; }
+
+.page-about #main-content .content-row:first-child {
+	padding-top: 130px;
+}
+
+.about-intro-left {
+	position: sticky;
+	top: 110px;
+}
+
+.about-intro-meta {
+	font-size: 11px;
+	color: rgba(255,255,255,0.22);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	line-height: 1.8;
+	letter-spacing: 0.04em;
+	margin-top: 16px;
+}
+
+.about-intro-side-rule {
+	width: 32px;
+	height: 1px;
+	background: rgba(255,255,255,0.1);
+	margin: 20px 0;
+}
+
+@media only screen and (max-width: 1024px) {
+	.about-intro-left { position: static; }
+}
+
 /* ── About — section intro personnelle ──────────────────────── */
 .about-intro-wrap {
 	display: grid;
