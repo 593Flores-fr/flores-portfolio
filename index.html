@@ -101,14 +101,14 @@
                                     <div class="inner">
                                         <!-- Eyebrow + disponible groupés, au-dessus du titre -->
                                         <div class="hero-top-info">
+                                            <div class="hero-avail-badge">
+                                                <span class="hero-available-dot"></span>
+                                                <span class="hero-avail-text">Disponible</span>
+                                            </div>
                                             <div class="hero-eyebrow">
                                                 <span>Graphiste & Développeur Web</span>
                                                 <i class="hero-eyebrow-sep"></i>
                                                 <span>Basé en France</span>
-                                            </div>
-                                            <div class="hero-avail-badge">
-                                                <span class="hero-available-dot"></span>
-                                                <span class="hero-avail-text">Disponible</span>
                                             </div>
                                         </div>
                                         <h1 class="hero-title caption-timeline primary-font-title"><span>Flores</span></h1>
@@ -449,5 +449,39 @@
     <script src="js/common.js"></script>
     <script src="js/contact.js"></script>
     <script src="js/scripts.js"></script>
+
+    <!-- ── Side Nav ────────────────────────────────────────────── -->
+    <nav class="side-nav" aria-label="Navigation principale">
+        <a href="index.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Accueil</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="index-showcase-gallery.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Portfolio</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="tarifs.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Tarifs</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="about.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">À Propos</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="contact.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Contact</span>
+            <span class="side-nav-dot"></span>
+        </a>
+    </nav>
+    <script>
+    (function(){
+        var p = window.location.pathname.split('/').pop() || 'index.html';
+        if (!p || p === '') p = 'index.html';
+        document.querySelectorAll('.side-nav-item').forEach(function(a){
+            if (a.getAttribute('href') === p) a.classList.add('is-active');
+        });
+    })();
+    </script>
+    <!-- /Side Nav -->
 </body>
 </html>

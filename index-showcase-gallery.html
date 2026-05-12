@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -478,6 +478,40 @@
 
 
 
+
+    <!-- ── Side Nav ────────────────────────────────────────────── -->
+    <nav class="side-nav" aria-label="Navigation principale">
+        <a href="index.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Accueil</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="index-showcase-gallery.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Portfolio</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="tarifs.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Tarifs</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="about.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">À Propos</span>
+            <span class="side-nav-dot"></span>
+        </a>
+        <a href="contact.html" class="ajax-link side-nav-item" data-type="page-transition">
+            <span class="side-nav-label">Contact</span>
+            <span class="side-nav-dot"></span>
+        </a>
+    </nav>
+    <script>
+    (function(){
+        var p = window.location.pathname.split('/').pop() || 'index.html';
+        if (!p || p === '') p = 'index.html';
+        document.querySelectorAll('.side-nav-item').forEach(function(a){
+            if (a.getAttribute('href') === p) a.classList.add('is-active');
+        });
+    })();
+    </script>
+    <!-- /Side Nav -->
 </body>
 
 </html>

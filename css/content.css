@@ -3581,6 +3581,82 @@
 	.cf-sidebar-title { font-size: clamp(52px, 6vw, 80px); }
 }
 
+/* ── Side Navigation ─────────────────────────────────────────── */
+.side-nav {
+	position: fixed;
+	right: 28px;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 900;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	align-items: flex-end;
+}
+
+.side-nav-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	text-decoration: none;
+	cursor: pointer;
+	padding: 3px 0;
+}
+
+.side-nav-dot {
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: rgba(255,255,255,0.2);
+	flex-shrink: 0;
+	transition: background 0.3s ease, transform 0.35s ease;
+}
+
+.side-nav-label {
+	font-size: 9px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0);
+	font-family: 'Poppins', sans-serif;
+	opacity: 0;
+	transform: translateX(8px);
+	transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+	white-space: nowrap;
+	pointer-events: none;
+}
+
+.side-nav-item:hover .side-nav-label {
+	opacity: 1;
+	transform: translateX(0);
+	color: rgba(255,255,255,0.65);
+}
+
+.side-nav-item:hover .side-nav-dot {
+	background: #8c6144;
+	transform: scale(1.5);
+}
+
+.side-nav-item.is-active .side-nav-dot {
+	background: rgba(255,255,255,0.55);
+	transform: scale(1.3);
+}
+
+.side-nav-item.is-active .side-nav-label {
+	opacity: 1;
+	transform: translateX(0);
+	color: rgba(255,255,255,0.4);
+}
+
+/* Cache le burger sur desktop, garde le side nav */
+@media only screen and (min-width: 1025px) {
+	.button-wrap.burger-lines { display: none !important; }
+}
+
+/* Mobile : burger visible, side nav caché */
+@media only screen and (max-width: 1024px) {
+	.side-nav { display: none; }
+}
+
 /* ── Page CTA strip (remplace #page-nav partout) ─────────────── */
 .page-cta-strip {
 	background: #0c0c0c;
