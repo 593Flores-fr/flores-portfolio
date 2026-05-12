@@ -109,100 +109,108 @@
                 <div id="main-content">
                 <div id="main-page-content" class="content-max-width">
 
-                    <!-- Formulaire complet -->
-                    <div class="content-row row_padding_top row_padding_bottom dark-section" data-bgcolor="#0c0c0c">
+                    <div class="content-row dark-section cf-page-split" data-bgcolor="#0c0c0c">
 
-                        <!-- Intro -->
-                        <div class="cf-intro">
-                            <span class="cf-intro-wave">👋</span>
-                            <div>
-                                <p class="cf-intro-title">Un projet en tête ?</p>
-                                <p class="cf-intro-sub">Remplissez le formulaire — je reviens vers vous personnellement sous 24h, pas de robot.</p>
+                        <!-- ─── Sidebar gauche ─────────────────────── -->
+                        <div class="cf-sidebar">
+                            <div class="cf-sidebar-badge">
+                                <span class="hero-available-dot"></span>
+                                <span>Disponible</span>
                             </div>
+                            <h1 class="cf-sidebar-title primary-font-title">HELLO.</h1>
+                            <p class="cf-sidebar-sub">Devis gratuit<br>Réponse sous 24h<br>Pas de robot.</p>
+                            <div class="cf-sidebar-rule"></div>
+                            <p class="cf-sidebar-hint">Retrouvez-moi sur</p>
+                            <div class="cf-sidebar-socials">
+                                <a href="https://discord.gg/9aDugrJyr5" target="_blank" class="cf-sidebar-social" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                                <a href="https://www.instagram.com/593floores/" target="_blank" class="cf-sidebar-social" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="https://www.tiktok.com/@593flores" target="_blank" class="cf-sidebar-social" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                                <a href="https://www.behance.net/flores_notion" target="_blank" class="cf-sidebar-social" aria-label="Behance"><i class="fa-brands fa-behance"></i></a>
+                            </div>
+                            <a href="mailto:593maldito@gmail.com" class="cf-sidebar-email">593maldito@gmail.com</a>
                         </div>
 
-                        <!-- Formulaire -->
-                        <form id="cf-form" action="https://formspree.io/f/xqazvbjn" method="POST" enctype="multipart/form-data">
+                        <!-- ─── Zone formulaire ────────────────────── -->
+                        <div class="cf-form-area">
 
-                            <!-- 01 Service -->
-                            <div class="cf-block">
-                                <span class="cf-block-label"><em>01</em> Quel service vous intéresse ?</span>
-                                <div class="cf-service-grid">
-                                    <label class="cf-pill"><input type="radio" name="service" value="Identité Visuelle"><span>Identité Visuelle</span></label>
-                                    <label class="cf-pill"><input type="radio" name="service" value="Site Web"><span>Site Web</span></label>
-                                    <label class="cf-pill"><input type="radio" name="service" value="Cover Art"><span>Cover Art</span></label>
-                                    <label class="cf-pill"><input type="radio" name="service" value="Pack Stream"><span>Pack Stream</span></label>
-                                    <label class="cf-pill"><input type="radio" name="service" value="Direction Artistique"><span>Direction Artistique</span></label>
-                                    <label class="cf-pill"><input type="radio" name="service" value="Accompagnement Artistes"><span>Accompagnement Artistes</span></label>
-                                    <label class="cf-pill"><input type="radio" name="service" value="Autre"><span>Autre</span></label>
+                            <form id="cf-form" action="https://formspree.io/f/xqazvbjn" method="POST" enctype="multipart/form-data">
+
+                                <!-- 01 Service -->
+                                <div class="cf-block">
+                                    <span class="cf-block-label"><em>01</em> Quel service vous intéresse ?</span>
+                                    <div class="cf-service-grid">
+                                        <label class="cf-pill"><input type="radio" name="service" value="Identité Visuelle"><span>Identité Visuelle</span></label>
+                                        <label class="cf-pill"><input type="radio" name="service" value="Site Web"><span>Site Web</span></label>
+                                        <label class="cf-pill"><input type="radio" name="service" value="Cover Art"><span>Cover Art</span></label>
+                                        <label class="cf-pill"><input type="radio" name="service" value="Pack Stream"><span>Pack Stream</span></label>
+                                        <label class="cf-pill"><input type="radio" name="service" value="Direction Artistique"><span>Direction Artistique</span></label>
+                                        <label class="cf-pill"><input type="radio" name="service" value="Accompagnement Artistes"><span>Accompagnement Artistes</span></label>
+                                        <label class="cf-pill"><input type="radio" name="service" value="Autre"><span>Autre</span></label>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- 02-03 Nom + Email -->
-                            <div class="cf-block cf-row-2">
-                                <div class="cf-field">
-                                    <label class="cf-block-label" for="cf-name"><em>02</em> Votre nom</label>
-                                    <input name="name" type="text" id="cf-name" placeholder="Comment vous appelez-vous ?" required>
+                                <!-- 02-03 Nom + Email -->
+                                <div class="cf-block cf-row-2">
+                                    <div class="cf-field">
+                                        <label class="cf-block-label" for="cf-name"><em>02</em> Votre nom</label>
+                                        <input name="name" type="text" id="cf-name" placeholder="Comment vous appelez-vous ?" required>
+                                    </div>
+                                    <div class="cf-field">
+                                        <label class="cf-block-label" for="cf-email"><em>03</em> Votre email</label>
+                                        <input name="email" type="email" id="cf-email" placeholder="Votre adresse mail" required>
+                                    </div>
                                 </div>
-                                <div class="cf-field">
-                                    <label class="cf-block-label" for="cf-email"><em>03</em> Votre email</label>
-                                    <input name="email" type="email" id="cf-email" placeholder="Votre adresse mail" required>
+
+                                <!-- 04 Discord (optionnel) -->
+                                <div class="cf-block">
+                                    <label class="cf-block-label" for="cf-discord">
+                                        <em>04</em> Votre Discord
+                                        <span class="cf-optional">— pour un contact encore plus rapide</span>
+                                    </label>
+                                    <div class="cf-discord-field">
+                                        <span class="cf-discord-icon"><i class="fa-brands fa-discord"></i></span>
+                                        <input name="discord" type="text" id="cf-discord" placeholder="NomUtilisateur ou lien de serveur">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- 04 Message -->
-                            <div class="cf-block">
-                                <label class="cf-block-label" for="cf-message"><em>04</em> Votre message</label>
-                                <textarea name="message" id="cf-message" rows="7" placeholder="Décrivez votre projet — objectifs, vision, délais, budget approximatif..." required></textarea>
-                            </div>
-
-                            <!-- 05 Drag & drop -->
-                            <div class="cf-block">
-                                <span class="cf-block-label"><em>05</em> Fichiers de référence <span class="cf-optional">— facultatif · 3 fichiers max · 50 Mo chacun</span></span>
-                                <div class="cf-drop-zone" id="cfDropZone">
-                                    <div class="cf-drop-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                                    <p class="cf-drop-text">Glissez vos images ici</p>
-                                    <p class="cf-drop-hint">ou <button type="button" id="cfPickBtn">parcourez vos fichiers</button></p>
-                                    <input type="file" id="cfFileInput" name="files" multiple accept="image/*,.pdf">
-                                    <div class="cf-files-list" id="cfFileList"></div>
+                                <!-- 05 Message -->
+                                <div class="cf-block">
+                                    <label class="cf-block-label" for="cf-message"><em>05</em> Votre message</label>
+                                    <textarea name="message" id="cf-message" rows="6" placeholder="Décrivez votre projet — objectifs, vision, délais, budget approximatif..." required></textarea>
                                 </div>
-                                <div class="cf-drop-error" id="cfDropError"></div>
-                            </div>
 
-                            <!-- Submit -->
-                            <div class="cf-block cf-submit-row">
-                                <div id="cf-feedback"></div>
-                                <div class="cf-submit-wrap">
-                                    <div class="clapat-button-wrap parallax-wrap link">
-                                        <div class="clapat-button parallax-element">
-                                            <div class="button-border rounded outline">
-                                                <button type="submit" class="send_message" id="cf-submit">Envoyer le message</button>
+                                <!-- 06 Drag & drop -->
+                                <div class="cf-block">
+                                    <span class="cf-block-label"><em>06</em> Fichiers de référence <span class="cf-optional">— facultatif · 3 fichiers max · 50 Mo chacun</span></span>
+                                    <div class="cf-drop-zone" id="cfDropZone">
+                                        <div class="cf-drop-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                        <p class="cf-drop-text">Glissez vos images ici</p>
+                                        <p class="cf-drop-hint">ou <button type="button" id="cfPickBtn">parcourez vos fichiers</button></p>
+                                        <input type="file" id="cfFileInput" name="files" multiple accept="image/*,.pdf">
+                                        <div class="cf-files-list" id="cfFileList"></div>
+                                    </div>
+                                    <div class="cf-drop-error" id="cfDropError"></div>
+                                </div>
+
+                                <!-- Submit -->
+                                <div class="cf-block cf-submit-row">
+                                    <div id="cf-feedback"></div>
+                                    <div class="cf-submit-wrap">
+                                        <div class="clapat-button-wrap parallax-wrap link">
+                                            <div class="clapat-button parallax-element">
+                                                <div class="button-border rounded outline">
+                                                    <button type="submit" class="send_message" id="cf-submit">Envoyer le message</button>
+                                                </div>
                                             </div>
                                         </div>
+                                        <span class="cf-submit-note">Réponse sous 24–48h · Devis 100% gratuit</span>
                                     </div>
-                                    <span class="cf-submit-note">Réponse sous 24–48h · Devis 100% gratuit</span>
                                 </div>
-                            </div>
 
-                        </form>
+                            </form>
 
-                        <!-- Séparateur + infos -->
-                        <div class="cf-bottom-info">
-                            <div class="cf-bottom-platforms">
-                                <span class="cf-bottom-label">Ou retrouvez-moi sur</span>
-                                <div class="cf-platforms-row">
-                                    <a href="https://discord.gg/9aDugrJyr5" target="_blank" class="cf-platform-link"><i class="fa-brands fa-discord"></i> Discord</a>
-                                    <a href="https://www.instagram.com/593floores/" target="_blank" class="cf-platform-link"><i class="fa-brands fa-instagram"></i> Instagram</a>
-                                    <a href="https://www.tiktok.com/@593flores" target="_blank" class="cf-platform-link"><i class="fa-brands fa-tiktok"></i> TikTok</a>
-                                    <a href="https://www.behance.net/flores_notion" target="_blank" class="cf-platform-link"><i class="fa-brands fa-behance"></i> Behance</a>
-                                    <a href="mailto:593maldito@gmail.com" class="cf-platform-link"><i class="fa-solid fa-envelope"></i> Mail</a>
-                                </div>
-                            </div>
-                            <div class="cf-bottom-avail">
-                                <span class="contact-avail-dot"></span>
-                                <span>Disponible — Devis gratuit à la demande</span>
-                            </div>
                         </div>
+                        <!-- /Zone formulaire -->
 
                     </div>
 

@@ -3163,3 +3163,263 @@
 @media only screen and (max-width: 767px) {
 	.pricing-row-specs ul { gap: 8px; }
 }
+
+/* ── VTO Studio card ─────────────────────────────────────────── */
+.vto-card {
+	margin-top: 48px;
+	display: flex;
+	align-items: flex-start;
+	gap: 24px;
+	background: rgba(255,255,255,0.03);
+	border: 1px solid rgba(255,255,255,0.08);
+	border-radius: 16px;
+	padding: 28px 32px;
+	position: relative;
+	overflow: hidden;
+}
+
+.vto-card::before {
+	content: '';
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	height: 1px;
+	background: linear-gradient(90deg, #8c6144, rgba(140,97,68,0));
+}
+
+.vto-card-logo {
+	width: 54px;
+	height: 54px;
+	border-radius: 50%;
+	overflow: hidden;
+	flex-shrink: 0;
+	border: 1px solid rgba(255,255,255,0.1);
+	background: rgba(255,255,255,0.05);
+}
+
+.vto-card-logo img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.vto-card-content { flex: 1; }
+
+.vto-card-label {
+	display: block;
+	font-size: 9px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.22);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 8px;
+}
+
+.vto-card-title {
+	font-size: 16px;
+	font-weight: 500;
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 8px;
+}
+
+.vto-card-desc {
+	font-size: 12px;
+	color: rgba(255,255,255,0.38);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	line-height: 1.75;
+	margin-bottom: 20px;
+}
+
+.vto-card-actions {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
+.vto-card-discord {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 9px 20px;
+	border-radius: 50px;
+	background: rgba(114,137,218,0.1);
+	border: 1px solid rgba(114,137,218,0.28);
+	color: rgba(114,137,218,0.85);
+	font-size: 11px;
+	letter-spacing: 0.06em;
+	font-family: 'Poppins', sans-serif;
+	text-decoration: none;
+	font-weight: 500;
+	transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.vto-card-discord:hover {
+	background: rgba(114,137,218,0.2);
+	border-color: rgba(114,137,218,0.55);
+	color: #fff;
+}
+
+.vto-card-link {
+	font-size: 11px;
+	color: rgba(255,255,255,0.28);
+	text-decoration: none;
+	font-family: 'Poppins', sans-serif;
+	letter-spacing: 0.08em;
+	transition: color 0.25s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.vto-card-link:hover { color: rgba(255,255,255,0.65); }
+
+/* ── Contact — split layout ──────────────────────────────────── */
+.page-contact #hero { display: none; }
+
+.cf-page-split {
+	display: grid;
+	grid-template-columns: 280px 1fr;
+	gap: 72px;
+	padding-top: 130px;
+	padding-bottom: 100px;
+	min-height: 100vh;
+	align-items: start;
+}
+
+.cf-sidebar {
+	position: sticky;
+	top: 110px;
+	padding-right: 48px;
+	border-right: 1px solid rgba(255,255,255,0.07);
+	display: flex;
+	flex-direction: column;
+}
+
+.cf-sidebar-badge {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 10px;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.3);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 20px;
+}
+
+.cf-sidebar-title {
+	font-size: clamp(64px, 6.5vw, 100px);
+	line-height: 0.88;
+	color: #fff;
+	margin-bottom: 20px;
+	letter-spacing: -0.02em;
+}
+
+.cf-sidebar-sub {
+	font-size: 12px;
+	color: rgba(255,255,255,0.28);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	line-height: 1.8;
+	margin-bottom: 36px;
+}
+
+.cf-sidebar-rule {
+	width: 36px;
+	height: 1px;
+	background: rgba(255,255,255,0.1);
+	margin-bottom: 28px;
+}
+
+.cf-sidebar-hint {
+	font-size: 9px;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.18);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 16px;
+}
+
+.cf-sidebar-socials {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-bottom: 28px;
+}
+
+.cf-sidebar-social {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	border: 1px solid rgba(255,255,255,0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 13px;
+	color: rgba(255,255,255,0.38);
+	text-decoration: none;
+	transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.cf-sidebar-social:hover {
+	border-color: #8c6144;
+	color: #8c6144;
+}
+
+.cf-sidebar-email {
+	font-size: 11px;
+	color: rgba(255,255,255,0.2);
+	font-family: 'Poppins', sans-serif;
+	text-decoration: none;
+	letter-spacing: 0.04em;
+	word-break: break-all;
+	transition: color 0.25s ease;
+}
+
+.cf-sidebar-email:hover { color: rgba(255,255,255,0.55); }
+
+.cf-form-area { padding-top: 4px; }
+
+/* ── Champ Discord avec icône inline ─────────────────────────── */
+.cf-discord-field {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.cf-discord-icon {
+	position: absolute;
+	left: 18px;
+	font-size: 15px;
+	color: rgba(114,137,218,0.6);
+	pointer-events: none;
+	z-index: 1;
+}
+
+.cf-discord-field input {
+	padding-left: 46px !important;
+}
+
+/* Responsive split */
+@media only screen and (max-width: 1100px) {
+	.cf-page-split { grid-template-columns: 240px 1fr; gap: 48px; }
+	.cf-sidebar-title { font-size: clamp(52px, 6vw, 80px); }
+}
+
+@media only screen and (max-width: 767px) {
+	.cf-page-split {
+		grid-template-columns: 1fr;
+		padding-top: 100px;
+	}
+	.cf-sidebar {
+		position: static;
+		border-right: none;
+		border-bottom: 1px solid rgba(255,255,255,0.06);
+		padding-right: 0;
+		padding-bottom: 40px;
+		margin-bottom: 40px;
+	}
+	.vto-card { flex-direction: column; gap: 16px; }
+}

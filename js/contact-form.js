@@ -78,20 +78,29 @@
     }
 
     /* ── Drag & Drop events ──────────────────────────────── */
-    dropZone.addEventListener('dragover', function (e) {
-        e.preventDefault();
-        dropZone.classList.add('drag-over');
+    ['dragenter', 'dragover'].forEach(function (evt) {
+        dropZone.addEventListener(evt, function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('drag-over');
+        });
     });
     dropZone.addEventListener('dragleave', function (e) {
+        e.stopPropagation();
         if (!dropZone.contains(e.relatedTarget)) {
             dropZone.classList.remove('drag-over');
         }
     });
     dropZone.addEventListener('drop', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         dropZone.classList.remove('drag-over');
         addFiles(e.dataTransfer.files);
     });
+
+    /* Prevent browser from opening file on missed drop */
+    document.addEventListener('dragover', function (e) { e.preventDefault(); });
+    document.addEventListener('drop',     function (e) { e.preventDefault(); });
 
     /* ── Bouton parcourir ────────────────────────────────── */
     pickBtn.addEventListener('click', function (e) {
