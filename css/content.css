@@ -3590,57 +3590,68 @@
 	align-items: flex-end;
 }
 
+/* items : le label sort vers la gauche de la pill */
 .side-nav-item {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	flex-direction: row-reverse; /* dot à droite (inside pill), label sort à gauche */
+	gap: 8px;
 	text-decoration: none;
 	cursor: pointer;
-	padding: 3px 0;
+	padding: 2px 0;
+	position: relative;
 }
 
 .side-nav-dot {
 	width: 5px;
 	height: 5px;
 	border-radius: 50%;
-	background: rgba(255,255,255,0.2);
+	background: rgba(255,255,255,0.28);
 	flex-shrink: 0;
 	transition: background 0.3s ease, transform 0.35s ease;
 }
 
+/* label flotte hors de la pill, à gauche */
 .side-nav-label {
 	font-size: 9px;
-	letter-spacing: 0.2em;
+	letter-spacing: 0.18em;
 	text-transform: uppercase;
 	color: rgba(255,255,255,0);
 	font-family: 'Poppins', sans-serif;
 	opacity: 0;
-	transform: translateX(8px);
-	transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+	transform: translateX(6px);
+	transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
 	white-space: nowrap;
 	pointer-events: none;
+	/* pill de contexte sur le label */
+	background: rgba(15,15,15,0.72);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid rgba(255,255,255,0.07);
+	padding: 4px 10px;
+	border-radius: 20px;
 }
 
 .side-nav-item:hover .side-nav-label {
 	opacity: 1;
 	transform: translateX(0);
-	color: rgba(255,255,255,0.65);
+	color: rgba(255,255,255,0.75);
 }
 
 .side-nav-item:hover .side-nav-dot {
 	background: #8c6144;
-	transform: scale(1.5);
+	transform: scale(1.6);
 }
 
 .side-nav-item.is-active .side-nav-dot {
-	background: rgba(255,255,255,0.55);
-	transform: scale(1.3);
+	background: rgba(255,255,255,0.7);
+	transform: scale(1.4);
 }
 
 .side-nav-item.is-active .side-nav-label {
 	opacity: 1;
 	transform: translateX(0);
-	color: rgba(255,255,255,0.4);
+	color: rgba(255,255,255,0.45);
 }
 
 /* Cache le burger sur desktop, garde le side nav */
@@ -3786,16 +3797,21 @@
 	opacity: 1 !important;
 	visibility: visible !important;
 	pointer-events: initial !important;
-	padding: 0 !important;
+	padding: 10px 12px !important;
 	margin: 0 !important;
-	border: none !important;
-	box-shadow: none !important;
+	border: 1px solid rgba(255,255,255,0.08) !important;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.35) !important;
+	border-radius: 40px !important;
+	background: rgba(15,15,15,0.55) !important;
+	background-color: rgba(15,15,15,0.55) !important;
+	backdrop-filter: blur(12px) !important;
+	-webkit-backdrop-filter: blur(12px) !important;
 	overflow: visible !important;
 	z-index: 9000 !important;
 	display: flex !important;
 	flex-direction: column !important;
-	gap: 18px !important;
-	align-items: flex-end !important;
+	gap: 14px !important;
+	align-items: center !important;
 }
 
 /* ── TARIFS — split layout (mirror contact/about) ─── */
