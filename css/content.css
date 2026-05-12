@@ -3654,7 +3654,30 @@
 
 /* Mobile : burger visible, side nav caché */
 @media only screen and (max-width: 1024px) {
-	.side-nav { display: none; }
+	.side-nav { display: none !important; }
+
+	/* ── Animations allégées sur mobile ── */
+	/* Panels : désactive le parallax lourd, scroll natif plus fluide */
+	.panels-container {
+		-webkit-overflow-scrolling: touch;
+	}
+	/* Réduit les transitions de hover (non pertinentes tactile) */
+	.panel:hover .panel-hover-info { opacity: 0; }
+	.skills-img-item:hover .item-image { transform: none; }
+
+	/* Désactive les effets will-change gourmands */
+	.panels,
+	.panel,
+	.start-move-thumb,
+	.has-parallax {
+		will-change: auto !important;
+	}
+
+	/* Transitions plus courtes pour paraître plus réactif */
+	.side-nav-dot,
+	.side-nav-label {
+		transition: none !important;
+	}
 }
 
 /* ── Page CTA strip (remplace #page-nav partout) ─────────────── */
