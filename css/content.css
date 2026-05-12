@@ -3594,7 +3594,7 @@
 .side-nav-item {
 	display: flex;
 	align-items: center;
-	flex-direction: row-reverse; /* [label][dot] — dot toujours visible à droite */
+	flex-direction: row; /* [label][dot] — texte à gauche, dot à droite */
 	gap: 0;
 	text-decoration: none;
 	cursor: pointer;
