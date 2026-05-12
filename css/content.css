@@ -3751,3 +3751,80 @@
 	}
 	.vto-card { flex-direction: column; gap: 16px; }
 }
+
+/* ── TARIFS — split layout (mirror contact/about) ─── */
+.page-tarifs #hero { display: none; }
+
+.tf-page-split {
+	display: grid;
+	grid-template-columns: 260px 1fr;
+	gap: 72px;
+	padding: 130px 5% 80px;
+	min-height: 100vh;
+	align-items: start;
+	max-width: 1400px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.tf-sidebar {
+	position: sticky;
+	top: 110px;
+	display: flex;
+	flex-direction: column;
+}
+
+.tf-sidebar-meta {
+	font-size: 10px;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.28);
+	font-family: 'Poppins', sans-serif;
+}
+
+.tf-sidebar-rule {
+	width: 32px;
+	height: 1px;
+	background: rgba(255,255,255,0.1);
+	margin: 16px 0;
+}
+
+.tf-sidebar-title {
+	font-size: clamp(64px, 5.5vw, 96px);
+	line-height: 0.88;
+	color: #fff;
+	margin-bottom: 24px;
+	font-family: 'Six Caps', sans-serif;
+	text-transform: uppercase;
+}
+
+.tf-sidebar-intro {
+	font-size: 12px;
+	color: rgba(255,255,255,0.32);
+	font-family: 'Poppins', sans-serif;
+	line-height: 1.75;
+	margin-bottom: 20px;
+}
+
+.tf-sidebar-avail {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 10px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.28);
+	font-family: 'Poppins', sans-serif;
+}
+
+.tf-pricing-area { padding-top: 4px; }
+
+@media only screen and (max-width: 1024px) {
+	.tf-page-split {
+		grid-template-columns: 1fr;
+		gap: 40px;
+		padding-top: 100px;
+	}
+	.tf-sidebar { position: static; }
+	.tf-sidebar-title { font-size: 64px; }
+}
