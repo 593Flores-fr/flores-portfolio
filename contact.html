@@ -335,6 +335,14 @@
         }, true);
         /* back / forward buttons */
         window.addEventListener('popstate', function(){ setTimeout(setActive, 80); });
+        /* navigation scroll-triggerée (panels Clapat) — intercepte pushState */
+        (function(){
+            var orig = history.pushState;
+            history.pushState = function(){
+                orig.apply(this, arguments);
+                setTimeout(setActive, 60);
+            };
+        })();
     })();
     </script>
     <!-- /Side Nav -->
