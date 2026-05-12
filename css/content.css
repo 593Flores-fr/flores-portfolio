@@ -3772,6 +3772,50 @@
 	.vto-card { flex-direction: column; gap: 16px; }
 }
 
+/* ── STATUT DE DISPONIBILITÉ ─────────────────────────────── */
+
+/* Tagline courte dans la bio about */
+.about-bio-tagline {
+	font-size: clamp(20px, 2.2vw, 28px);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	color: rgba(255,255,255,0.82);
+	margin-bottom: 20px;
+	line-height: 1.35;
+}
+
+/* Badge de statut standalone */
+.about-status-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 11px;
+	letter-spacing: 0.1em;
+	font-family: 'Poppins', sans-serif;
+	color: rgba(255,255,255,0.55);
+	margin-bottom: 36px;
+	padding: 8px 18px;
+	border: 1px solid rgba(255,255,255,0.1);
+	border-radius: 50px;
+	background: rgba(255,255,255,0.03);
+	transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.about-status-badge[data-status="available"] {
+	border-color: rgba(34,197,94,0.3);
+	color: rgba(34,197,94,0.85);
+}
+
+.about-status-badge[data-status="limited"] {
+	border-color: rgba(245,158,11,0.3);
+	color: rgba(245,158,11,0.85);
+}
+
+.about-status-badge[data-status="off"] {
+	border-color: rgba(239,68,68,0.3);
+	color: rgba(239,68,68,0.85);
+}
+
 /* ── SIDE NAV — hard reset + touch-bar pill ── */
 .side-nav {
 	position: fixed !important;
