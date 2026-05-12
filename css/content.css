@@ -3772,6 +3772,151 @@
 	.vto-card { flex-direction: column; gap: 16px; }
 }
 
+/* ── VTO CARD : ligne supérieure blanche ── */
+.vto-card::before {
+	background: linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0)) !important;
+}
+
+/* ── PAGES PROJET ──────────────────────────────────────────── */
+
+/* Split intro : sidebar méta + description */
+.proj-intro-split {
+	display: grid;
+	grid-template-columns: 240px 1fr;
+	gap: 72px;
+	padding: 80px 5% 72px;
+	align-items: start;
+	max-width: 1400px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.proj-meta-card {
+	position: sticky;
+	top: 110px;
+}
+
+.proj-meta-label {
+	font-size: 10px;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.28);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 14px;
+}
+
+.proj-meta-rule {
+	width: 32px;
+	height: 1px;
+	background: rgba(255,255,255,0.1);
+	margin-bottom: 24px;
+}
+
+.proj-meta-item {
+	margin-bottom: 18px;
+	padding-bottom: 18px;
+	border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.proj-meta-key {
+	display: block;
+	font-size: 9px;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.22);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 5px;
+}
+
+.proj-meta-val {
+	display: block;
+	font-size: 13px;
+	color: rgba(255,255,255,0.7);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+}
+
+.proj-meta-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 22px;
+	font-size: 10px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.45);
+	font-family: 'Poppins', sans-serif;
+	text-decoration: none;
+	padding: 10px 20px;
+	border: 1px solid rgba(255,255,255,0.1);
+	border-radius: 50px;
+	transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+
+.proj-meta-link:hover {
+	border-color: #8c6144;
+	color: #fff;
+	background: rgba(140,97,68,0.06);
+}
+
+/* Description */
+.proj-desc-area { padding-top: 4px; }
+
+.proj-hero-eyebrow {
+	font-size: 10px;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.38);
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 14px;
+}
+
+.proj-desc-text {
+	font-size: 16px;
+	color: rgba(255,255,255,0.52);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	line-height: 1.9;
+	max-width: 600px;
+}
+
+/* Grilles d'images */
+.proj-img-pair {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 3px;
+}
+
+.proj-img-triple {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 3px;
+}
+
+.proj-img-pair img,
+.proj-img-triple img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	aspect-ratio: 4/3;
+}
+
+.proj-full-img {
+	width: 100%;
+	display: block;
+}
+
+@media only screen and (max-width: 1024px) {
+	.proj-intro-split { grid-template-columns: 1fr; gap: 40px; padding-top: 80px; }
+	.proj-meta-card { position: static; }
+}
+
+@media only screen and (max-width: 767px) {
+	.proj-img-pair { grid-template-columns: 1fr; }
+	.proj-img-triple { grid-template-columns: 1fr 1fr; }
+}
+
 /* ── STATUT DE DISPONIBILITÉ ─────────────────────────────── */
 
 /* Tagline courte dans la bio about */

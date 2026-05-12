@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Admin — Flores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="css/all.min.css" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0a0a0a;
+            color: rgba(255,255,255,0.75);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── Login Screen ── */
+        #admin-login {
+            width: 100%;
+            max-width: 360px;
+            padding: 0 24px;
+            text-align: center;
+        }
+        .admin-logo {
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+            margin-bottom: 52px;
+        }
+        .admin-logo strong {
+            display: block;
+            font-size: 28px;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.7);
+            font-weight: 300;
+            margin-bottom: 6px;
+        }
+        #login-form { display: flex; flex-direction: column; gap: 14px; }
+        .admin-input {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.8);
+            outline: none;
+            transition: border-color 0.25s;
+            width: 100%;
+        }
+        .admin-input:focus { border-color: rgba(140,97,68,0.6); }
+        .admin-input::placeholder { color: rgba(255,255,255,0.2); }
+        .admin-btn {
+            background: rgba(140,97,68,0.12);
+            border: 1px solid rgba(140,97,68,0.3);
+            border-radius: 8px;
+            padding: 13px 24px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: background 0.25s, border-color 0.25s, color 0.25s;
+        }
+        .admin-btn:hover { background: rgba(140,97,68,0.22); border-color: rgba(140,97,68,0.6); color: #fff; }
+        #login-error {
+            font-size: 11px;
+            color: rgba(239,68,68,0.8);
+            letter-spacing: 0.05em;
+            min-height: 16px;
+            margin-top: 4px;
+        }
+
+        /* ── Dashboard ── */
+        #admin-panel {
+            display: none;
+            width: 100%;
+            max-width: 680px;
+            padding: 48px 32px;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+        .panel-title {
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+        }
+        .panel-title strong {
+            display: block;
+            font-size: 22px;
+            letter-spacing: 0.04em;
+            color: rgba(255,255,255,0.78);
+            font-weight: 300;
+            margin-top: 4px;
+        }
+        .logout-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            padding: 7px 18px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .logout-btn:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); }
+
+        /* Section */
+        .admin-section {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 28px 28px;
+            margin-bottom: 20px;
+        }
+        .section-label {
+            font-size: 9px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.22);
+            margin-bottom: 20px;
+        }
+
+        /* Status pills */
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .status-pill {
+            border-radius: 8px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            transition: all 0.25s;
+            user-select: none;
+        }
+        .status-pill:hover { background: rgba(255,255,255,0.06); }
+        .status-pill.active { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.07); }
+        .status-pill.active.s-available { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); }
+        .status-pill.active.s-limited   { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.06); }
+        .status-pill.active.s-off       { border-color: rgba(239,68,68,0.4);  background: rgba(239,68,68,0.06); }
+        .pill-emoji { font-size: 22px; margin-bottom: 8px; }
+        .pill-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+        .status-pill.active .pill-label { color: rgba(255,255,255,0.75); }
+
+        /* GitHub section */
+        .gh-fields { display: flex; flex-direction: column; gap: 12px; }
+        .gh-label {
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.22);
+            margin-bottom: 4px;
+        }
+        .gh-field-group { display: flex; flex-direction: column; }
+        .admin-input-sm {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.75);
+            outline: none;
+            transition: border-color 0.25s;
+            width: 100%;
+        }
+        .admin-input-sm:focus { border-color: rgba(140,97,68,0.5); }
+        .admin-input-sm::placeholder { color: rgba(255,255,255,0.18); }
+        .apply-btn {
+            background: rgba(140,97,68,0.15);
+            border: 1px solid rgba(140,97,68,0.35);
+            border-radius: 8px;
+            padding: 13px 24px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            cursor: pointer;
+            transition: all 0.25s;
+            width: 100%;
+            margin-top: 6px;
+        }
+        .apply-btn:hover:not(:disabled) { background: rgba(140,97,68,0.28); border-color: rgba(140,97,68,0.7); color: #fff; }
+        .apply-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Result banner */
+        #apply-result {
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            display: none;
+        }
+        #apply-result.ok  { background: rgba(34,197,94,0.08);  border: 1px solid rgba(34,197,94,0.25);  color: rgba(34,197,94,0.9); }
+        #apply-result.err { background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.25);  color: rgba(239,68,68,0.9); }
+
+        /* Info note */
+        .admin-note {
+            font-size: 10px;
+            color: rgba(255,255,255,0.18);
+            line-height: 1.7;
+            margin-top: 8px;
+        }
+        .admin-note a { color: rgba(140,97,68,0.7); text-decoration: none; }
+        .admin-note a:hover { color: rgba(140,97,68,1); }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+            text-decoration: none;
+            margin-top: 32px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.5); }
+
+        @media (max-width: 560px) {
+            .status-grid { grid-template-columns: 1fr; }
+            #admin-panel { padding: 32px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Login Screen ────────────────────────────────────────── -->
+<div id="admin-login">
+    <div class="admin-logo">
+        <strong>Flores</strong>
+        Espace Administration
+    </div>
+    <form id="login-form">
+        <input class="admin-input" type="password" id="admin-pwd" placeholder="Mot de passe" autocomplete="current-password" autofocus>
+        <button class="admin-btn" type="submit">Entrer</button>
+        <div id="login-error"></div>
+    </form>
+</div>
+
+<!-- ── Admin Dashboard ────────────────────────────────────── -->
+<div id="admin-panel">
+
+    <div class="panel-header">
+        <div class="panel-title">
+            Administration
+            <strong>Statut de disponibilit&eacute;</strong>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp; D&eacute;connexion
+        </button>
+    </div>
+
+    <!-- Status picker -->
+    <div class="admin-section">
+        <p class="section-label">S&eacute;lectionner un statut</p>
+        <div class="status-grid">
+            <div class="status-pill s-available" data-status="available" onclick="selectStatus(this)">
+                <div class="pill-emoji">&#x2705;</div>
+                <div class="pill-label">Disponible</div>
+            </div>
+            <div class="status-pill s-limited" data-status="limited" onclick="selectStatus(this)">
+                <div class="pill-emoji">&#x23F3;</div>
+                <div class="pill-label">Momentan&eacute;ment<br>indisponible</div>
+            </div>
+            <div class="status-pill s-off" data-status="off" onclick="selectStatus(this)">
+                <div class="pill-emoji">&#x1F534;</div>
+                <div class="pill-label">Actuellement<br>en OFF</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GitHub publish -->
+    <div class="admin-section">
+        <p class="section-label">Publier via GitHub API</p>
+        <div class="gh-fields">
+            <div class="gh-field-group">
+                <p class="gh-label">Token GitHub (PAT)</p>
+                <input class="admin-input-sm" type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
+            </div>
+            <div class="gh-field-group">
+                <p class="gh-label">D&eacute;p&ocirc;t (owner/repo)</p>
+                <input class="admin-input-sm" type="text" id="gh-repo" placeholder="593flores-fr/flores-portfolio" value="593flores-fr/flores-portfolio">
+            </div>
+            <div class="gh-field-group">
+                <p class="gh-label">Chemin du fichier dans le repo</p>
+                <input class="admin-input-sm" type="text" id="gh-path" placeholder="Portfolio/js/status.js" value="Portfolio/js/status.js">
+            </div>
+            <button class="apply-btn" id="apply-btn" onclick="applyStatus()" disabled>
+                <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Appliquer le changement
+            </button>
+            <div id="apply-result"></div>
+        </div>
+        <p class="admin-note">
+            Ton token GitHub (PAT) n&rsquo;est jamais stock&eacute; &mdash; uniquement en m&eacute;moire pour cette session.<br>
+            Cr&eacute;er un token sur <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> avec le scope <strong>repo</strong>.
+        </p>
+    </div>
+
+    <a class="back-link" href="index.html">
+        <i class="fa-solid fa-arrow-left"></i> Retour au site
+    </a>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────────────────────
+// CONFIG — change the password here
+// ──────────────────────────────────────────────────────────────
+var ADMIN_PASSWORD = 'flores2026';
+
+// ──────────────────────────────────────────────────────────────
+// State
+// ──────────────────────────────────────────────────────────────
+var selectedStatus = 'available';
+
+// ──────────────────────────────────────────────────────────────
+// Auth
+// ──────────────────────────────────────────────────────────────
+document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var pwd = document.getElementById('admin-pwd').value;
+    if (pwd === ADMIN_PASSWORD) {
+        document.getElementById('admin-login').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        sessionStorage.setItem('flores-admin', '1');
+        initDashboard();
+    } else {
+        var err = document.getElementById('login-error');
+        err.textContent = 'Mot de passe incorrect.';
+        document.getElementById('admin-pwd').value = '';
+        document.getElementById('admin-pwd').focus();
+        setTimeout(function(){ err.textContent = ''; }, 2500);
+    }
+});
+
+function logout() {
+    sessionStorage.removeItem('flores-admin');
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('admin-login').style.display = 'block';
+    document.getElementById('admin-pwd').value = '';
+    document.getElementById('admin-pwd').focus();
+}
+
+// Auto-restore session
+if (sessionStorage.getItem('flores-admin') === '1') {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    initDashboard();
+}
+
+// ──────────────────────────────────────────────────────────────
+// Dashboard
+// ──────────────────────────────────────────────────────────────
+function initDashboard() {
+    // Try to detect current status from status.js (local)
+    var s = window.FLORES_STATUS || 'available';
+    selectedStatus = s;
+    highlightPill(s);
+    updateApplyBtn();
+}
+
+function selectStatus(el) {
+    selectedStatus = el.getAttribute('data-status');
+    highlightPill(selectedStatus);
+    updateApplyBtn();
+    hideResult();
+}
+
+function highlightPill(status) {
+    document.querySelectorAll('.status-pill').forEach(function(p) {
+        p.classList.remove('active');
+    });
+    var target = document.querySelector('.status-pill[data-status="' + status + '"]');
+    if (target) target.classList.add('active');
+}
+
+function updateApplyBtn() {
+    var token = document.getElementById('gh-token').value.trim();
+    document.getElementById('apply-btn').disabled = !token;
+}
+
+document.getElementById('gh-token').addEventListener('input', updateApplyBtn);
+
+function hideResult() {
+    var r = document.getElementById('apply-result');
+    r.style.display = 'none';
+    r.className = '';
+    r.textContent = '';
+}
+
+function showResult(ok, msg) {
+    var r = document.getElementById('apply-result');
+    r.style.display = 'block';
+    r.className = ok ? 'ok' : 'err';
+    r.textContent = msg;
+}
+
+// ──────────────────────────────────────────────────────────────
+// GitHub API — update status.js
+// ──────────────────────────────────────────────────────────────
+function applyStatus() {
+    var token  = document.getElementById('gh-token').value.trim();
+    var repo   = document.getElementById('gh-repo').value.trim();
+    var path   = document.getElementById('gh-path').value.trim();
+
+    if (!token || !repo || !path) {
+        showResult(false, 'Veuillez remplir tous les champs.');
+        return;
+    }
+
+    var btn = document.getElementById('apply-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; En cours...';
+    hideResult();
+
+    var apiBase = 'https://api.github.com/repos/' + repo + '/contents/' + path;
+    var headers = {
+        'Authorization': 'token ' + token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+    };
+
+    // Step 1 — get current file (need SHA to update)
+    fetch(apiBase, { headers: headers })
+        .then(function(res) {
+            if (!res.ok) throw new Error('Fichier introuvable (' + res.status + '). V&eacute;rifie le chemin et le token.');
+            return res.json();
+        })
+        .then(function(data) {
+            var sha = data.sha;
+
+            // Build new file content
+            var newContent = buildStatusJS(selectedStatus);
+            var encoded = btoa(unescape(encodeURIComponent(newContent)));
+
+            // Step 2 — commit the update
+            return fetch(apiBase, {
+                method: 'PUT',
+                headers: headers,
+                body: JSON.stringify({
+                    message: 'chore: update status to ' + selectedStatus,
+                    content: encoded,
+                    sha: sha,
+                    branch: 'main'
+                })
+            });
+        })
+        .then(function(res) {
+            if (!res.ok) return res.json().then(function(d){ throw new Error(d.message || 'Erreur GitHub ' + res.status); });
+            return res.json();
+        })
+        .then(function() {
+            showResult(true, '✓ Statut mis à jour : « ' + selectedStatus + ' ». Le site sera déployé dans quelques secondes.');
+        })
+        .catch(function(err) {
+            showResult(false, '✕ ' + (err.message || 'Erreur inconnue.'));
+        })
+        .finally(function() {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Appliquer le changement';
+            updateApplyBtn();
+        });
+}
+
+function buildStatusJS(status) {
+    return '// ─────────────────────────────────────────────────────────────\n'
+        + '// Flores — Statut de disponibilité centralisé\n'
+        + '// Modifier FLORES_STATUS pour mettre à jour TOUT le site\n'
+        + '// ─────────────────────────────────────────────────────────────\n'
+        + "// OPTIONS : 'available' | 'limited' | 'off'\n"
+        + "window.FLORES_STATUS = '" + status + "';\n"
+        + '\n'
+        + '(function () {\n'
+        + '    var STATES = {\n'
+        + "        available: {\n            emoji: '✅',\n            label: 'Disponible',\n            color: '#22c55e',\n            pulse: true\n        },\n"
+        + "        limited: {\n            emoji: '⏳',\n            label: 'Momentanément indisponible',\n            color: '#f59e0b',\n            pulse: false\n        },\n"
+        + "        off: {\n            emoji: '🔴',\n            label: 'Actuellement en OFF',\n            color: '#ef4444',\n            pulse: false\n        }\n"
+        + '    };\n'
+        + '\n'
+        + '    function applyStatus() {\n'
+        + '        var s = STATES[window.FLORES_STATUS] || STATES.available;\n'
+        + '\n'
+        + "        document.querySelectorAll('[data-status-label]').forEach(function (el) {\n"
+        + "            el.textContent = s.emoji + ' ' + s.label;\n"
+        + '        });\n'
+        + '\n'
+        + "        document.querySelectorAll('[data-status-short]').forEach(function (el) {\n"
+        + '            el.textContent = s.label;\n'
+        + '        });\n'
+        + '\n'
+        + "        document.querySelectorAll('[data-status-dot]').forEach(function (dot) {\n"
+        + '            dot.style.backgroundColor = s.color;\n'
+        + '            if (!s.pulse) {\n'
+        + "                dot.style.animation = 'none';\n"
+        + "                dot.style.boxShadow = 'none';\n"
+        + '            } else {\n'
+        + "                dot.style.animation = '';\n"
+        + "                dot.style.boxShadow = '';\n"
+        + '            }\n'
+        + '        });\n'
+        + '\n'
+        + "        document.querySelectorAll('[data-status-badge]').forEach(function (el) {\n"
+        + '            el.setAttribute(\'data-status\', window.FLORES_STATUS);\n'
+        + '        });\n'
+        + '    }\n'
+        + '\n'
+        + "    if (document.readyState === 'loading') {\n"
+        + "        document.addEventListener('DOMContentLoaded', applyStatus);\n"
+        + '    } else {\n'
+        + '        applyStatus();\n'
+        + '    }\n'
+        + '})();\n';
+}
+</script>
+
+<!-- Load status.js to read current value -->
+<script src="js/status.js"></script>
+
+</body>
+</html>
