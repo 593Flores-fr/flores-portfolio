@@ -9,544 +9,831 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link href="css/all.min.css" rel="stylesheet">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --bg:#0a0a0a; --surface:rgba(255,255,255,0.025);
+            --border:rgba(255,255,255,0.08); --accent:#8c6144;
+            --text:rgba(255,255,255,0.72); --muted:rgba(255,255,255,0.28);
+            --ok:rgba(34,197,94,0.85); --err:rgba(239,68,68,0.85);
+            --warn:rgba(245,158,11,0.85);
+        }
+        body{background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;font-weight:300;min-height:100vh}
+        a{color:inherit;text-decoration:none}
+        button{font-family:'Poppins',sans-serif;cursor:pointer}
 
-        body {
-            background: #0a0a0a;
-            color: rgba(255,255,255,0.75);
-            font-family: 'Poppins', sans-serif;
-            font-weight: 300;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+        /* ── LOGIN ─────────────────────────────────────────── */
+        #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+        .login-box{width:100%;max-width:340px;text-align:center}
+        .login-logo{font-size:32px;letter-spacing:0.06em;font-weight:300;color:rgba(255,255,255,0.78);margin-bottom:6px}
+        .login-sub{font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:var(--muted);margin-bottom:52px}
+        .login-form{display:flex;flex-direction:column;gap:12px}
+        .fi{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px 16px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:300;color:rgba(255,255,255,0.82);outline:none;transition:border-color .2s}
+        .fi:focus{border-color:rgba(140,97,68,.55)}
+        .fi::placeholder{color:rgba(255,255,255,.18)}
+        .btn{border-radius:8px;padding:12px 20px;font-size:10.5px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;transition:all .22s;border:1px solid}
+        .btn-primary{background:rgba(140,97,68,.14);border-color:rgba(140,97,68,.35);color:rgba(255,255,255,.62)}
+        .btn-primary:hover:not(:disabled){background:rgba(140,97,68,.28);border-color:rgba(140,97,68,.7);color:#fff}
+        .btn-primary:disabled{opacity:.35;cursor:not-allowed}
+        .btn-ghost{background:none;border-color:var(--border);color:var(--muted)}
+        .btn-ghost:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
+        .btn-danger{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.28);color:rgba(239,68,68,.75)}
+        .btn-danger:hover{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.5);color:#f87171}
+        .btn-ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.28);color:rgba(34,197,94,.8)}
+        .btn-ok:hover:not(:disabled){background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.5);color:#4ade80}
+        #login-err{font-size:11px;color:var(--err);min-height:14px;margin-top:4px}
 
-        /* ── Login Screen ── */
-        #admin-login {
-            width: 100%;
-            max-width: 360px;
-            padding: 0 24px;
-            text-align: center;
-        }
-        .admin-logo {
-            font-size: 11px;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.2);
-            margin-bottom: 52px;
-        }
-        .admin-logo strong {
-            display: block;
-            font-size: 28px;
-            letter-spacing: 0.08em;
-            color: rgba(255,255,255,0.7);
-            font-weight: 300;
-            margin-bottom: 6px;
-        }
-        #login-form { display: flex; flex-direction: column; gap: 14px; }
-        .admin-input {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 14px 18px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
-            font-weight: 300;
-            color: rgba(255,255,255,0.8);
-            outline: none;
-            transition: border-color 0.25s;
-            width: 100%;
-        }
-        .admin-input:focus { border-color: rgba(140,97,68,0.6); }
-        .admin-input::placeholder { color: rgba(255,255,255,0.2); }
-        .admin-btn {
-            background: rgba(140,97,68,0.12);
-            border: 1px solid rgba(140,97,68,0.3);
-            border-radius: 8px;
-            padding: 13px 24px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 11px;
-            font-weight: 400;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.6);
-            cursor: pointer;
-            transition: background 0.25s, border-color 0.25s, color 0.25s;
-        }
-        .admin-btn:hover { background: rgba(140,97,68,0.22); border-color: rgba(140,97,68,0.6); color: #fff; }
-        #login-error {
-            font-size: 11px;
-            color: rgba(239,68,68,0.8);
-            letter-spacing: 0.05em;
-            min-height: 16px;
-            margin-top: 4px;
-        }
+        /* ── LAYOUT ─────────────────────────────────────────── */
+        #app{display:none;min-height:100vh;flex-direction:column}
+        .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,.92);backdrop-filter:blur(12px);z-index:100}
+        .topbar-brand{font-size:13px;letter-spacing:.08em;color:rgba(255,255,255,.5)}
+        .topbar-brand strong{color:rgba(255,255,255,.82);font-weight:400}
+        .topbar-right{display:flex;align-items:center;gap:12px}
+        .conn-status{font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+        .conn-dot{width:6px;height:6px;border-radius:50%;background:#374151}
+        .conn-dot.connected{background:#22c55e}
 
-        /* ── Dashboard ── */
-        #admin-panel {
-            display: none;
-            width: 100%;
-            max-width: 680px;
-            padding: 48px 32px;
-        }
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 48px;
-        }
-        .panel-title {
-            font-size: 11px;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.25);
-        }
-        .panel-title strong {
-            display: block;
-            font-size: 22px;
-            letter-spacing: 0.04em;
-            color: rgba(255,255,255,0.78);
-            font-weight: 300;
-            margin-top: 4px;
-        }
-        .logout-btn {
-            background: none;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 50px;
-            padding: 7px 18px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 10px;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.3);
-            cursor: pointer;
-            transition: border-color 0.2s, color 0.2s;
-        }
-        .logout-btn:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); }
+        /* ── TABS ────────────────────────────────────────────── */
+        .tabs-bar{display:flex;padding:0 28px;border-bottom:1px solid var(--border);gap:0}
+        .tab-btn{padding:14px 20px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;transition:all .2s;position:relative;top:1px}
+        .tab-btn:hover{color:rgba(255,255,255,.55)}
+        .tab-btn.active{color:rgba(255,255,255,.82);border-bottom-color:rgba(140,97,68,.8)}
+        .tab-pane{display:none;padding:32px 28px;max-width:860px}
+        .tab-pane.active{display:block}
 
-        /* Section */
-        .admin-section {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 12px;
-            padding: 28px 28px;
-            margin-bottom: 20px;
-        }
-        .section-label {
-            font-size: 9px;
-            letter-spacing: 0.24em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.22);
-            margin-bottom: 20px;
-        }
+        /* ── CARDS ───────────────────────────────────────────── */
+        .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:18px}
+        .card-title{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+        .field-row{display:grid;gap:10px;margin-bottom:14px}
+        .field-row.cols-2{grid-template-columns:1fr 1fr}
+        .field-row.cols-3{grid-template-columns:1fr 1fr 1fr}
+        .field-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:5px}
+        .field-wrap{display:flex;flex-direction:column}
+        textarea.fi{resize:vertical;min-height:72px;line-height:1.6}
+        .card-actions{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+        .result-msg{font-size:11px;padding:10px 14px;border-radius:7px;display:none;margin-top:12px}
+        .result-msg.ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.22);color:var(--ok)}
+        .result-msg.err{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.22);color:var(--err)}
+        .result-msg.info{background:rgba(140,97,68,.07);border:1px solid rgba(140,97,68,.22);color:rgba(140,97,68,.9)}
 
-        /* Status pills */
-        .status-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-        }
-        .status-pill {
-            border-radius: 8px;
-            padding: 16px 12px;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.03);
-            transition: all 0.25s;
-            user-select: none;
-        }
-        .status-pill:hover { background: rgba(255,255,255,0.06); }
-        .status-pill.active { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.07); }
-        .status-pill.active.s-available { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); }
-        .status-pill.active.s-limited   { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.06); }
-        .status-pill.active.s-off       { border-color: rgba(239,68,68,0.4);  background: rgba(239,68,68,0.06); }
-        .pill-emoji { font-size: 22px; margin-bottom: 8px; }
-        .pill-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
-        .status-pill.active .pill-label { color: rgba(255,255,255,0.75); }
+        /* ── GitHub Config (collapsible) ─────────────────────── */
+        #gh-config{padding:14px 28px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01)}
+        .gh-config-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .gh-config-row .fi{flex:1;min-width:150px;padding:9px 12px;font-size:12px}
+        #conn-btn{white-space:nowrap;padding:9px 18px;font-size:9.5px}
 
-        /* GitHub section */
-        .gh-fields { display: flex; flex-direction: column; gap: 12px; }
-        .gh-label {
-            font-size: 9px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.22);
-            margin-bottom: 4px;
-        }
-        .gh-field-group { display: flex; flex-direction: column; }
-        .admin-input-sm {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 11px 14px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 12px;
-            font-weight: 300;
-            color: rgba(255,255,255,0.75);
-            outline: none;
-            transition: border-color 0.25s;
-            width: 100%;
-        }
-        .admin-input-sm:focus { border-color: rgba(140,97,68,0.5); }
-        .admin-input-sm::placeholder { color: rgba(255,255,255,0.18); }
-        .apply-btn {
-            background: rgba(140,97,68,0.15);
-            border: 1px solid rgba(140,97,68,0.35);
-            border-radius: 8px;
-            padding: 13px 24px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 11px;
-            font-weight: 400;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.65);
-            cursor: pointer;
-            transition: all 0.25s;
-            width: 100%;
-            margin-top: 6px;
-        }
-        .apply-btn:hover:not(:disabled) { background: rgba(140,97,68,0.28); border-color: rgba(140,97,68,0.7); color: #fff; }
-        .apply-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        /* ── Status pills ────────────────────────────────────── */
+        .status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+        .s-pill{border-radius:10px;padding:18px 12px;text-align:center;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.03);transition:all .22s;user-select:none}
+        .s-pill:hover{background:rgba(255,255,255,.06)}
+        .s-pill.active{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.06)}
+        .s-pill.active.s-avail{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.06)}
+        .s-pill.active.s-ltd{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.06)}
+        .s-pill.active.s-off{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.06)}
+        .s-emoji{font-size:24px;margin-bottom:8px}
+        .s-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+        .s-pill.active .s-label{color:rgba(255,255,255,.75)}
 
-        /* Result banner */
-        #apply-result {
-            margin-top: 14px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 11px;
-            letter-spacing: 0.05em;
-            display: none;
-        }
-        #apply-result.ok  { background: rgba(34,197,94,0.08);  border: 1px solid rgba(34,197,94,0.25);  color: rgba(34,197,94,0.9); }
-        #apply-result.err { background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.25);  color: rgba(239,68,68,0.9); }
+        /* ── Project list ────────────────────────────────────── */
+        .proj-select-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:18px}
+        .proj-select-row select.fi{flex:1}
+        .proj-list{display:grid;gap:8px}
+        .proj-item{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px 16px;transition:border-color .2s;cursor:pointer}
+        .proj-item:hover{border-color:rgba(140,97,68,.35)}
+        .proj-item-name{font-size:13px;color:rgba(255,255,255,.7)}
+        .proj-item-meta{font-size:10px;color:var(--muted);letter-spacing:.08em}
+        .proj-item-arrow{color:rgba(140,97,68,.6);font-size:12px}
+        .proj-editor{display:none}
+        .proj-editor.open{display:block}
+        .back-btn{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 0 18px;display:flex;align-items:center;gap:6px;transition:color .2s}
+        .back-btn:hover{color:rgba(255,255,255,.55)}
 
-        /* Info note */
-        .admin-note {
-            font-size: 10px;
-            color: rgba(255,255,255,0.18);
-            line-height: 1.7;
-            margin-top: 8px;
-        }
-        .admin-note a { color: rgba(140,97,68,0.7); text-decoration: none; }
-        .admin-note a:hover { color: rgba(140,97,68,1); }
+        /* ── New project form ────────────────────────────────── */
+        .new-proj-toggle{margin-top:20px;width:100%}
+        .new-proj-form{display:none;margin-top:18px}
+        .new-proj-form.open{display:block}
+        .img-url-list{display:flex;flex-direction:column;gap:8px}
 
-        /* Back link */
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 10px;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.2);
-            text-decoration: none;
-            margin-top: 32px;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: rgba(255,255,255,0.5); }
+        /* ── Tarifs ──────────────────────────────────────────── */
+        .tarif-row-card{border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;background:rgba(255,255,255,.02)}
+        .tarif-row-num{font-size:10px;letter-spacing:.2em;color:rgba(140,97,68,.7);margin-bottom:10px;text-transform:uppercase}
+        .tarif-fields{display:grid;gap:10px}
 
-        @media (max-width: 560px) {
-            .status-grid { grid-template-columns: 1fr; }
-            #admin-panel { padding: 32px 20px; }
+        /* ── Responsive ──────────────────────────────────────── */
+        @media(max-width:600px){
+            .topbar,.tabs-bar,.tab-pane,#gh-config{padding-left:16px;padding-right:16px}
+            .status-grid,.field-row.cols-2,.field-row.cols-3{grid-template-columns:1fr}
         }
     </style>
 </head>
 <body>
 
-<!-- ── Login Screen ────────────────────────────────────────── -->
-<div id="admin-login">
-    <div class="admin-logo">
-        <strong>Flores</strong>
-        Espace Administration
+<!-- ══ LOGIN ══════════════════════════════════════════════════ -->
+<div id="login-screen">
+    <div class="login-box">
+        <div class="login-logo">Flores</div>
+        <div class="login-sub">Espace Administration</div>
+        <form class="login-form" id="login-form">
+            <input class="fi" type="password" id="login-pwd" placeholder="Mot de passe" autocomplete="current-password" autofocus>
+            <button class="btn btn-primary" type="submit">Entrer</button>
+            <div id="login-err"></div>
+        </form>
     </div>
-    <form id="login-form">
-        <input class="admin-input" type="password" id="admin-pwd" placeholder="Mot de passe" autocomplete="current-password" autofocus>
-        <button class="admin-btn" type="submit">Entrer</button>
-        <div id="login-error"></div>
-    </form>
 </div>
 
-<!-- ── Admin Dashboard ────────────────────────────────────── -->
-<div id="admin-panel">
+<!-- ══ APP ════════════════════════════════════════════════════ -->
+<div id="app">
 
-    <div class="panel-header">
-        <div class="panel-title">
-            Administration
-            <strong>Statut de disponibilit&eacute;</strong>
-        </div>
-        <button class="logout-btn" onclick="logout()">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp; D&eacute;connexion
-        </button>
-    </div>
-
-    <!-- Status picker -->
-    <div class="admin-section">
-        <p class="section-label">S&eacute;lectionner un statut</p>
-        <div class="status-grid">
-            <div class="status-pill s-available" data-status="available" onclick="selectStatus(this)">
-                <div class="pill-emoji">&#x2705;</div>
-                <div class="pill-label">Disponible</div>
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-brand">Flores · <strong>Admin</strong></div>
+        <div class="topbar-right">
+            <div class="conn-status">
+                <span class="conn-dot" id="conn-dot"></span>
+                <span id="conn-label">Non connecté</span>
             </div>
-            <div class="status-pill s-limited" data-status="limited" onclick="selectStatus(this)">
-                <div class="pill-emoji">&#x23F3;</div>
-                <div class="pill-label">Momentan&eacute;ment<br>indisponible</div>
-            </div>
-            <div class="status-pill s-off" data-status="off" onclick="selectStatus(this)">
-                <div class="pill-emoji">&#x1F534;</div>
-                <div class="pill-label">Actuellement<br>en OFF</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- GitHub publish -->
-    <div class="admin-section">
-        <p class="section-label">Publier via GitHub API</p>
-        <div class="gh-fields">
-            <div class="gh-field-group">
-                <p class="gh-label">Token GitHub (PAT)</p>
-                <input class="admin-input-sm" type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
-            </div>
-            <div class="gh-field-group">
-                <p class="gh-label">D&eacute;p&ocirc;t (owner/repo)</p>
-                <input class="admin-input-sm" type="text" id="gh-repo" placeholder="593flores-fr/flores-portfolio" value="593flores-fr/flores-portfolio">
-            </div>
-            <div class="gh-field-group">
-                <p class="gh-label">Chemin du fichier dans le repo</p>
-                <input class="admin-input-sm" type="text" id="gh-path" placeholder="Portfolio/js/status.js" value="Portfolio/js/status.js">
-            </div>
-            <button class="apply-btn" id="apply-btn" onclick="applyStatus()" disabled>
-                <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Appliquer le changement
+            <button class="btn btn-ghost" style="padding:7px 14px;font-size:9.5px;" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
             </button>
-            <div id="apply-result"></div>
         </div>
-        <p class="admin-note">
-            Ton token GitHub (PAT) n&rsquo;est jamais stock&eacute; &mdash; uniquement en m&eacute;moire pour cette session.<br>
-            Cr&eacute;er un token sur <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> avec le scope <strong>repo</strong>.
-        </p>
     </div>
 
-    <a class="back-link" href="index.html">
-        <i class="fa-solid fa-arrow-left"></i> Retour au site
-    </a>
+    <!-- GitHub Config -->
+    <div id="gh-config">
+        <div class="gh-config-row">
+            <input class="fi" type="password" id="gh-token" placeholder="GitHub Token (ghp_...)" style="max-width:220px" autocomplete="off">
+            <input class="fi" type="text" id="gh-repo" placeholder="owner/repo" style="max-width:200px">
+            <input class="fi" type="text" id="gh-branch" placeholder="Branche (main)" style="max-width:120px">
+            <input class="fi" type="text" id="gh-root" placeholder="Dossier (Portfolio)" style="max-width:140px">
+            <button class="btn btn-primary" id="conn-btn" onclick="saveGhConfig()" style="padding:9px 18px;font-size:9.5px;">
+                <i class="fa-solid fa-plug"></i>&nbsp; Connecter
+            </button>
+        </div>
+    </div>
 
-</div>
+    <!-- Tabs bar -->
+    <div class="tabs-bar">
+        <button class="tab-btn active" onclick="switchTab('status')"><i class="fa-solid fa-circle-dot"></i>&nbsp; Statut</button>
+        <button class="tab-btn" onclick="switchTab('about')"><i class="fa-regular fa-id-card"></i>&nbsp; Biographie</button>
+        <button class="tab-btn" onclick="switchTab('projects')"><i class="fa-solid fa-layer-group"></i>&nbsp; Projets</button>
+        <button class="tab-btn" onclick="switchTab('tarifs')"><i class="fa-solid fa-tag"></i>&nbsp; Tarifs</button>
+    </div>
+
+    <!-- ── TAB: STATUT ──────────────────────────────────────── -->
+    <div class="tab-pane active" id="tab-status">
+        <div class="card">
+            <div class="card-title">Disponibilité — mise à jour globale du site</div>
+            <div class="status-grid">
+                <div class="s-pill s-avail active" data-status="available" onclick="selectStatus(this)">
+                    <div class="s-emoji">✅</div>
+                    <div class="s-label">Disponible</div>
+                </div>
+                <div class="s-pill s-ltd" data-status="limited" onclick="selectStatus(this)">
+                    <div class="s-emoji">⏳</div>
+                    <div class="s-label">Momentanément<br>indisponible</div>
+                </div>
+                <div class="s-pill s-off" data-status="off" onclick="selectStatus(this)">
+                    <div class="s-emoji">🔴</div>
+                    <div class="s-label">Actuellement<br>en OFF</div>
+                </div>
+            </div>
+            <div class="card-actions" style="margin-top:18px">
+                <button class="btn btn-primary" onclick="commitStatus()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Publier le statut
+                </button>
+            </div>
+            <div class="result-msg" id="status-result"></div>
+        </div>
+        <div class="card" style="font-size:11px;color:var(--muted);line-height:1.8">
+            <div class="card-title">À propos du système de statut</div>
+            Le statut est lu depuis <code>js/status.js</code>. Le changer ici met à jour tous les badges du site en une seule publication GitHub.<br>
+            GitHub Pages redéploie automatiquement en quelques secondes.
+        </div>
+    </div>
+
+    <!-- ── TAB: BIOGRAPHIE ─────────────────────────────────── -->
+    <div class="tab-pane" id="tab-about">
+        <div class="card">
+            <div class="card-title">Page À propos</div>
+            <div class="card-actions" style="margin-bottom:18px">
+                <button class="btn btn-ghost" onclick="loadAbout()"><i class="fa-solid fa-rotate"></i>&nbsp; Charger le contenu actuel</button>
+            </div>
+            <div class="result-msg" id="about-load-result"></div>
+
+            <div class="field-row">
+                <div class="field-wrap">
+                    <div class="field-label">Accroche principale</div>
+                    <input class="fi" type="text" id="about-tagline" placeholder="Créatif polyvalent — Dév web & Visuel">
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field-wrap">
+                    <div class="field-label">Paragraphe 1</div>
+                    <textarea class="fi" id="about-intro-1" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="field-row">
+                <div class="field-wrap">
+                    <div class="field-label">Paragraphe 2</div>
+                    <textarea class="fi" id="about-intro-2" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="field-row">
+                <div class="field-wrap">
+                    <div class="field-label">Paragraphe 3</div>
+                    <textarea class="fi" id="about-intro-3" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="field-row cols-3">
+                <div class="field-wrap">
+                    <div class="field-label">Chip 1</div>
+                    <input class="fi" type="text" id="about-chip-1" placeholder="4+ ans de pratique">
+                </div>
+                <div class="field-wrap">
+                    <div class="field-label">Chip 2</div>
+                    <input class="fi" type="text" id="about-chip-2" placeholder="30+ projets livrés">
+                </div>
+                <div class="field-wrap">
+                    <div class="field-label">Chip 3</div>
+                    <input class="fi" type="text" id="about-chip-3" placeholder="10+ clients satisfaits">
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <button class="btn btn-primary" onclick="saveAbout()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarder
+                </button>
+            </div>
+            <div class="result-msg" id="about-result"></div>
+        </div>
+    </div>
+
+    <!-- ── TAB: PROJETS ─────────────────────────────────────── -->
+    <div class="tab-pane" id="tab-projects">
+
+        <!-- Project list -->
+        <div id="proj-list-view">
+            <div class="card">
+                <div class="card-title">Projets existants — cliquer pour modifier</div>
+                <div class="proj-list" id="proj-list">
+                    <div class="proj-item" onclick="openProj('project01')"><span class="proj-item-name">Project 01 — Yevta</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="proj-item" onclick="openProj('project02')"><span class="proj-item-name">Project 02 — VZX</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="proj-item" onclick="openProj('project03')"><span class="proj-item-name">Project 03 — V.T.O. Studio</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="proj-item" onclick="openProj('project04')"><span class="proj-item-name">Project 04 — Cover-Art</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="proj-item" onclick="openProj('project05')"><span class="proj-item-name">Project 05 — 213 HUMA (D.A.)</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="proj-item" onclick="openProj('project06')"><span class="proj-item-name">Project 06 — MDLR</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="proj-item" onclick="openProj('project07')"><span class="proj-item-name">Project 07 — 213 HUMA (Charte)</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="proj-item" onclick="openProj('project08')"><span class="proj-item-name">Project 08 — Muzey</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+                </div>
+            </div>
+
+            <!-- Add new project -->
+            <div class="card">
+                <div class="card-title">Nouveau projet</div>
+                <button class="btn btn-ghost new-proj-toggle" onclick="toggleNewProj()">
+                    <i class="fa-solid fa-plus"></i>&nbsp; Créer un nouveau projet
+                </button>
+                <div class="new-proj-form" id="new-proj-form">
+                    <div class="field-row cols-2">
+                        <div class="field-wrap">
+                            <div class="field-label">Nom du fichier (ex: project09)</div>
+                            <input class="fi" type="text" id="new-proj-slug" placeholder="project09">
+                        </div>
+                        <div class="field-wrap">
+                            <div class="field-label">Titre</div>
+                            <input class="fi" type="text" id="new-proj-title" placeholder="Mon Projet">
+                        </div>
+                    </div>
+                    <div class="field-row cols-2">
+                        <div class="field-wrap">
+                            <div class="field-label">Rôle</div>
+                            <input class="fi" type="text" id="new-proj-role" placeholder="Art Direction">
+                        </div>
+                        <div class="field-wrap">
+                            <div class="field-label">Date</div>
+                            <input class="fi" type="text" id="new-proj-date" placeholder="Jan. 2025">
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-wrap">
+                            <div class="field-label">Description</div>
+                            <textarea class="fi" id="new-proj-desc" rows="3" placeholder="Description du projet..."></textarea>
+                        </div>
+                    </div>
+                    <div class="field-row cols-2">
+                        <div class="field-wrap">
+                            <div class="field-label">URL image héro</div>
+                            <input class="fi" type="text" id="new-proj-hero" placeholder="images/monhero.jpg">
+                        </div>
+                        <div class="field-wrap">
+                            <div class="field-label">URL lien externe (optionnel)</div>
+                            <input class="fi" type="text" id="new-proj-link" placeholder="https://...">
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-wrap">
+                            <div class="field-label">Images galerie (1 URL par ligne)</div>
+                            <textarea class="fi" id="new-proj-images" rows="3" placeholder="images/projects/img1.jpg&#10;images/projects/img2.jpg&#10;images/projects/img3.jpg"></textarea>
+                        </div>
+                    </div>
+                    <div class="field-row cols-2">
+                        <div class="field-wrap">
+                            <div class="field-label">Projet suivant (fichier)</div>
+                            <input class="fi" type="text" id="new-proj-next" placeholder="project01.html">
+                        </div>
+                        <div class="field-wrap">
+                            <div class="field-label">Image projet suivant</div>
+                            <input class="fi" type="text" id="new-proj-next-img" placeholder="images/next.jpg">
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-ok" onclick="createNewProject()">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Créer & publier
+                        </button>
+                        <button class="btn btn-ghost" onclick="toggleNewProj()">Annuler</button>
+                    </div>
+                    <div class="result-msg" id="new-proj-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project editor -->
+        <div class="proj-editor" id="proj-editor">
+            <button class="back-btn" onclick="backToList()">
+                <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+            </button>
+            <div class="card">
+                <div class="card-title" id="proj-editor-title">Édition projet</div>
+                <div class="card-actions" style="margin-bottom:18px">
+                    <button class="btn btn-ghost" onclick="loadCurrentProj()"><i class="fa-solid fa-rotate"></i>&nbsp; Charger le contenu actuel</button>
+                </div>
+                <div class="result-msg" id="proj-load-result"></div>
+
+                <div class="field-row cols-2">
+                    <div class="field-wrap">
+                        <div class="field-label">Titre (hero)</div>
+                        <input class="fi" type="text" id="edit-proj-title">
+                    </div>
+                    <div class="field-wrap">
+                        <div class="field-label">Rôle</div>
+                        <input class="fi" type="text" id="edit-proj-role">
+                    </div>
+                </div>
+                <div class="field-row cols-2">
+                    <div class="field-wrap">
+                        <div class="field-label">Date</div>
+                        <input class="fi" type="text" id="edit-proj-date">
+                    </div>
+                    <div class="field-wrap">
+                        <div class="field-label">URL lien externe</div>
+                        <input class="fi" type="text" id="edit-proj-link">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field-wrap">
+                        <div class="field-label">Description</div>
+                        <textarea class="fi" id="edit-proj-desc" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="saveProj()">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarder
+                    </button>
+                </div>
+                <div class="result-msg" id="proj-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── TAB: TARIFS ─────────────────────────────────────── -->
+    <div class="tab-pane" id="tab-tarifs">
+        <div class="card">
+            <div class="card-title">Services & tarifs</div>
+            <div class="card-actions" style="margin-bottom:18px">
+                <button class="btn btn-ghost" onclick="loadTarifs()"><i class="fa-solid fa-rotate"></i>&nbsp; Charger les tarifs actuels</button>
+            </div>
+            <div class="result-msg" id="tarifs-load-result"></div>
+            <div id="tarifs-fields">
+                <!-- Generated dynamically -->
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-primary" onclick="saveTarifs()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarder les tarifs
+                </button>
+            </div>
+            <div class="result-msg" id="tarifs-result"></div>
+        </div>
+    </div>
+
+</div><!-- /app -->
+
+<!-- ══ STATUS.JS LOAD (pour détecter statut courant) ══════════ -->
+<script src="js/status.js"></script>
 
 <script>
-// ──────────────────────────────────────────────────────────────
-// CONFIG — change the password here
-// ──────────────────────────────────────────────────────────────
-var ADMIN_PASSWORD = 'flores2026';
+// ════════════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════════════
+var ADMIN_PASSWORD = 'flores2026'; // ← changer ici
 
-// ──────────────────────────────────────────────────────────────
-// State
-// ──────────────────────────────────────────────────────────────
+var gh = { token:'', repo:'', branch:'main', root:'Portfolio' };
 var selectedStatus = 'available';
+var currentProjFile = '';
 
-// ──────────────────────────────────────────────────────────────
-// Auth
-// ──────────────────────────────────────────────────────────────
-document.getElementById('login-form').addEventListener('submit', function(e) {
+// ════════════════════════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════════════════════════
+document.getElementById('login-form').addEventListener('submit', function(e){
     e.preventDefault();
-    var pwd = document.getElementById('admin-pwd').value;
-    if (pwd === ADMIN_PASSWORD) {
-        document.getElementById('admin-login').style.display = 'none';
-        document.getElementById('admin-panel').style.display = 'block';
-        sessionStorage.setItem('flores-admin', '1');
-        initDashboard();
+    var pwd = document.getElementById('login-pwd').value;
+    if(pwd === ADMIN_PASSWORD){
+        sessionStorage.setItem('fadm','1');
+        showApp();
     } else {
-        var err = document.getElementById('login-error');
-        err.textContent = 'Mot de passe incorrect.';
-        document.getElementById('admin-pwd').value = '';
-        document.getElementById('admin-pwd').focus();
-        setTimeout(function(){ err.textContent = ''; }, 2500);
+        var el = document.getElementById('login-err');
+        el.textContent = 'Mot de passe incorrect.';
+        document.getElementById('login-pwd').value = '';
+        setTimeout(function(){ el.textContent=''; }, 2500);
     }
 });
-
-function logout() {
-    sessionStorage.removeItem('flores-admin');
-    document.getElementById('admin-panel').style.display = 'none';
-    document.getElementById('admin-login').style.display = 'block';
-    document.getElementById('admin-pwd').value = '';
-    document.getElementById('admin-pwd').focus();
+function logout(){
+    sessionStorage.removeItem('fadm');
+    location.reload();
 }
-
-// Auto-restore session
-if (sessionStorage.getItem('flores-admin') === '1') {
-    document.getElementById('admin-login').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    initDashboard();
+function showApp(){
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    restoreGhConfig();
+    initStatus();
+    buildTarifFields();
 }
+if(sessionStorage.getItem('fadm')==='1') showApp();
 
-// ──────────────────────────────────────────────────────────────
-// Dashboard
-// ──────────────────────────────────────────────────────────────
-function initDashboard() {
-    // Try to detect current status from status.js (local)
-    var s = window.FLORES_STATUS || 'available';
-    selectedStatus = s;
-    highlightPill(s);
-    updateApplyBtn();
-}
-
-function selectStatus(el) {
-    selectedStatus = el.getAttribute('data-status');
-    highlightPill(selectedStatus);
-    updateApplyBtn();
-    hideResult();
-}
-
-function highlightPill(status) {
-    document.querySelectorAll('.status-pill').forEach(function(p) {
-        p.classList.remove('active');
-    });
-    var target = document.querySelector('.status-pill[data-status="' + status + '"]');
-    if (target) target.classList.add('active');
-}
-
-function updateApplyBtn() {
-    var token = document.getElementById('gh-token').value.trim();
-    document.getElementById('apply-btn').disabled = !token;
-}
-
-document.getElementById('gh-token').addEventListener('input', updateApplyBtn);
-
-function hideResult() {
-    var r = document.getElementById('apply-result');
-    r.style.display = 'none';
-    r.className = '';
-    r.textContent = '';
-}
-
-function showResult(ok, msg) {
-    var r = document.getElementById('apply-result');
-    r.style.display = 'block';
-    r.className = ok ? 'ok' : 'err';
-    r.textContent = msg;
-}
-
-// ──────────────────────────────────────────────────────────────
-// GitHub API — update status.js
-// ──────────────────────────────────────────────────────────────
-function applyStatus() {
-    var token  = document.getElementById('gh-token').value.trim();
-    var repo   = document.getElementById('gh-repo').value.trim();
-    var path   = document.getElementById('gh-path').value.trim();
-
-    if (!token || !repo || !path) {
-        showResult(false, 'Veuillez remplir tous les champs.');
-        return;
+// ════════════════════════════════════════════════════════════════
+// GITHUB CONFIG
+// ════════════════════════════════════════════════════════════════
+function saveGhConfig(){
+    gh.token  = document.getElementById('gh-token').value.trim();
+    gh.repo   = document.getElementById('gh-repo').value.trim();
+    gh.branch = document.getElementById('gh-branch').value.trim() || 'main';
+    gh.root   = document.getElementById('gh-root').value.trim() || 'Portfolio';
+    if(gh.token && gh.repo){
+        sessionStorage.setItem('fgh', JSON.stringify({r:gh.repo,b:gh.branch,root:gh.root}));
+        setConn(true);
+    } else {
+        setConn(false);
     }
+}
+function restoreGhConfig(){
+    var s = sessionStorage.getItem('fgh');
+    if(s){ try{ var d=JSON.parse(s); gh.repo=d.r; gh.branch=d.b||'main'; gh.root=d.root||'Portfolio';
+        document.getElementById('gh-repo').value=gh.repo;
+        document.getElementById('gh-branch').value=gh.branch;
+        document.getElementById('gh-root').value=gh.root;
+    }catch(e){} }
+    // token not persisted for security
+}
+function setConn(ok){
+    document.getElementById('conn-dot').className = 'conn-dot' + (ok ? ' connected' : '');
+    document.getElementById('conn-label').textContent = ok ? 'Connecté — ' + gh.repo : 'Non connecté';
+}
 
-    var btn = document.getElementById('apply-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; En cours...';
-    hideResult();
+// ════════════════════════════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════════════════════════════
+function switchTab(id){
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('tab-'+id).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
 
-    var apiBase = 'https://api.github.com/repos/' + repo + '/contents/' + path;
-    var headers = {
-        'Authorization': 'token ' + token,
+// ════════════════════════════════════════════════════════════════
+// GITHUB API HELPERS
+// ════════════════════════════════════════════════════════════════
+function apiUrl(path){
+    return 'https://api.github.com/repos/' + gh.repo + '/contents/' + gh.root + '/' + path;
+}
+function ghHeaders(){
+    return {
+        'Authorization': 'token ' + gh.token,
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
     };
-
-    // Step 1 — get current file (need SHA to update)
-    fetch(apiBase, { headers: headers })
-        .then(function(res) {
-            if (!res.ok) throw new Error('Fichier introuvable (' + res.status + '). V&eacute;rifie le chemin et le token.');
-            return res.json();
-        })
-        .then(function(data) {
-            var sha = data.sha;
-
-            // Build new file content
-            var newContent = buildStatusJS(selectedStatus);
-            var encoded = btoa(unescape(encodeURIComponent(newContent)));
-
-            // Step 2 — commit the update
-            return fetch(apiBase, {
-                method: 'PUT',
-                headers: headers,
-                body: JSON.stringify({
-                    message: 'chore: update status to ' + selectedStatus,
-                    content: encoded,
-                    sha: sha,
-                    branch: 'main'
-                })
-            });
-        })
-        .then(function(res) {
-            if (!res.ok) return res.json().then(function(d){ throw new Error(d.message || 'Erreur GitHub ' + res.status); });
-            return res.json();
-        })
-        .then(function() {
-            showResult(true, '✓ Statut mis à jour : « ' + selectedStatus + ' ». Le site sera déployé dans quelques secondes.');
-        })
-        .catch(function(err) {
-            showResult(false, '✕ ' + (err.message || 'Erreur inconnue.'));
-        })
-        .finally(function() {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Appliquer le changement';
-            updateApplyBtn();
-        });
+}
+function getFile(path){
+    return fetch(apiUrl(path), {headers: ghHeaders()}).then(function(r){
+        if(!r.ok) throw new Error('Erreur ' + r.status + ' — vérifie le token et le chemin du repo.');
+        return r.json();
+    });
+}
+function putFile(path, content, sha, message){
+    var encoded = btoa(unescape(encodeURIComponent(content)));
+    return fetch(apiUrl(path), {
+        method:'PUT', headers: ghHeaders(),
+        body: JSON.stringify({ message:message, content:encoded, sha:sha, branch:gh.branch })
+    }).then(function(r){
+        if(!r.ok) return r.json().then(function(d){ throw new Error(d.message || 'Erreur GitHub '+r.status); });
+        return r.json();
+    });
+}
+function parseHTML(b64){
+    var raw = decodeURIComponent(escape(atob(b64.replace(/\n/g,''))));
+    return (new DOMParser()).parseFromString(raw, 'text/html');
+}
+function serializeDoc(doc){
+    return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+}
+function showResult(elId, ok, msg){
+    var el = document.getElementById(elId);
+    el.style.display = 'block';
+    el.className = 'result-msg ' + (ok ? 'ok' : 'err');
+    el.textContent = msg;
+}
+function hideResult(elId){
+    var el = document.getElementById(elId);
+    if(el){ el.style.display = 'none'; }
+}
+function checkConn(){
+    if(!gh.token || !gh.repo){
+        alert('Configure et connecte le token GitHub en haut de page d\'abord.');
+        return false;
+    }
+    return true;
 }
 
-function buildStatusJS(status) {
-    return '// ─────────────────────────────────────────────────────────────\n'
-        + '// Flores — Statut de disponibilité centralisé\n'
-        + '// Modifier FLORES_STATUS pour mettre à jour TOUT le site\n'
-        + '// ─────────────────────────────────────────────────────────────\n'
-        + "// OPTIONS : 'available' | 'limited' | 'off'\n"
-        + "window.FLORES_STATUS = '" + status + "';\n"
-        + '\n'
-        + '(function () {\n'
-        + '    var STATES = {\n'
-        + "        available: {\n            emoji: '✅',\n            label: 'Disponible',\n            color: '#22c55e',\n            pulse: true\n        },\n"
-        + "        limited: {\n            emoji: '⏳',\n            label: 'Momentanément indisponible',\n            color: '#f59e0b',\n            pulse: false\n        },\n"
-        + "        off: {\n            emoji: '🔴',\n            label: 'Actuellement en OFF',\n            color: '#ef4444',\n            pulse: false\n        }\n"
-        + '    };\n'
-        + '\n'
-        + '    function applyStatus() {\n'
-        + '        var s = STATES[window.FLORES_STATUS] || STATES.available;\n'
-        + '\n'
-        + "        document.querySelectorAll('[data-status-label]').forEach(function (el) {\n"
-        + "            el.textContent = s.emoji + ' ' + s.label;\n"
-        + '        });\n'
-        + '\n'
-        + "        document.querySelectorAll('[data-status-short]').forEach(function (el) {\n"
-        + '            el.textContent = s.label;\n'
-        + '        });\n'
-        + '\n'
-        + "        document.querySelectorAll('[data-status-dot]').forEach(function (dot) {\n"
-        + '            dot.style.backgroundColor = s.color;\n'
-        + '            if (!s.pulse) {\n'
-        + "                dot.style.animation = 'none';\n"
-        + "                dot.style.boxShadow = 'none';\n"
-        + '            } else {\n'
-        + "                dot.style.animation = '';\n"
-        + "                dot.style.boxShadow = '';\n"
-        + '            }\n'
-        + '        });\n'
-        + '\n'
-        + "        document.querySelectorAll('[data-status-badge]').forEach(function (el) {\n"
-        + '            el.setAttribute(\'data-status\', window.FLORES_STATUS);\n'
-        + '        });\n'
-        + '    }\n'
-        + '\n'
-        + "    if (document.readyState === 'loading') {\n"
-        + "        document.addEventListener('DOMContentLoaded', applyStatus);\n"
-        + '    } else {\n'
-        + '        applyStatus();\n'
-        + '    }\n'
-        + '})();\n';
+// ════════════════════════════════════════════════════════════════
+// TAB: STATUT
+// ════════════════════════════════════════════════════════════════
+function initStatus(){
+    var s = (window.FLORES_STATUS || 'available');
+    selectedStatus = s;
+    document.querySelectorAll('.s-pill').forEach(function(p){
+        p.classList.toggle('active', p.getAttribute('data-status') === s);
+    });
+}
+function selectStatus(el){
+    selectedStatus = el.getAttribute('data-status');
+    document.querySelectorAll('.s-pill').forEach(function(p){ p.classList.remove('active'); });
+    el.classList.add('active');
+    hideResult('status-result');
+}
+function commitStatus(){
+    if(!checkConn()) return;
+    showResult('status-result','ok' /* reusing as info */, '⏳ Publication...');
+    getFile('js/status.js').then(function(data){
+        var newContent = buildStatusJS(selectedStatus);
+        return putFile('js/status.js', newContent, data.sha, 'chore: status → ' + selectedStatus);
+    }).then(function(){
+        showResult('status-result', true, '✓ Statut mis à jour : « ' + selectedStatus + ' ». Déploiement en cours...');
+    }).catch(function(e){
+        showResult('status-result', false, '✕ ' + e.message);
+    });
+}
+function buildStatusJS(s){
+    return "// Flores — Statut de disponibilité centralisé\n// OPTIONS : 'available' | 'limited' | 'off'\nwindow.FLORES_STATUS = '" + s + "';\n\n(function () {\n    var STATES = {\n        available: { emoji: '✅', label: 'Disponible', color: '#22c55e', pulse: true },\n        limited:   { emoji: '⏳', label: 'Momentanément indisponible', color: '#f59e0b', pulse: false },\n        off:       { emoji: '🔴', label: 'Actuellement en OFF', color: '#ef4444', pulse: false }\n    };\n    function applyStatus() {\n        var s = STATES[window.FLORES_STATUS] || STATES.available;\n        document.querySelectorAll('[data-status-label]').forEach(function (el) { el.textContent = s.emoji + ' ' + s.label; });\n        document.querySelectorAll('[data-status-short]').forEach(function (el) { el.textContent = s.label; });\n        document.querySelectorAll('[data-status-dot]').forEach(function (dot) {\n            dot.style.backgroundColor = s.color;\n            if (!s.pulse) { dot.style.animation = 'none'; dot.style.boxShadow = 'none'; }\n            else { dot.style.animation = ''; dot.style.boxShadow = ''; }\n        });\n        document.querySelectorAll('[data-status-badge]').forEach(function (el) { el.setAttribute('data-status', window.FLORES_STATUS); });\n    }\n    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', applyStatus); }\n    else { applyStatus(); }\n})();\n";
+}
+
+// ════════════════════════════════════════════════════════════════
+// TAB: BIOGRAPHIE
+// ════════════════════════════════════════════════════════════════
+var aboutSha = '';
+function loadAbout(){
+    if(!checkConn()) return;
+    showResult('about-load-result', true, '⏳ Chargement...');
+    getFile('about.html').then(function(data){
+        aboutSha = data.sha;
+        var doc = parseHTML(data.content);
+        setValue('about-tagline',  doc, '#admin-bio-tagline', 'textContent');
+        setValue('about-intro-1',  doc, '#admin-bio-intro-1', 'innerHTML');
+        setValue('about-intro-2',  doc, '#admin-bio-intro-2', 'innerHTML');
+        setValue('about-intro-3',  doc, '#admin-bio-intro-3', 'innerHTML');
+        setValue('about-chip-1',   doc, '#admin-bio-chip-1',  'textContent');
+        setValue('about-chip-2',   doc, '#admin-bio-chip-2',  'textContent');
+        setValue('about-chip-3',   doc, '#admin-bio-chip-3',  'textContent');
+        showResult('about-load-result', true, '✓ Contenu chargé.');
+    }).catch(function(e){ showResult('about-load-result', false, '✕ ' + e.message); });
+}
+function setValue(inputId, doc, selector, prop){
+    var el = doc.querySelector(selector);
+    var input = document.getElementById(inputId);
+    if(el && input) input.value = (prop === 'innerHTML') ? el.innerHTML : el.textContent;
+}
+function saveAbout(){
+    if(!checkConn() || !aboutSha){ alert('Charge d\'abord le contenu (bouton Charger).'); return; }
+    showResult('about-result', true, '⏳ Sauvegarde...');
+    getFile('about.html').then(function(data){
+        aboutSha = data.sha;
+        var doc = parseHTML(data.content);
+        setDocVal(doc, '#admin-bio-tagline',  'about-tagline',  'textContent');
+        setDocVal(doc, '#admin-bio-intro-1',  'about-intro-1',  'innerHTML');
+        setDocVal(doc, '#admin-bio-intro-2',  'about-intro-2',  'innerHTML');
+        setDocVal(doc, '#admin-bio-intro-3',  'about-intro-3',  'innerHTML');
+        setDocVal(doc, '#admin-bio-chip-1',   'about-chip-1',   'textContent');
+        setDocVal(doc, '#admin-bio-chip-2',   'about-chip-2',   'textContent');
+        setDocVal(doc, '#admin-bio-chip-3',   'about-chip-3',   'textContent');
+        return putFile('about.html', serializeDoc(doc), data.sha, 'content: update biographie');
+    }).then(function(){
+        showResult('about-result', true, '✓ Biographie sauvegardée et publiée !');
+    }).catch(function(e){ showResult('about-result', false, '✕ ' + e.message); });
+}
+function setDocVal(doc, selector, inputId, prop){
+    var el = doc.querySelector(selector);
+    var val = document.getElementById(inputId).value;
+    if(el){ if(prop === 'innerHTML') el.innerHTML = val; else el.textContent = val; }
+}
+
+// ════════════════════════════════════════════════════════════════
+// TAB: PROJETS
+// ════════════════════════════════════════════════════════════════
+function openProj(slug){
+    currentProjFile = slug + '.html';
+    document.getElementById('proj-list-view').style.display = 'none';
+    document.getElementById('proj-editor').classList.add('open');
+    document.getElementById('proj-editor-title').textContent = 'Édition — ' + slug;
+    // Clear fields
+    ['edit-proj-title','edit-proj-role','edit-proj-date','edit-proj-desc','edit-proj-link'].forEach(function(id){
+        document.getElementById(id).value = '';
+    });
+    hideResult('proj-load-result');
+    hideResult('proj-result');
+}
+function backToList(){
+    currentProjFile = '';
+    document.getElementById('proj-list-view').style.display = 'block';
+    document.getElementById('proj-editor').classList.remove('open');
+}
+var projSha = '';
+function loadCurrentProj(){
+    if(!checkConn() || !currentProjFile) return;
+    showResult('proj-load-result', true, '⏳ Chargement...');
+    getFile(currentProjFile).then(function(data){
+        projSha = data.sha;
+        var doc = parseHTML(data.content);
+        setValue('edit-proj-title', doc, '#admin-proj-title',  'textContent');
+        setValue('edit-proj-role',  doc, '#admin-proj-role',   'textContent');
+        setValue('edit-proj-date',  doc, '#admin-proj-date',   'textContent');
+        setValue('edit-proj-desc',  doc, '#admin-proj-desc',   'innerHTML');
+        // Link
+        var linkEl = doc.querySelector('.proj-meta-link');
+        if(linkEl) document.getElementById('edit-proj-link').value = linkEl.getAttribute('href') || '';
+        showResult('proj-load-result', true, '✓ Contenu chargé.');
+    }).catch(function(e){ showResult('proj-load-result', false, '✕ ' + e.message); });
+}
+function saveProj(){
+    if(!checkConn() || !currentProjFile){ alert('Aucun projet sélectionné.'); return; }
+    showResult('proj-result', true, '⏳ Sauvegarde...');
+    getFile(currentProjFile).then(function(data){
+        projSha = data.sha;
+        var doc = parseHTML(data.content);
+        setDocVal(doc, '#admin-proj-title', 'edit-proj-title', 'textContent');
+        setDocVal(doc, '#admin-proj-role',  'edit-proj-role',  'textContent');
+        setDocVal(doc, '#admin-proj-date',  'edit-proj-date',  'textContent');
+        setDocVal(doc, '#admin-proj-desc',  'edit-proj-desc',  'innerHTML');
+        var linkEl = doc.querySelector('.proj-meta-link');
+        var newHref = document.getElementById('edit-proj-link').value.trim();
+        if(linkEl && newHref) linkEl.setAttribute('href', newHref);
+        return putFile(currentProjFile, serializeDoc(doc), data.sha, 'content: update ' + currentProjFile);
+    }).then(function(){
+        showResult('proj-result', true, '✓ Projet sauvegardé et publié !');
+    }).catch(function(e){ showResult('proj-result', false, '✕ ' + e.message); });
+}
+
+// ── New project ──────────────────────────────────────────────
+var newProjOpen = false;
+function toggleNewProj(){
+    newProjOpen = !newProjOpen;
+    document.getElementById('new-proj-form').classList.toggle('open', newProjOpen);
+}
+function createNewProject(){
+    if(!checkConn()) return;
+    var slug  = document.getElementById('new-proj-slug').value.trim();
+    var title = document.getElementById('new-proj-title').value.trim();
+    var role  = document.getElementById('new-proj-role').value.trim();
+    var date  = document.getElementById('new-proj-date').value.trim();
+    var desc  = document.getElementById('new-proj-desc').value.trim();
+    var hero  = document.getElementById('new-proj-hero').value.trim();
+    var link  = document.getElementById('new-proj-link').value.trim();
+    var imgs  = document.getElementById('new-proj-images').value.trim().split('\n').filter(Boolean);
+    var nxt   = document.getElementById('new-proj-next').value.trim() || 'index-showcase-gallery.html';
+    var nxtImg= document.getElementById('new-proj-next-img').value.trim() || '';
+    if(!slug || !title){ alert('Nom du fichier et titre requis.'); return; }
+    showResult('new-proj-result', true, '⏳ Création...');
+
+    // Build image grid HTML
+    var gridHTML = '';
+    if(imgs.length === 2){
+        gridHTML = '<div class="proj-img-pair">\n' + imgs.map(function(u){ return '    <img src="'+u+'" alt="'+title+'">'; }).join('\n') + '\n</div>';
+    } else if(imgs.length >= 3){
+        var tri = imgs.slice(0,3);
+        gridHTML = '<div class="proj-img-triple">\n' + tri.map(function(u){ return '    <img src="'+u+'" alt="'+title+'">'; }).join('\n') + '\n</div>';
+        if(imgs.length > 3){
+            var rest = imgs.slice(3);
+            if(rest.length === 2){
+                gridHTML += '\n<div class="proj-img-pair" style="margin-top:3px;">\n' + rest.map(function(u){ return '    <img src="'+u+'" alt="'+title+'">'; }).join('\n') + '\n</div>';
+            }
+        }
+    } else if(imgs.length === 1){
+        gridHTML = '<img src="'+imgs[0]+'" alt="'+title+'" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">';
+    }
+
+    var linkBlock = link ? '<a class="proj-meta-link" href="'+link+'" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le projet</a>' : '';
+    var html = generateProjectHTML(slug, title, role, date, desc, hero, linkBlock, gridHTML, nxt, nxtImg);
+
+    fetch('https://api.github.com/repos/' + gh.repo + '/contents/' + gh.root + '/' + slug + '.html', {
+        method:'PUT', headers: ghHeaders(),
+        body: JSON.stringify({
+            message: 'feat: add ' + slug + ' — ' + title,
+            content: btoa(unescape(encodeURIComponent(html))),
+            branch: gh.branch
+        })
+    }).then(function(r){
+        if(!r.ok) return r.json().then(function(d){ throw new Error(d.message); });
+        return r.json();
+    }).then(function(){
+        showResult('new-proj-result', true, '✓ ' + slug + '.html créé et publié ! Pense à l\'ajouter dans la galerie (index-showcase-gallery.html).');
+        // Add to list display
+        var li = document.createElement('div');
+        li.className = 'proj-item';
+        li.onclick = function(){ openProj(slug); };
+        li.innerHTML = '<span class="proj-item-name">'+slug+' — '+title+'</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span>';
+        document.getElementById('proj-list').appendChild(li);
+    }).catch(function(e){ showResult('new-proj-result', false, '✕ ' + e.message); });
+}
+
+function generateProjectHTML(slug, title, role, date, desc, hero, linkBlock, gridHTML, nxt, nxtImg){
+    return '<!DOCTYPE html>\n<html lang="fr">\n<head>\n    <title>Flores — '+title+'</title>\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <meta charset="UTF-8" />\n    <link rel="icon" type="image/ico" href="favicon.ico" />\n    <link href="style.css" rel="stylesheet" />\n    <link href="css/content.css" rel="stylesheet" />\n    <link href="css/all.min.css" rel="stylesheet" />\n    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Six+Caps&display=swap" rel="stylesheet">\n</head>\n<body class="hidden hidden-ball smooth-scroll1 rounded-borders" data-primary-color="#8c6144">\n<main>\n    <div class="preloader-wrap" data-centerLine="Chargement..."><div class="outer"><div class="inner"><div class="trackbar"><div class="preloader-intro"><span>Chargement</span></div><div class="loadbar"></div><div class="percentage-wrapper"><div class="percentage" id="precent"></div></div></div><div class="percentage-intro">Veuillez patienter...</div></div></div></div>\n    <div class="cd-index cd-main-content">\n    <div id="clapat-page-content" class="light-content" data-bgcolor="#0c0c0c">\n        <header class="fullscreen-menu invert-header" data-menucolor="#0c0c0c"><div id="header-container"><div id="logo" class="hide-ball"><a class="ajax-link" data-type="page-transition" href="index.html"><img class="black-logo" src="images/logo.png" alt="Flores"><img class="white-logo" src="images/logo-white.png" alt="Flores"></a></div><nav><div class="nav-height"><div class="outer"><div class="inner"><ul data-breakpoint="10025" class="flexnav"><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="index.html"><div class="before-span"><span data-hover="Accueil">Accueil</span></div></a></li><li class="link menu-timeline"><a href="#"><div class="before-span"><span data-hover="Portfolio">Portfolio</span></div></a><ul><li><a class="ajax-link" href="index-showcase-gallery.html" data-type="page-transition">Galerie d\'archive</a></li></ul></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="tarifs.html"><div class="before-span"><span data-hover="Tarifs">Tarifs</span></div></a></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="about.html"><div class="before-span"><span data-hover="Presentation">Presentation</span></div></a></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="contact.html"><div class="before-span"><span data-hover="Contactez-moi">Contactez-moi</span></div></a></li></ul></div></div></div></nav><div class="button-wrap right menu burger-lines"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><div id="burger-wrapper"><div id="menu-burger"><span></span><span></span><span></span></div></div></div></div><div class="button-text sticky right"><span data-hover="Menu">Menu</span></div></div></div></header>\n        <div id="content-scroll"><div id="main">\n            <div id="hero" class="has-image"><div id="hero-styles"><div id="hero-caption" class="content-full-width height-title"><div class="inner"><h1 class="hero-title caption-timeline primary-font-title"><span id="admin-proj-title">'+title+'</span></h1></div></div><div id="hero-footer"><div class="hero-footer-left"><div class="button-wrap right scroll-down"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><i class="arrow-icon-down"></i></div></div><div class="button-text sticky right"><span data-hover="Scroll">Scroll</span></div></div></div><div class="hero-footer-right"><div id="share" class="page-action-content" data-text="Share:"></div></div></div></div></div>\n            <div id="hero-image-wrapper"><div id="hero-background-layer" class="parallax-scroll-image"><div id="hero-bg-image" style="background-image:url('+hero+')"></div></div></div>\n            <div id="main-content"><div id="main-page-content">\n                <div class="proj-intro-split">\n                    <div class="proj-meta-card">\n                        <p class="proj-meta-label">'+title+'</p>\n                        <div class="proj-meta-rule"></div>\n                        <div class="proj-meta-item"><span class="proj-meta-key">R&ocirc;le</span><span class="proj-meta-val" id="admin-proj-role">'+role+'</span></div>\n                        <div class="proj-meta-item"><span class="proj-meta-key">Date</span><span class="proj-meta-val" id="admin-proj-date">'+date+'</span></div>\n                        '+linkBlock+'\n                    </div>\n                    <div><p class="proj-desc-text" id="admin-proj-desc">'+desc+'</p></div>\n                </div>\n                '+gridHTML+'\n            </div></div>\n            <div id="project-nav"><div class="next-project-wrap"><div class="next-project-caption text-align-center content-full-width height-title"><div class="next-caption-wrapper"><div class="caption-wrapper"><a class="next-ajax-link-project auto-trigger" data-type="page-transition" href="'+nxt+'" data-color="#8c6144" data-firstline="Projet" data-secondline="Suivant"></a><div class="next-caption"><div class="next-hero-subtitle"><span></span></div><div class="next-hero-title primary-font-title"><span>Projet suivant.</span></div></div></div></div></div><div class="next-hero-progress"><span></span></div><div class="next-project-image-wrapper"><div class="next-project-image"><div class="next-project-image-bg" style="background-image:url('+nxtImg+')"></div></div></div></div></div>\n        </div></div>\n        <footer class="hidden"><div id="footer-container"><div id="backtotop" class="button-wrap left"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><i class="fa-solid fa-angle-up"></i></div></div><div class="button-text sticky left"><span data-hover="Retour en haut">Retour en haut</span></div></div><div class="footer-middle"><div class="copyright"><span onclick="window.location=\'admin.html\'" style="cursor:default;user-select:none;" title="">2024 &copy;</span> <a class="link" target="_blank" href="https://www.instagram.com/593floores/">Flores</a>. All rights reserved.</div></div><div class="socials-wrap"><div class="socials-icon"><i class="fa-solid fa-share-nodes"></i></div><div class="socials-text">Suivez-moi</div><ul class="socials"><li><span class="parallax-wrap"><a class="parallax-element" href="https://discord.gg/KbA57NM9sC" target="_blank"><i class="fa-brands fa-discord"></i></a></span></li><li><span class="parallax-wrap"><a class="parallax-element" href="https://www.tiktok.com/@593flores" target="_blank"><i class="fa-brands fa-tiktok"></i></a></span></li><li><span class="parallax-wrap"><a class="parallax-element" href="https://www.instagram.com/593floores/"><i class="fa-brands fa-instagram"></i></a></span></li></ul></div></div></footer>\n        <div id="app"></div>\n    </div></div>\n</main>\n<div class="cd-cover-layer"></div><div id="magic-cursor"><div id="ball"><div id="ball-drag-x"></div><div id="ball-drag-y"></div><div id="ball-loader"></div></div></div><div id="clone-image"><div class="hero-translate"></div></div><div id="rotate-device"></div>\n<script src="js/jquery.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/Flip.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/5.0.0/imagesloaded.pkgd.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.4.0/smooth-scrollbar.js"><\/script><script src="js/status.js"><\/script><script src="js/clapat.js"><\/script><script src="js/plugins.js"><\/script><script src="js/common.js"><\/script><script src="js/contact.js"><\/script><script src="js/scripts.js"><\/script>\n<div class="side-nav" role="navigation"><a href="index.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Accueil</span><span class="side-nav-dot"></span></a><a href="index-showcase-gallery.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Portfolio</span><span class="side-nav-dot"></span></a><a href="tarifs.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Tarifs</span><span class="side-nav-dot"></span></a><a href="about.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">&Agrave; Propos</span><span class="side-nav-dot"></span></a><a href="contact.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Contact</span><span class="side-nav-dot"></span></a></div>\n<script>(function(){function setActive(href){var p=href?href.split(\'/\').pop():(window.location.pathname.split(\'/\').pop()||\'index.html\');if(!p)p=\'index.html\';document.querySelectorAll(\'.side-nav-item\').forEach(function(a){a.classList.remove(\'is-active\');if(a.getAttribute(\'href\')===p)a.classList.add(\'is-active\');});if(!document.querySelector(\'.side-nav-item.is-active\')&&p&&/^project\\d+/.test(p)){var g=document.querySelector(\'.side-nav-item[href="index-showcase-gallery.html"]\');if(g)g.classList.add(\'is-active\');}}setActive();document.addEventListener(\'click\',function(e){var l=e.target.closest(\'[data-type="page-transition"]\');if(l){var h=l.getAttribute(\'href\');if(h&&h.indexOf(\'#\')!==0)setActive(h);}},true);window.addEventListener(\'popstate\',function(){setTimeout(setActive,80);});(function(){var o=history.pushState;history.pushState=function(){o.apply(this,arguments);setTimeout(setActive,60);};})();})();<\/script>\n</body></html>';
+}
+
+// ════════════════════════════════════════════════════════════════
+// TAB: TARIFS
+// ════════════════════════════════════════════════════════════════
+var tarifsSha = '';
+var NUM_TARIFS = 7;
+
+function buildTarifFields(){
+    var container = document.getElementById('tarifs-fields');
+    var html = '';
+    for(var i=1; i<=NUM_TARIFS; i++){
+        html += '<div class="tarif-row-card"><div class="tarif-row-num">Service 0'+i+'</div><div class="tarif-fields">'
+            + '<div class="field-row"><div class="field-wrap"><div class="field-label">Nom du service</div><input class="fi" type="text" id="tarif-'+i+'-title"></div></div>'
+            + '<div class="field-row"><div class="field-wrap"><div class="field-label">Description</div><textarea class="fi" id="tarif-'+i+'-desc" rows="2"></textarea></div></div>'
+            + '<div class="field-row" style="max-width:200px"><div class="field-wrap"><div class="field-label">Prix (ex: 250€)</div><input class="fi" type="text" id="tarif-'+i+'-price"></div></div>'
+            + '</div></div>';
+    }
+    container.innerHTML = html;
+}
+function loadTarifs(){
+    if(!checkConn()) return;
+    showResult('tarifs-load-result', true, '⏳ Chargement...');
+    getFile('tarifs.html').then(function(data){
+        tarifsSha = data.sha;
+        var doc = parseHTML(data.content);
+        for(var i=1; i<=NUM_TARIFS; i++){
+            var titleEl = doc.querySelector('#admin-tarif-'+i+'-title');
+            var descEl  = doc.querySelector('#admin-tarif-'+i+'-desc');
+            var priceEl = doc.querySelector('#admin-tarif-'+i+'-price');
+            if(titleEl){
+                // Extract text before the icon span
+                var titleText = '';
+                titleEl.childNodes.forEach(function(node){ if(node.nodeType === 3) titleText += node.textContent; });
+                var inp = document.getElementById('tarif-'+i+'-title');
+                if(inp) inp.value = titleText.trim();
+            }
+            if(descEl){ var d = document.getElementById('tarif-'+i+'-desc'); if(d) d.value = descEl.textContent.trim(); }
+            if(priceEl){ var p = document.getElementById('tarif-'+i+'-price'); if(p) p.value = priceEl.textContent.trim(); }
+        }
+        showResult('tarifs-load-result', true, '✓ Tarifs chargés.');
+    }).catch(function(e){ showResult('tarifs-load-result', false, '✕ ' + e.message); });
+}
+function saveTarifs(){
+    if(!checkConn() || !tarifsSha){ alert('Charge d\'abord les tarifs.'); return; }
+    showResult('tarifs-result', true, '⏳ Sauvegarde...');
+    getFile('tarifs.html').then(function(data){
+        tarifsSha = data.sha;
+        var doc = parseHTML(data.content);
+        for(var i=1; i<=NUM_TARIFS; i++){
+            var titleEl = doc.querySelector('#admin-tarif-'+i+'-title');
+            var descEl  = doc.querySelector('#admin-tarif-'+i+'-desc');
+            var priceEl = doc.querySelector('#admin-tarif-'+i+'-price');
+            var newTitle = document.getElementById('tarif-'+i+'-title').value;
+            var newDesc  = document.getElementById('tarif-'+i+'-desc').value;
+            var newPrice = document.getElementById('tarif-'+i+'-price').value;
+
+            if(titleEl && newTitle){
+                // Replace only the text node (keep icon spans)
+                var found = false;
+                titleEl.childNodes.forEach(function(node){ if(!found && node.nodeType === 3 && node.textContent.trim()){ node.textContent = newTitle + ' '; found = true; } });
+            }
+            if(descEl && newDesc) descEl.textContent = newDesc;
+            if(priceEl && newPrice) priceEl.textContent = newPrice;
+        }
+        return putFile('tarifs.html', serializeDoc(doc), data.sha, 'content: update tarifs');
+    }).then(function(){
+        showResult('tarifs-result', true, '✓ Tarifs sauvegardés et publiés !');
+    }).catch(function(e){ showResult('tarifs-result', false, '✕ ' + e.message); });
 }
 </script>
-
-<!-- Load status.js to read current value -->
-<script src="js/status.js"></script>
-
 </body>
 </html>
