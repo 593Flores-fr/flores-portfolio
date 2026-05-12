@@ -370,11 +370,26 @@
     </nav>
     <script>
     (function(){
-        var p = window.location.pathname.split('/').pop() || 'index.html';
-        if (!p || p === '') p = 'index.html';
-        document.querySelectorAll('.side-nav-item').forEach(function(a){
-            if (a.getAttribute('href') === p) a.classList.add('is-active');
-        });
+        function setActive(href){
+            var p = href ? href.split('/').pop() : (window.location.pathname.split('/').pop() || 'index.html');
+            if(!p) p = 'index.html';
+            document.querySelectorAll('.side-nav-item').forEach(function(a){
+                a.classList.remove('is-active');
+                if(a.getAttribute('href') === p) a.classList.add('is-active');
+            });
+        }
+        /* initial state */
+        setActive();
+        /* intercept every ajax page-transition click (capture phase = fires before Clapat stops propagation) */
+        document.addEventListener('click', function(e){
+            var link = e.target.closest('[data-type="page-transition"]');
+            if(link){
+                var href = link.getAttribute('href');
+                if(href && href.indexOf('#') !== 0) setActive(href);
+            }
+        }, true);
+        /* back / forward buttons */
+        window.addEventListener('popstate', function(){ setTimeout(setActive, 80); });
     })();
     </script>
     <!-- /Side Nav -->
