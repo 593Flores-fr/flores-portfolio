@@ -3164,6 +3164,57 @@
 	.pricing-row-specs ul { gap: 8px; }
 }
 
+/* ── About — grid compétences (remplace parallax) ───────────── */
+.skills-grid-section {
+	padding: 80px 0;
+}
+
+.skills-grid-header {
+	text-align: center;
+	margin-bottom: 60px;
+}
+
+.skills-grid-header p {
+	font-size: 13px;
+	color: rgba(255,255,255,0.35);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 300;
+	margin-top: 16px;
+}
+
+.skills-img-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 16px;
+}
+
+.skills-img-item {
+	border-radius: 10px;
+	overflow: hidden;
+	aspect-ratio: 4/3;
+}
+
+.skills-img-item .section-image {
+	width: 100%;
+	height: 100%;
+}
+
+.skills-img-item .item-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.5s ease;
+}
+
+.skills-img-item:hover .item-image {
+	transform: scale(1.04);
+}
+
+@media only screen and (max-width: 767px) {
+	.skills-img-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+
 /* ── VTO Studio card ─────────────────────────────────────────── */
 .vto-card {
 	margin-top: 48px;
