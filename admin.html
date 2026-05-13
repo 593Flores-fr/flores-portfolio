@@ -1,839 +1,1297 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Admin — Flores</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/ico" href="favicon.ico" />
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-    <link href="css/all.min.css" rel="stylesheet">
-    <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        :root{
-            --bg:#0a0a0a; --surface:rgba(255,255,255,0.025);
-            --border:rgba(255,255,255,0.08); --accent:#8c6144;
-            --text:rgba(255,255,255,0.72); --muted:rgba(255,255,255,0.28);
-            --ok:rgba(34,197,94,0.85); --err:rgba(239,68,68,0.85);
-            --warn:rgba(245,158,11,0.85);
-        }
-        body{background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;font-weight:300;min-height:100vh}
-        a{color:inherit;text-decoration:none}
-        button{font-family:'Poppins',sans-serif;cursor:pointer}
-
-        /* ── LOGIN ─────────────────────────────────────────── */
-        #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-        .login-box{width:100%;max-width:340px;text-align:center}
-        .login-logo{font-size:32px;letter-spacing:0.06em;font-weight:300;color:rgba(255,255,255,0.78);margin-bottom:6px}
-        .login-sub{font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:var(--muted);margin-bottom:52px}
-        .login-form{display:flex;flex-direction:column;gap:12px}
-        .fi{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px 16px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:300;color:rgba(255,255,255,0.82);outline:none;transition:border-color .2s}
-        .fi:focus{border-color:rgba(140,97,68,.55)}
-        .fi::placeholder{color:rgba(255,255,255,.18)}
-        .btn{border-radius:8px;padding:12px 20px;font-size:10.5px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;transition:all .22s;border:1px solid}
-        .btn-primary{background:rgba(140,97,68,.14);border-color:rgba(140,97,68,.35);color:rgba(255,255,255,.62)}
-        .btn-primary:hover:not(:disabled){background:rgba(140,97,68,.28);border-color:rgba(140,97,68,.7);color:#fff}
-        .btn-primary:disabled{opacity:.35;cursor:not-allowed}
-        .btn-ghost{background:none;border-color:var(--border);color:var(--muted)}
-        .btn-ghost:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
-        .btn-danger{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.28);color:rgba(239,68,68,.75)}
-        .btn-danger:hover{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.5);color:#f87171}
-        .btn-ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.28);color:rgba(34,197,94,.8)}
-        .btn-ok:hover:not(:disabled){background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.5);color:#4ade80}
-        #login-err{font-size:11px;color:var(--err);min-height:14px;margin-top:4px}
-
-        /* ── LAYOUT ─────────────────────────────────────────── */
-        #app{display:none;min-height:100vh;flex-direction:column}
-        .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,.92);backdrop-filter:blur(12px);z-index:100}
-        .topbar-brand{font-size:13px;letter-spacing:.08em;color:rgba(255,255,255,.5)}
-        .topbar-brand strong{color:rgba(255,255,255,.82);font-weight:400}
-        .topbar-right{display:flex;align-items:center;gap:12px}
-        .conn-status{font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
-        .conn-dot{width:6px;height:6px;border-radius:50%;background:#374151}
-        .conn-dot.connected{background:#22c55e}
-
-        /* ── TABS ────────────────────────────────────────────── */
-        .tabs-bar{display:flex;padding:0 28px;border-bottom:1px solid var(--border);gap:0}
-        .tab-btn{padding:14px 20px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;transition:all .2s;position:relative;top:1px}
-        .tab-btn:hover{color:rgba(255,255,255,.55)}
-        .tab-btn.active{color:rgba(255,255,255,.82);border-bottom-color:rgba(140,97,68,.8)}
-        .tab-pane{display:none;padding:32px 28px;max-width:860px}
-        .tab-pane.active{display:block}
-
-        /* ── CARDS ───────────────────────────────────────────── */
-        .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:18px}
-        .card-title{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
-        .field-row{display:grid;gap:10px;margin-bottom:14px}
-        .field-row.cols-2{grid-template-columns:1fr 1fr}
-        .field-row.cols-3{grid-template-columns:1fr 1fr 1fr}
-        .field-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:5px}
-        .field-wrap{display:flex;flex-direction:column}
-        textarea.fi{resize:vertical;min-height:72px;line-height:1.6}
-        .card-actions{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
-        .result-msg{font-size:11px;padding:10px 14px;border-radius:7px;display:none;margin-top:12px}
-        .result-msg.ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.22);color:var(--ok)}
-        .result-msg.err{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.22);color:var(--err)}
-        .result-msg.info{background:rgba(140,97,68,.07);border:1px solid rgba(140,97,68,.22);color:rgba(140,97,68,.9)}
-
-        /* ── GitHub Config (collapsible) ─────────────────────── */
-        #gh-config{padding:14px 28px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01)}
-        .gh-config-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-        .gh-config-row .fi{flex:1;min-width:150px;padding:9px 12px;font-size:12px}
-        #conn-btn{white-space:nowrap;padding:9px 18px;font-size:9.5px}
-
-        /* ── Status pills ────────────────────────────────────── */
-        .status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-        .s-pill{border-radius:10px;padding:18px 12px;text-align:center;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.03);transition:all .22s;user-select:none}
-        .s-pill:hover{background:rgba(255,255,255,.06)}
-        .s-pill.active{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.06)}
-        .s-pill.active.s-avail{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.06)}
-        .s-pill.active.s-ltd{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.06)}
-        .s-pill.active.s-off{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.06)}
-        .s-emoji{font-size:24px;margin-bottom:8px}
-        .s-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-        .s-pill.active .s-label{color:rgba(255,255,255,.75)}
-
-        /* ── Project list ────────────────────────────────────── */
-        .proj-select-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:18px}
-        .proj-select-row select.fi{flex:1}
-        .proj-list{display:grid;gap:8px}
-        .proj-item{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px 16px;transition:border-color .2s;cursor:pointer}
-        .proj-item:hover{border-color:rgba(140,97,68,.35)}
-        .proj-item-name{font-size:13px;color:rgba(255,255,255,.7)}
-        .proj-item-meta{font-size:10px;color:var(--muted);letter-spacing:.08em}
-        .proj-item-arrow{color:rgba(140,97,68,.6);font-size:12px}
-        .proj-editor{display:none}
-        .proj-editor.open{display:block}
-        .back-btn{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 0 18px;display:flex;align-items:center;gap:6px;transition:color .2s}
-        .back-btn:hover{color:rgba(255,255,255,.55)}
-
-        /* ── New project form ────────────────────────────────── */
-        .new-proj-toggle{margin-top:20px;width:100%}
-        .new-proj-form{display:none;margin-top:18px}
-        .new-proj-form.open{display:block}
-        .img-url-list{display:flex;flex-direction:column;gap:8px}
-
-        /* ── Tarifs ──────────────────────────────────────────── */
-        .tarif-row-card{border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;background:rgba(255,255,255,.02)}
-        .tarif-row-num{font-size:10px;letter-spacing:.2em;color:rgba(140,97,68,.7);margin-bottom:10px;text-transform:uppercase}
-        .tarif-fields{display:grid;gap:10px}
-
-        /* ── Responsive ──────────────────────────────────────── */
-        @media(max-width:600px){
-            .topbar,.tabs-bar,.tab-pane,#gh-config{padding-left:16px;padding-right:16px}
-            .status-grid,.field-row.cols-2,.field-row.cols-3{grid-template-columns:1fr}
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Flores</title>
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:#0a0a0a;color:#e0e0e0;font-size:14px}
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.login-box{background:#111;border:1px solid #222;border-radius:12px;padding:48px 40px;width:340px;text-align:center}
+.login-logo{font-size:22px;font-weight:600;letter-spacing:.1em;margin-bottom:6px;color:#fff}
+.login-sub{font-size:12px;color:#444;margin-bottom:32px}
+.login-box input{width:100%;padding:12px 16px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;color:#e0e0e0;font-family:inherit;font-size:14px;margin-bottom:12px;outline:none}
+.login-box input:focus{border-color:#444}
+.btn-primary{width:100%;padding:12px;background:#fff;color:#000;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s;letter-spacing:.04em}
+.btn-primary:hover{opacity:.85}
+#login-error{font-size:12px;color:#e05555;margin-top:8px;min-height:18px}
+/* DASHBOARD */
+#dashboard{display:flex;flex-direction:column;height:100vh}
+/* Topbar */
+#topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:52px;background:#111;border-bottom:1px solid #1e1e1e;flex-shrink:0;position:relative;z-index:50}
+.topbar-brand{font-weight:600;font-size:14px;color:#fff;letter-spacing:.06em;margin-right:auto}
+.topbar-brand span{color:#444;font-weight:300;font-size:13px;margin-left:6px}
+.topbar-btn{background:#1a1a1a;border:1px solid #252525;color:#888;padding:5px 12px;border-radius:6px;font-family:inherit;font-size:12px;cursor:pointer;transition:border-color .2s,color .2s}
+.topbar-btn:hover{border-color:#444;color:#e0e0e0}
+#logout-btn:hover{border-color:#c0392b;color:#e05555}
+/* Config panel */
+#gh-config-panel{position:absolute;top:56px;right:20px;background:#141414;border:1px solid #222;border-radius:10px;padding:20px;width:400px;z-index:100;display:none;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+#gh-config-panel.open{display:block}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cfg-full{grid-column:1/-1}
+.cfg-label{font-size:11px;color:#555;margin-bottom:4px;display:block;letter-spacing:.04em}
+.cfg-input{width:100%;padding:8px 12px;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:6px;color:#e0e0e0;font-family:inherit;font-size:12px;outline:none}
+.cfg-input:focus{border-color:#444}
+.cfg-hint{font-size:10px;color:#444;margin-top:10px;line-height:1.5;grid-column:1/-1}
+/* Layout */
+#main-layout{display:flex;flex:1;overflow:hidden}
+/* Sidebar */
+#sidebar{width:190px;flex-shrink:0;background:#0d0d0d;border-right:1px solid #181818;padding:12px 0;overflow-y:auto}
+.nav-group{padding:6px 16px 4px;font-size:10px;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:12px}
+.nav-group:first-child{margin-top:0}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 18px;color:#555;font-size:13px;cursor:pointer;transition:color .15s,background .15s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{color:#bbb;background:#141414}
+.nav-item.active{color:#fff;background:#171717;border-left-color:#fff}
+.nav-icon{font-size:13px;width:16px;text-align:center}
+/* Content */
+#content-area{flex:1;overflow-y:auto;padding:28px 32px}
+.tab-panel{display:none;max-width:840px}
+.tab-panel.active{display:block}
+/* Headings */
+.panel-title{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
+.panel-sub{font-size:12px;color:#444;margin-bottom:24px}
+.section-head{font-size:11px;font-weight:600;color:#555;letter-spacing:.08em;text-transform:uppercase;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid #1a1a1a}
+/* Card */
+.admin-card{background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:20px;margin-bottom:14px}
+.card-label{font-size:11px;font-weight:600;color:#666;letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+/* Fields */
+.field-row{margin-bottom:14px}
+.field-row:last-child{margin-bottom:0}
+.field-label{font-size:11px;color:#555;margin-bottom:5px;display:block;letter-spacing:.03em}
+.field-input,.field-textarea,.field-select{width:100%;padding:9px 13px;background:#181818;border:1px solid #232323;border-radius:7px;color:#e0e0e0;font-family:inherit;font-size:13px;outline:none;transition:border-color .15s}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:#383838}
+.field-textarea{resize:vertical;min-height:80px;line-height:1.55}
+.field-mono{font-family:monospace;font-size:12px}
+.field-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+/* Image field */
+.img-field-wrap{display:flex;gap:12px;align-items:flex-start}
+.img-field-preview{width:80px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #232323;background:#181818;flex-shrink:0}
+.img-field-right{flex:1}
+.btn-upload{display:inline-block;padding:6px 13px;background:#181818;border:1px solid #252525;border-radius:6px;color:#888;font-size:12px;cursor:pointer;transition:border-color .15s,color .15s;margin-bottom:7px}
+.btn-upload:hover{border-color:#444;color:#e0e0e0}
+/* Save bar */
+.save-bar{display:flex;align-items:center;gap:12px;margin-top:22px;padding-top:20px;border-top:1px solid #181818}
+.btn-save{padding:10px 26px;background:#fff;color:#000;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn-save:hover{opacity:.85}
+.btn-save:disabled{opacity:.35;cursor:default}
+.btn-sec{padding:10px 18px;background:transparent;color:#888;border:1px solid #252525;border-radius:7px;font-family:inherit;font-size:13px;cursor:pointer;transition:border-color .15s}
+.btn-sec:hover{border-color:#444;color:#e0e0e0}
+.save-msg{font-size:12px;color:#444}
+.save-msg.ok{color:#4caf50}
+.save-msg.err{color:#e05555}
+.save-msg.spin{color:#888}
+/* Status */
+.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.status-opt{border:1px solid #222;border-radius:8px;padding:16px;cursor:pointer;transition:border-color .15s,background .15s;text-align:center}
+.status-opt:hover{border-color:#3a3a3a;background:#141414}
+.status-opt.selected{border-color:#fff;background:#161616}
+.s-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-bottom:8px}
+.d-green{background:#4caf50}
+.d-orange{background:#ff9800}
+.d-red{background:#e05555}
+.s-name{font-size:13px;font-weight:500;display:block;margin-bottom:3px}
+.s-sub{font-size:11px;color:#444}
+.status-preview{background:#161616;border:1px solid #1e1e1e;border-radius:8px;padding:14px 18px;display:inline-flex;align-items:center;gap:10px;margin-bottom:20px}
+/* Accordion */
+.acc-item{border:1px solid #1a1a1a;border-radius:8px;margin-bottom:8px;overflow:hidden}
+.acc-head{display:flex;align-items:center;gap:10px;padding:13px 15px;cursor:pointer;background:#111;transition:background .15s;user-select:none}
+.acc-head:hover{background:#151515}
+.acc-num{font-size:11px;color:#383838;font-weight:600;min-width:22px}
+.acc-lbl{flex:1;font-size:13px;color:#aaa}
+.acc-chev{color:#383838;font-size:11px;transition:transform .2s}
+.acc-head.open .acc-chev{transform:rotate(180deg)}
+.acc-body{padding:16px;border-top:1px solid #1a1a1a;display:none}
+.acc-body.open{display:block}
+/* Projects list */
+.proj-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.proj-card{background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px 16px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;gap:12px}
+.proj-card:hover{border-color:#333}
+.proj-card-num{font-size:11px;color:#383838;font-weight:600;min-width:22px}
+.proj-card-info{flex:1}
+.proj-card-title{font-size:13px;font-weight:500;color:#ddd}
+.proj-card-sub{font-size:11px;color:#444;margin-top:2px}
+.proj-card-arr{color:#2a2a2a;font-size:13px}
+/* Project editor */
+#proj-editor{display:none}
+#proj-editor.active{display:block}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:#555;font-size:13px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;margin-bottom:20px;transition:color .15s}
+.back-btn:hover{color:#ccc}
+/* Gallery items */
+.gallery-item{display:flex;align-items:flex-start;gap:12px;padding:12px;background:#161616;border-radius:7px;margin-bottom:8px}
+.gal-thumb{width:80px;height:60px;object-fit:cover;border-radius:5px;background:#1e1e1e;flex-shrink:0;border:1px solid #222}
+.gal-info{flex:1}
+.gal-type{font-size:10px;color:#444;letter-spacing:.04em;margin-bottom:6px}
+/* Media tab */
+.media-zone{border:2px dashed #222;border-radius:10px;padding:36px;text-align:center;cursor:pointer;transition:border-color .2s;margin-bottom:20px}
+.media-zone:hover,.media-zone.drag-over{border-color:#444}
+.media-zone-icon{font-size:32px;margin-bottom:10px;opacity:.5}
+.media-zone-text{font-size:13px;color:#666}
+.media-zone-sub{font-size:11px;color:#383838;margin-top:4px}
+.media-folders{display:flex;gap:8px;margin-bottom:16px;align-items:center}
+.mf-btn{padding:5px 13px;border-radius:6px;border:1px solid #222;background:#181818;color:#666;font-size:12px;cursor:pointer;font-family:inherit;transition:border-color .15s}
+.mf-btn.active{border-color:#e0e0e0;color:#e0e0e0;background:#1a1a1a}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.media-item{position:relative}
+.media-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;background:#181818;border:1px solid #1e1e1e;display:block}
+.media-name{font-size:10px;color:#444;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.media-copy{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.8);border:none;color:#ccc;border-radius:4px;padding:3px 7px;font-size:10px;cursor:pointer;opacity:0;transition:opacity .15s;font-family:inherit}
+.media-item:hover .media-copy{opacity:1}
+/* New project toggle */
+.new-proj-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+/* Toast */
+#toast{position:fixed;bottom:20px;right:20px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:11px 18px;font-size:13px;color:#ccc;transform:translateY(70px);opacity:0;transition:transform .28s,opacity .28s;z-index:999;max-width:320px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.ok{border-color:#4caf50;color:#4caf50}
+#toast.err{border-color:#e05555;color:#e05555}
+/* Loading */
+.loading-text{font-size:12px;color:#444;padding:12px 0}
+/* Misc */
+.note{font-size:11px;color:#444;line-height:1.5;margin-top:6px}
+@media(max-width:680px){#sidebar{width:50px}.nav-item span:not(.nav-icon){display:none}.proj-list{grid-template-columns:1fr}.field-row-2,.field-row-3{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══════════════════════════════════════════════════ -->
+<!-- ═══════════ LOGIN ═══════════ -->
 <div id="login-screen">
-    <div class="login-box">
-        <div class="login-logo">Flores</div>
-        <div class="login-sub">Espace Administration</div>
-        <form class="login-form" id="login-form">
-            <input class="fi" type="password" id="login-pwd" placeholder="Mot de passe" autocomplete="current-password" autofocus>
-            <button class="btn btn-primary" type="submit">Entrer</button>
-            <div id="login-err"></div>
-        </form>
-    </div>
+  <div class="login-box">
+    <div class="login-logo">FLORES</div>
+    <div class="login-sub">Panneau d'administration</div>
+    <input type="password" id="login-pass" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-primary" onclick="doLogin()">Accéder</button>
+    <div id="login-error"></div>
+  </div>
 </div>
 
-<!-- ══ APP ════════════════════════════════════════════════════ -->
-<div id="app">
+<!-- ═══════════ DASHBOARD ═══════════ -->
+<div id="dashboard" style="display:none">
 
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="topbar-brand">Flores · <strong>Admin</strong></div>
-        <div class="topbar-right">
-            <div class="conn-status">
-                <span class="conn-dot" id="conn-dot"></span>
-                <span id="conn-label">Non connecté</span>
-            </div>
-            <button class="btn btn-ghost" style="padding:7px 14px;font-size:9.5px;" onclick="logout()">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </button>
+  <!-- Topbar -->
+  <div id="topbar">
+    <span class="topbar-brand">Flores <span>Admin Dashboard</span></span>
+    <button class="topbar-btn" onclick="toggleConfig()">⚙ GitHub API</button>
+    <button class="topbar-btn" id="logout-btn" onclick="doLogout()">Déconnexion</button>
+    <!-- Config panel -->
+    <div id="gh-config-panel">
+      <div class="cfg-grid">
+        <div class="cfg-full field-row">
+          <label class="cfg-label">Token GitHub (Personal Access Token)</label>
+          <input class="cfg-input" id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <div class="note">Le token n'est jamais stocké — à rensaisir à chaque session.</div>
         </div>
-    </div>
-
-    <!-- GitHub Config -->
-    <div id="gh-config">
-        <div class="gh-config-row">
-            <input class="fi" type="password" id="gh-token" placeholder="GitHub Token (ghp_...)" style="max-width:220px" autocomplete="off">
-            <input class="fi" type="text" id="gh-repo" placeholder="owner/repo" style="max-width:200px">
-            <input class="fi" type="text" id="gh-branch" placeholder="Branche (main)" style="max-width:120px">
-            <input class="fi" type="text" id="gh-root" placeholder="Dossier (Portfolio)" style="max-width:140px">
-            <button class="btn btn-primary" id="conn-btn" onclick="saveGhConfig()" style="padding:9px 18px;font-size:9.5px;">
-                <i class="fa-solid fa-plug"></i>&nbsp; Connecter
-            </button>
+        <div class="field-row">
+          <label class="cfg-label">Repo (owner/nom)</label>
+          <input class="cfg-input" id="cfg-repo" placeholder="593Flores-fr/flores-portfolio">
         </div>
-    </div>
-
-    <!-- Tabs bar -->
-    <div class="tabs-bar">
-        <button class="tab-btn active" onclick="switchTab('status')"><i class="fa-solid fa-circle-dot"></i>&nbsp; Statut</button>
-        <button class="tab-btn" onclick="switchTab('about')"><i class="fa-regular fa-id-card"></i>&nbsp; Biographie</button>
-        <button class="tab-btn" onclick="switchTab('projects')"><i class="fa-solid fa-layer-group"></i>&nbsp; Projets</button>
-        <button class="tab-btn" onclick="switchTab('tarifs')"><i class="fa-solid fa-tag"></i>&nbsp; Tarifs</button>
-    </div>
-
-    <!-- ── TAB: STATUT ──────────────────────────────────────── -->
-    <div class="tab-pane active" id="tab-status">
-        <div class="card">
-            <div class="card-title">Disponibilité — mise à jour globale du site</div>
-            <div class="status-grid">
-                <div class="s-pill s-avail active" data-status="available" onclick="selectStatus(this)">
-                    <div class="s-emoji">✅</div>
-                    <div class="s-label">Disponible</div>
-                </div>
-                <div class="s-pill s-ltd" data-status="limited" onclick="selectStatus(this)">
-                    <div class="s-emoji">⏳</div>
-                    <div class="s-label">Momentanément<br>indisponible</div>
-                </div>
-                <div class="s-pill s-off" data-status="off" onclick="selectStatus(this)">
-                    <div class="s-emoji">🔴</div>
-                    <div class="s-label">Actuellement<br>en OFF</div>
-                </div>
-            </div>
-            <div class="card-actions" style="margin-top:18px">
-                <button class="btn btn-primary" onclick="commitStatus()">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Publier le statut
-                </button>
-            </div>
-            <div class="result-msg" id="status-result"></div>
+        <div class="field-row">
+          <label class="cfg-label">Branche</label>
+          <input class="cfg-input" id="cfg-branch" placeholder="main">
         </div>
-        <div class="card" style="font-size:11px;color:var(--muted);line-height:1.8">
-            <div class="card-title">À propos du système de statut</div>
-            Le statut est lu depuis <code>js/status.js</code>. Le changer ici met à jour tous les badges du site en une seule publication GitHub.<br>
-            GitHub Pages redéploie automatiquement en quelques secondes.
+        <div class="cfg-full field-row">
+          <label class="cfg-label">Dossier racine dans le repo (optionnel)</label>
+          <input class="cfg-input" id="cfg-root" placeholder="Portfolio">
         </div>
-    </div>
-
-    <!-- ── TAB: BIOGRAPHIE ─────────────────────────────────── -->
-    <div class="tab-pane" id="tab-about">
-        <div class="card">
-            <div class="card-title">Page À propos</div>
-            <div class="card-actions" style="margin-bottom:18px">
-                <button class="btn btn-ghost" onclick="loadAbout()"><i class="fa-solid fa-rotate"></i>&nbsp; Charger le contenu actuel</button>
-            </div>
-            <div class="result-msg" id="about-load-result"></div>
-
-            <div class="field-row">
-                <div class="field-wrap">
-                    <div class="field-label">Accroche principale</div>
-                    <input class="fi" type="text" id="about-tagline" placeholder="Créatif polyvalent — Dév web & Visuel">
-                </div>
-            </div>
-
-            <div class="field-row">
-                <div class="field-wrap">
-                    <div class="field-label">Paragraphe 1</div>
-                    <textarea class="fi" id="about-intro-1" rows="3"></textarea>
-                </div>
-            </div>
-            <div class="field-row">
-                <div class="field-wrap">
-                    <div class="field-label">Paragraphe 2</div>
-                    <textarea class="fi" id="about-intro-2" rows="3"></textarea>
-                </div>
-            </div>
-            <div class="field-row">
-                <div class="field-wrap">
-                    <div class="field-label">Paragraphe 3</div>
-                    <textarea class="fi" id="about-intro-3" rows="3"></textarea>
-                </div>
-            </div>
-
-            <div class="field-row cols-3">
-                <div class="field-wrap">
-                    <div class="field-label">Chip 1</div>
-                    <input class="fi" type="text" id="about-chip-1" placeholder="4+ ans de pratique">
-                </div>
-                <div class="field-wrap">
-                    <div class="field-label">Chip 2</div>
-                    <input class="fi" type="text" id="about-chip-2" placeholder="30+ projets livrés">
-                </div>
-                <div class="field-wrap">
-                    <div class="field-label">Chip 3</div>
-                    <input class="fi" type="text" id="about-chip-3" placeholder="10+ clients satisfaits">
-                </div>
-            </div>
-
-            <div class="card-actions">
-                <button class="btn btn-primary" onclick="saveAbout()">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarder
-                </button>
-            </div>
-            <div class="result-msg" id="about-result"></div>
+        <div class="cfg-full">
+          <button class="btn-save" style="width:100%" onclick="saveGhConfig()">Enregistrer la configuration</button>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- ── TAB: PROJETS ─────────────────────────────────────── -->
-    <div class="tab-pane" id="tab-projects">
+  <div id="main-layout">
 
-        <!-- Project list -->
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="nav-group">Général</div>
+      <div class="nav-item active" data-tab="statut" onclick="switchTab('statut')">
+        <span class="nav-icon">🟢</span><span>Statut</span>
+      </div>
+      <div class="nav-group">Pages</div>
+      <div class="nav-item" data-tab="accueil" onclick="switchTab('accueil')">
+        <span class="nav-icon">🏠</span><span>Accueil</span>
+      </div>
+      <div class="nav-item" data-tab="apropos" onclick="switchTab('apropos')">
+        <span class="nav-icon">👤</span><span>À propos</span>
+      </div>
+      <div class="nav-item" data-tab="projets" onclick="switchTab('projets')">
+        <span class="nav-icon">💼</span><span>Projets</span>
+      </div>
+      <div class="nav-item" data-tab="tarifs" onclick="switchTab('tarifs')">
+        <span class="nav-icon">💰</span><span>Tarifs</span>
+      </div>
+      <div class="nav-item" data-tab="contact" onclick="switchTab('contact')">
+        <span class="nav-icon">📧</span><span>Contact</span>
+      </div>
+      <div class="nav-group">Fichiers</div>
+      <div class="nav-item" data-tab="medias" onclick="switchTab('medias')">
+        <span class="nav-icon">🖼</span><span>Médias</span>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div id="content-area">
+
+      <!-- ─── STATUT ─── -->
+      <div class="tab-panel active" id="tab-statut">
+        <div class="panel-title">Disponibilité</div>
+        <div class="panel-sub">Statut affiché sur l'ensemble du site</div>
+        <div class="status-grid">
+          <div class="status-opt selected" data-status="available" onclick="selectStatus('available')">
+            <div class="s-dot d-green"></div>
+            <span class="s-name">Disponible</span>
+            <div class="s-sub">Prêt pour de nouveaux projets</div>
+          </div>
+          <div class="status-opt" data-status="busy" onclick="selectStatus('busy')">
+            <div class="s-dot d-orange"></div>
+            <span class="s-name">Projet en cours</span>
+            <div class="s-sub">En cours de mission</div>
+          </div>
+          <div class="status-opt" data-status="unavailable" onclick="selectStatus('unavailable')">
+            <div class="s-dot d-red"></div>
+            <span class="s-name">Indisponible</span>
+            <div class="s-sub">Pause / non disponible</div>
+          </div>
+        </div>
+        <div class="status-preview">
+          <div class="s-dot d-green" id="status-preview-dot"></div>
+          <span id="status-preview-label" style="font-size:13px">Disponible</span>
+        </div>
+        <div class="save-bar" style="border:none;padding:0;margin:0">
+          <button class="btn-save" id="save-btn-statut" onclick="saveStatus()">Enregistrer le statut</button>
+          <span class="save-msg" id="save-msg-statut"></span>
+        </div>
+      </div>
+
+      <!-- ─── ACCUEIL ─── -->
+      <div class="tab-panel" id="tab-accueil">
+        <div class="panel-title">Page d'accueil</div>
+        <div class="panel-sub">Hero, projets en vedette, compétences, section CTA</div>
+        <div class="loading-text" id="loading-accueil" style="display:none">⏳ Chargement...</div>
+
+        <div class="admin-card">
+          <div class="card-label">Hero</div>
+          <div class="field-row">
+            <label class="field-label">Sous-titre (eyebrow)</label>
+            <input class="field-input" id="home-eyebrow" placeholder="Graphiste & Développeur Web">
+          </div>
+          <div class="field-row">
+            <label class="field-label">Tagline</label>
+            <input class="field-input" id="home-tagline" placeholder="Identité visuelle · Direction artistique...">
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="card-label">Projets en vedette — 7 panels</div>
+          <!-- Panel 1 -->
+          <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)"><span class="acc-num">01</span><span class="acc-lbl" id="acc-lbl-panel-1">Panel 1</span><span class="acc-chev">▼</span></div>
+            <div class="acc-body">
+              <div class="field-row"><label class="field-label">Image</label>
+                <div class="img-field-wrap">
+                  <img class="img-field-preview" id="panel-1-preview" src="" onerror="this.src=''">
+                  <div class="img-field-right">
+                    <label class="btn-upload">↑ Upload<input type="file" accept="image/*" style="display:none" onchange="uploadPanelImg(this,1)"></label>
+                    <input class="field-input" id="panel-1-img" placeholder="images/01hero.jpg" oninput="syncPreview('panel-1-preview',this.value)">
+                  </div>
+                </div>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Catégorie</label><input class="field-input" id="panel-1-cat"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="panel-1-title" oninput="document.getElementById('acc-lbl-panel-1').textContent=this.value||'Panel 1'"></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="panel-1-desc"></textarea></div>
+            </div>
+          </div>
+          <!-- Panel 2 -->
+          <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)"><span class="acc-num">02</span><span class="acc-lbl" id="acc-lbl-panel-2">Panel 2</span><span class="acc-chev">▼</span></div>
+            <div class="acc-body">
+              <div class="field-row"><label class="field-label">Image</label>
+                <div class="img-field-wrap">
+                  <img class="img-field-preview" id="panel-2-preview" src="" onerror="this.src=''">
+                  <div class="img-field-right">
+                    <label class="btn-upload">↑ Upload<input type="file" accept="image/*" style="display:none" onchange="uploadPanelImg(this,2)"></label>
+                    <input class="field-input" id="panel-2-img" placeholder="images/..." oninput="syncPreview('panel-2-preview',this.value)">
+                  </div>
+                </div>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Catégorie</label><input class="field-input" id="panel-2-cat"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="panel-2-title" oninput="document.getElementById('acc-lbl-panel-2').textContent=this.value||'Panel 2'"></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="panel-2-desc"></textarea></div>
+            </div>
+          </div>
+          <!-- Panel 3 -->
+          <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)"><span class="acc-num">03</span><span class="acc-lbl" id="acc-lbl-panel-3">Panel 3</span><span class="acc-chev">▼</span></div>
+            <div class="acc-body">
+              <div class="field-row"><label class="field-label">Image</label>
+                <div class="img-field-wrap">
+                  <img class="img-field-preview" id="panel-3-preview" src="" onerror="this.src=''">
+                  <div class="img-field-right">
+                    <label class="btn-upload">↑ Upload<input type="file" accept="image/*" style="display:none" onchange="uploadPanelImg(this,3)"></label>
+                    <input class="field-input" id="panel-3-img" placeholder="images/..." oninput="syncPreview('panel-3-preview',this.value)">
+                  </div>
+                </div>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Catégorie</label><input class="field-input" id="panel-3-cat"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="panel-3-title" oninput="document.getElementById('acc-lbl-panel-3').textContent=this.value||'Panel 3'"></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="panel-3-desc"></textarea></div>
+            </div>
+          </div>
+          <!-- Panel 4 -->
+          <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)"><span class="acc-num">04</span><span class="acc-lbl" id="acc-lbl-panel-4">Panel 4</span><span class="acc-chev">▼</span></div>
+            <div class="acc-body">
+              <div class="field-row"><label class="field-label">Image</label>
+                <div class="img-field-wrap">
+                  <img class="img-field-preview" id="panel-4-preview" src="" onerror="this.src=''">
+                  <div class="img-field-right">
+                    <label class="btn-upload">↑ Upload<input type="file" accept="image/*" style="display:none" onchange="uploadPanelImg(this,4)"></label>
+                    <input class="field-input" id="panel-4-img" placeholder="images/..." oninput="syncPreview('panel-4-preview',this.value)">
+                  </div>
+                </div>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Catégorie</label><input class="field-input" id="panel-4-cat"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="panel-4-title" oninput="document.getElementById('acc-lbl-panel-4').textContent=this.value||'Panel 4'"></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="panel-4-desc"></textarea></div>
+            </div>
+          </div>
+          <!-- Panel 5 -->
+          <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)"><span class="acc-num">05</span><span class="acc-lbl" id="acc-lbl-panel-5">Panel 5</span><span class="acc-chev">▼</span></div>
+            <div class="acc-body">
+              <div class="field-row"><label class="field-label">Image</label>
+                <div class="img-field-wrap">
+                  <img class="img-field-preview" id="panel-5-preview" src="" onerror="this.src=''">
+                  <div class="img-field-right">
+                    <label class="btn-upload">↑ Upload<input type="file" accept="image/*" style="display:none" onchange="uploadPanelImg(this,5)"></label>
+                    <input class="field-input" id="panel-5-img" placeholder="images/..." oninput="syncPreview('panel-5-preview',this.value)">
+                  </div>
+                </div>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Catégorie</label><input class="field-input" id="panel-5-cat"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="panel-5-title" oninput="document.getElementById('acc-lbl-panel-5').textContent=this.value||'Panel 5'"></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="panel-5-desc"></textarea></div>
+            </div>
+          </div>
+          <!-- Panel 6 -->
+          <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)"><span class="acc-num">06</span><span class="acc-lbl" id="acc-lbl-panel-6">Panel 6</span><span class="acc-chev">▼</span></div>
+            <div class="acc-body">
+              <div class="field-row"><label class="field-label">Image</label>
+                <div class="img-field-wrap">
+                  <img class="img-field-preview" id="panel-6-preview" src="" onerror="this.src=''">
+                  <div class="img-field-right">
+                    <label class="btn-upload">↑ Upload<input type="file" accept="image/*" style="display:none" onchange="uploadPanelImg(this,6)"></label>
+                    <input class="field-input" id="panel-6-img" placeholder="images/..." oninput="syncPreview('panel-6-preview',this.value)">
+                  </div>
+                </div>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Catégorie</label><input class="field-input" id="panel-6-cat"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="panel-6-title" oninput="document.getElementById('acc-lbl-panel-6').textContent=this.value||'Panel 6'"></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="panel-6-desc"></textarea></div>
+            </div>
+          </div>
+          <!-- Panel 7 -->
+          <div class="acc-item">
+            <div class="acc-head" onclick="toggleAcc(this)"><span class="acc-num">07</span><span class="acc-lbl" id="acc-lbl-panel-7">Panel 7</span><span class="acc-chev">▼</span></div>
+            <div class="acc-body">
+              <div class="field-row"><label class="field-label">Image</label>
+                <div class="img-field-wrap">
+                  <img class="img-field-preview" id="panel-7-preview" src="" onerror="this.src=''">
+                  <div class="img-field-right">
+                    <label class="btn-upload">↑ Upload<input type="file" accept="image/*" style="display:none" onchange="uploadPanelImg(this,7)"></label>
+                    <input class="field-input" id="panel-7-img" placeholder="images/..." oninput="syncPreview('panel-7-preview',this.value)">
+                  </div>
+                </div>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Catégorie</label><input class="field-input" id="panel-7-cat"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="panel-7-title" oninput="document.getElementById('acc-lbl-panel-7').textContent=this.value||'Panel 7'"></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="panel-7-desc"></textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="card-label">Compétences — 6 cartes</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field-row"><label class="field-label">Titre 01</label><input class="field-input" id="skill-1-title"></div>
+            <div class="field-row"><label class="field-label">Description 01</label><input class="field-input" id="skill-1-desc"></div>
+            <div class="field-row"><label class="field-label">Titre 02</label><input class="field-input" id="skill-2-title"></div>
+            <div class="field-row"><label class="field-label">Description 02</label><input class="field-input" id="skill-2-desc"></div>
+            <div class="field-row"><label class="field-label">Titre 03</label><input class="field-input" id="skill-3-title"></div>
+            <div class="field-row"><label class="field-label">Description 03</label><input class="field-input" id="skill-3-desc"></div>
+            <div class="field-row"><label class="field-label">Titre 04</label><input class="field-input" id="skill-4-title"></div>
+            <div class="field-row"><label class="field-label">Description 04</label><input class="field-input" id="skill-4-desc"></div>
+            <div class="field-row"><label class="field-label">Titre 05</label><input class="field-input" id="skill-5-title"></div>
+            <div class="field-row"><label class="field-label">Description 05</label><input class="field-input" id="skill-5-desc"></div>
+            <div class="field-row"><label class="field-label">Titre 06</label><input class="field-input" id="skill-6-title"></div>
+            <div class="field-row"><label class="field-label">Description 06</label><input class="field-input" id="skill-6-desc"></div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="card-label">Section CTA</div>
+          <div class="field-row">
+            <label class="field-label">Titre (HTML — les balises &lt;span class="has-mask-fill"&gt; et &lt;br&gt; sont préservées)</label>
+            <textarea class="field-textarea field-mono" id="home-cta-headline" style="min-height:64px"></textarea>
+          </div>
+          <div class="field-row">
+            <label class="field-label">Pitch</label>
+            <textarea class="field-textarea" id="home-cta-pitch"></textarea>
+          </div>
+        </div>
+
+        <div class="save-bar">
+          <button class="btn-save" id="save-btn-accueil" onclick="saveAccueil()">Enregistrer l'accueil</button>
+          <span class="save-msg" id="save-msg-accueil"></span>
+        </div>
+      </div>
+
+      <!-- ─── À PROPOS ─── -->
+      <div class="tab-panel" id="tab-apropos">
+        <div class="panel-title">À propos</div>
+        <div class="panel-sub">Tagline, chips et textes de présentation</div>
+        <div class="loading-text" id="loading-apropos" style="display:none">⏳ Chargement...</div>
+        <div class="admin-card">
+          <div class="card-label">En-tête</div>
+          <div class="field-row">
+            <label class="field-label">Tagline</label>
+            <input class="field-input" id="about-tagline" placeholder="Créatif polyvalent — Dév web & Visuel">
+          </div>
+          <div class="field-row-3">
+            <div class="field-row"><label class="field-label">Chip 1</label><input class="field-input" id="about-chip-1"></div>
+            <div class="field-row"><label class="field-label">Chip 2</label><input class="field-input" id="about-chip-2"></div>
+            <div class="field-row"><label class="field-label">Chip 3</label><input class="field-input" id="about-chip-3"></div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="card-label">Paragraphes de présentation</div>
+          <div class="field-row"><label class="field-label">Paragraphe 1 (HTML autorisé)</label><textarea class="field-textarea" id="about-intro-1" style="min-height:100px"></textarea></div>
+          <div class="field-row"><label class="field-label">Paragraphe 2 (HTML autorisé)</label><textarea class="field-textarea" id="about-intro-2" style="min-height:100px"></textarea></div>
+          <div class="field-row"><label class="field-label">Paragraphe 3 (HTML autorisé)</label><textarea class="field-textarea" id="about-intro-3" style="min-height:100px"></textarea></div>
+        </div>
+        <div class="save-bar">
+          <button class="btn-save" id="save-btn-apropos" onclick="saveAbout()">Enregistrer la biographie</button>
+          <span class="save-msg" id="save-msg-apropos"></span>
+        </div>
+      </div>
+
+      <!-- ─── PROJETS ─── -->
+      <div class="tab-panel" id="tab-projets">
         <div id="proj-list-view">
-            <div class="card">
-                <div class="card-title">Projets existants — cliquer pour modifier</div>
-                <div class="proj-list" id="proj-list">
-                    <div class="proj-item" onclick="openProj('project01')"><span class="proj-item-name">Project 01 — Yevta</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                    <div class="proj-item" onclick="openProj('project02')"><span class="proj-item-name">Project 02 — VZX</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                    <div class="proj-item" onclick="openProj('project03')"><span class="proj-item-name">Project 03 — V.T.O. Studio</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                    <div class="proj-item" onclick="openProj('project04')"><span class="proj-item-name">Project 04 — Cover-Art</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                    <div class="proj-item" onclick="openProj('project05')"><span class="proj-item-name">Project 05 — 213 HUMA (D.A.)</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                    <div class="proj-item" onclick="openProj('project06')"><span class="proj-item-name">Project 06 — MDLR</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                    <div class="proj-item" onclick="openProj('project07')"><span class="proj-item-name">Project 07 — 213 HUMA (Charte)</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                    <div class="proj-item" onclick="openProj('project08')"><span class="proj-item-name">Project 08 — Muzey</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
-                </div>
-            </div>
+          <div class="new-proj-bar">
+            <div><div class="panel-title">Projets</div><div class="panel-sub">Sélectionnez un projet à modifier</div></div>
+            <button class="btn-sec" id="new-proj-toggle" onclick="toggleNewProj()">+ Nouveau projet</button>
+          </div>
 
-            <!-- Add new project -->
-            <div class="card">
-                <div class="card-title">Nouveau projet</div>
-                <button class="btn btn-ghost new-proj-toggle" onclick="toggleNewProj()">
-                    <i class="fa-solid fa-plus"></i>&nbsp; Créer un nouveau projet
-                </button>
-                <div class="new-proj-form" id="new-proj-form">
-                    <div class="field-row cols-2">
-                        <div class="field-wrap">
-                            <div class="field-label">Nom du fichier (ex: project09)</div>
-                            <input class="fi" type="text" id="new-proj-slug" placeholder="project09">
-                        </div>
-                        <div class="field-wrap">
-                            <div class="field-label">Titre</div>
-                            <input class="fi" type="text" id="new-proj-title" placeholder="Mon Projet">
-                        </div>
-                    </div>
-                    <div class="field-row cols-2">
-                        <div class="field-wrap">
-                            <div class="field-label">Rôle</div>
-                            <input class="fi" type="text" id="new-proj-role" placeholder="Art Direction">
-                        </div>
-                        <div class="field-wrap">
-                            <div class="field-label">Date</div>
-                            <input class="fi" type="text" id="new-proj-date" placeholder="Jan. 2025">
-                        </div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-wrap">
-                            <div class="field-label">Description</div>
-                            <textarea class="fi" id="new-proj-desc" rows="3" placeholder="Description du projet..."></textarea>
-                        </div>
-                    </div>
-                    <div class="field-row cols-2">
-                        <div class="field-wrap">
-                            <div class="field-label">URL image héro</div>
-                            <input class="fi" type="text" id="new-proj-hero" placeholder="images/monhero.jpg">
-                        </div>
-                        <div class="field-wrap">
-                            <div class="field-label">URL lien externe (optionnel)</div>
-                            <input class="fi" type="text" id="new-proj-link" placeholder="https://...">
-                        </div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-wrap">
-                            <div class="field-label">Images galerie (1 URL par ligne)</div>
-                            <textarea class="fi" id="new-proj-images" rows="3" placeholder="images/projects/img1.jpg&#10;images/projects/img2.jpg&#10;images/projects/img3.jpg"></textarea>
-                        </div>
-                    </div>
-                    <div class="field-row cols-2">
-                        <div class="field-wrap">
-                            <div class="field-label">Projet suivant (fichier)</div>
-                            <input class="fi" type="text" id="new-proj-next" placeholder="project01.html">
-                        </div>
-                        <div class="field-wrap">
-                            <div class="field-label">Image projet suivant</div>
-                            <input class="fi" type="text" id="new-proj-next-img" placeholder="images/next.jpg">
-                        </div>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn btn-ok" onclick="createNewProject()">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Créer & publier
-                        </button>
-                        <button class="btn btn-ghost" onclick="toggleNewProj()">Annuler</button>
-                    </div>
-                    <div class="result-msg" id="new-proj-result"></div>
-                </div>
+          <!-- New project form -->
+          <div id="new-proj-form" style="display:none">
+            <div class="admin-card">
+              <div class="card-label">Nouveau projet</div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Slug (ex: project09)</label><input class="field-input" id="new-slug" placeholder="project09"></div>
+                <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="new-title" placeholder="Nom du projet"></div>
+              </div>
+              <div class="field-row-3">
+                <div class="field-row"><label class="field-label">Rôle</label><input class="field-input" id="new-role" placeholder="Art Direction"></div>
+                <div class="field-row"><label class="field-label">Date</label><input class="field-input" id="new-date" placeholder="Jan 2025"></div>
+                <div class="field-row"><label class="field-label">Lien externe (URL)</label><input class="field-input" id="new-link" placeholder="https://..."></div>
+              </div>
+              <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="new-desc"></textarea></div>
+              <div class="field-row"><label class="field-label">Image hero (URL relative)</label><input class="field-input" id="new-hero" placeholder="images/monhero.jpg"></div>
+              <div class="field-row">
+                <label class="field-label">Images galerie (une par ligne — 2 = paire, 3+ = triple auto)</label>
+                <textarea class="field-textarea field-mono" id="new-imgs" placeholder="images/projects/img1.jpg&#10;images/projects/img2.jpg&#10;images/projects/img3.jpg"></textarea>
+              </div>
+              <div class="field-row-2">
+                <div class="field-row"><label class="field-label">Projet suivant (fichier)</label><input class="field-input" id="new-nxt-file" placeholder="project01.html"></div>
+                <div class="field-row"><label class="field-label">Projet suivant (image preview)</label><input class="field-input" id="new-nxt-img" placeholder="images/..."></div>
+              </div>
+              <div class="save-bar" style="border:none;padding:0;margin-top:16px">
+                <button class="btn-save" onclick="createProject()">Créer le projet</button>
+                <span class="save-msg" id="save-msg-newproj"></span>
+              </div>
             </div>
+          </div>
+
+          <div class="proj-list">
+            <div class="proj-card" onclick="openProj('project01')"><span class="proj-card-num">01</span><div class="proj-card-info"><div class="proj-card-title">Yevta</div><div class="proj-card-sub">Art Direction</div></div><span class="proj-card-arr">›</span></div>
+            <div class="proj-card" onclick="openProj('project02')"><span class="proj-card-num">02</span><div class="proj-card-info"><div class="proj-card-title">VZX Build</div><div class="proj-card-sub">D.A. & Web</div></div><span class="proj-card-arr">›</span></div>
+            <div class="proj-card" onclick="openProj('project03')"><span class="proj-card-num">03</span><div class="proj-card-info"><div class="proj-card-title">V.T.O Studio</div><div class="proj-card-sub">D.A. & Web-dév</div></div><span class="proj-card-arr">›</span></div>
+            <div class="proj-card" onclick="openProj('project04')"><span class="proj-card-num">04</span><div class="proj-card-info"><div class="proj-card-title">Cover-Art</div><div class="proj-card-sub">Graphisme</div></div><span class="proj-card-arr">›</span></div>
+            <div class="proj-card" onclick="openProj('project05')"><span class="proj-card-num">05</span><div class="proj-card-info"><div class="proj-card-title">213 HUMA</div><div class="proj-card-sub">D.A.</div></div><span class="proj-card-arr">›</span></div>
+            <div class="proj-card" onclick="openProj('project06')"><span class="proj-card-num">06</span><div class="proj-card-info"><div class="proj-card-title">MDLR</div><div class="proj-card-sub">Branding</div></div><span class="proj-card-arr">›</span></div>
+            <div class="proj-card" onclick="openProj('project07')"><span class="proj-card-num">07</span><div class="proj-card-info"><div class="proj-card-title">213 HUMA</div><div class="proj-card-sub">Charte graphique</div></div><span class="proj-card-arr">›</span></div>
+            <div class="proj-card" onclick="openProj('project08')"><span class="proj-card-num">08</span><div class="proj-card-info"><div class="proj-card-title">Muzey</div><div class="proj-card-sub">Art Direction</div></div><span class="proj-card-arr">›</span></div>
+          </div>
         </div>
 
-        <!-- Project editor -->
-        <div class="proj-editor" id="proj-editor">
-            <button class="back-btn" onclick="backToList()">
-                <i class="fa-solid fa-arrow-left"></i> Retour à la liste
-            </button>
-            <div class="card">
-                <div class="card-title" id="proj-editor-title">Édition projet</div>
-                <div class="card-actions" style="margin-bottom:18px">
-                    <button class="btn btn-ghost" onclick="loadCurrentProj()"><i class="fa-solid fa-rotate"></i>&nbsp; Charger le contenu actuel</button>
-                </div>
-                <div class="result-msg" id="proj-load-result"></div>
+        <!-- Project Editor -->
+        <div id="proj-editor">
+          <button class="back-btn" onclick="showProjList()">← Retour aux projets</button>
+          <div class="panel-title" id="proj-editor-title">Édition</div>
+          <div class="panel-sub" id="proj-editor-file" style="font-family:monospace;font-size:11px"></div>
+          <div class="loading-text" id="loading-proj" style="display:none">⏳ Chargement...</div>
 
-                <div class="field-row cols-2">
-                    <div class="field-wrap">
-                        <div class="field-label">Titre (hero)</div>
-                        <input class="fi" type="text" id="edit-proj-title">
-                    </div>
-                    <div class="field-wrap">
-                        <div class="field-label">Rôle</div>
-                        <input class="fi" type="text" id="edit-proj-role">
-                    </div>
-                </div>
-                <div class="field-row cols-2">
-                    <div class="field-wrap">
-                        <div class="field-label">Date</div>
-                        <input class="fi" type="text" id="edit-proj-date">
-                    </div>
-                    <div class="field-wrap">
-                        <div class="field-label">URL lien externe</div>
-                        <input class="fi" type="text" id="edit-proj-link">
-                    </div>
-                </div>
-                <div class="field-row">
-                    <div class="field-wrap">
-                        <div class="field-label">Description</div>
-                        <textarea class="fi" id="edit-proj-desc" rows="4"></textarea>
-                    </div>
-                </div>
-                <div class="card-actions">
-                    <button class="btn btn-primary" onclick="saveProj()">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarder
-                    </button>
-                </div>
-                <div class="result-msg" id="proj-result"></div>
+          <div class="admin-card">
+            <div class="card-label">Informations</div>
+            <div class="field-row-2">
+              <div class="field-row"><label class="field-label">Titre</label><input class="field-input" id="proj-title"></div>
+              <div class="field-row"><label class="field-label">Rôle</label><input class="field-input" id="proj-role"></div>
             </div>
+            <div class="field-row-2">
+              <div class="field-row"><label class="field-label">Date</label><input class="field-input" id="proj-date"></div>
+              <div class="field-row"><label class="field-label">Lien externe (URL)</label><input class="field-input" id="proj-link" placeholder="https://..."></div>
+            </div>
+            <div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="proj-desc" style="min-height:100px"></textarea></div>
+          </div>
+
+          <div class="admin-card">
+            <div class="card-label">Image hero</div>
+            <div class="img-field-wrap">
+              <img class="img-field-preview" id="proj-hero-preview" src="" onerror="this.src=''" style="width:120px;height:90px">
+              <div class="img-field-right">
+                <label class="btn-upload">↑ Uploader une nouvelle image<input type="file" accept="image/*" style="display:none" onchange="uploadHeroImg(this)"></label>
+                <div class="field-row" style="margin:0">
+                  <label class="field-label">URL (relative)</label>
+                  <input class="field-input" id="proj-hero-url" placeholder="images/monhero.jpg" oninput="syncPreview('proj-hero-preview',this.value)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="card-label">Galerie d'images</div>
+            <div id="proj-gallery-items"></div>
+            <div class="note" style="margin-top:8px">Les URLs sont mises à jour directement. Pour remplacer une image, uploadez-en une nouvelle via le bouton "Remplacer".</div>
+          </div>
+
+          <div class="save-bar">
+            <button class="btn-save" id="save-btn-proj" onclick="saveProj()">Enregistrer le projet</button>
+            <span class="save-msg" id="save-msg-proj"></span>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- ── TAB: TARIFS ─────────────────────────────────────── -->
-    <div class="tab-pane" id="tab-tarifs">
-        <div class="card">
-            <div class="card-title">Services & tarifs</div>
-            <div class="card-actions" style="margin-bottom:18px">
-                <button class="btn btn-ghost" onclick="loadTarifs()"><i class="fa-solid fa-rotate"></i>&nbsp; Charger les tarifs actuels</button>
-            </div>
-            <div class="result-msg" id="tarifs-load-result"></div>
-            <div id="tarifs-fields">
-                <!-- Generated dynamically -->
-            </div>
-            <div class="card-actions">
-                <button class="btn btn-primary" onclick="saveTarifs()">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarder les tarifs
-                </button>
-            </div>
-            <div class="result-msg" id="tarifs-result"></div>
+      <!-- ─── TARIFS ─── -->
+      <div class="tab-panel" id="tab-tarifs">
+        <div class="panel-title">Tarifs</div>
+        <div class="panel-sub">7 prestations — nom, description et prix</div>
+        <div class="loading-text" id="loading-tarifs" style="display:none">⏳ Chargement...</div>
+        <div id="tarifs-cards">
+          <!-- Cards générées par buildTarifsUI() -->
         </div>
-    </div>
+        <div class="save-bar">
+          <button class="btn-save" id="save-btn-tarifs" onclick="saveTarifs()">Enregistrer les tarifs</button>
+          <span class="save-msg" id="save-msg-tarifs"></span>
+        </div>
+      </div>
 
-</div><!-- /app -->
+      <!-- ─── CONTACT ─── -->
+      <div class="tab-panel" id="tab-contact">
+        <div class="panel-title">Contact</div>
+        <div class="panel-sub">Email, réseaux sociaux et texte de la sidebar</div>
+        <div class="loading-text" id="loading-contact" style="display:none">⏳ Chargement...</div>
+        <div class="admin-card">
+          <div class="card-label">Coordonnées</div>
+          <div class="field-row">
+            <label class="field-label">Adresse email</label>
+            <input class="field-input" id="contact-email" type="email" placeholder="593maldito@gmail.com">
+          </div>
+          <div class="field-row">
+            <label class="field-label">Sous-titre sidebar (HTML — &lt;br&gt; pour sauts de ligne)</label>
+            <textarea class="field-textarea field-mono" id="contact-sub" style="min-height:64px"></textarea>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="card-label">Liens réseaux sociaux</div>
+          <div class="field-row"><label class="field-label">Discord (URL du serveur)</label><input class="field-input" id="contact-discord" placeholder="https://discord.gg/..."></div>
+          <div class="field-row"><label class="field-label">Instagram (URL du profil)</label><input class="field-input" id="contact-instagram" placeholder="https://www.instagram.com/..."></div>
+          <div class="field-row"><label class="field-label">TikTok (URL du profil)</label><input class="field-input" id="contact-tiktok" placeholder="https://www.tiktok.com/@..."></div>
+          <div class="field-row"><label class="field-label">Behance (URL du profil)</label><input class="field-input" id="contact-behance" placeholder="https://www.behance.net/..."></div>
+        </div>
+        <div class="save-bar">
+          <button class="btn-save" id="save-btn-contact" onclick="saveContact()">Enregistrer la page contact</button>
+          <span class="save-msg" id="save-msg-contact"></span>
+        </div>
+      </div>
 
-<!-- ══ STATUS.JS LOAD (pour détecter statut courant) ══════════ -->
-<script src="js/status.js"></script>
+      <!-- ─── MÉDIAS ─── -->
+      <div class="tab-panel" id="tab-medias">
+        <div class="panel-title">Médias</div>
+        <div class="panel-sub">Upload et gestion des images du site</div>
+        <div class="media-zone" id="media-zone"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="handleMediaDrop(event)">
+          <div class="media-zone-icon">🖼</div>
+          <div class="media-zone-text">Glissez vos images ici</div>
+          <div class="media-zone-sub">ou <label style="color:#888;cursor:pointer;text-decoration:underline">parcourez<input type="file" accept="image/*" multiple style="display:none" onchange="handleMediaFileSelect(this)"></label></div>
+        </div>
+        <div class="media-folders">
+          <span style="font-size:12px;color:#555;margin-right:4px">Dossier :</span>
+          <button class="mf-btn active" data-folder="images" onclick="switchMediaFolder('images')">images/</button>
+          <button class="mf-btn" data-folder="images/projects" onclick="switchMediaFolder('images/projects')">images/projects/</button>
+        </div>
+        <div class="media-grid" id="media-grid">
+          <div class="loading-text" style="grid-column:1/-1">Configurez GitHub API puis naviguez dans un onglet pour charger.</div>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /main-layout -->
+</div><!-- /dashboard -->
+
+<!-- Toast -->
+<div id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-// CONFIG
-// ════════════════════════════════════════════════════════════════
-var ADMIN_PASSWORD = 'flores2026'; // ← changer ici
-
-var gh = { token:'', repo:'', branch:'main', root:'Portfolio' };
-var selectedStatus = 'available';
-var currentProjFile = '';
-
-// ════════════════════════════════════════════════════════════════
-// AUTH
-// ════════════════════════════════════════════════════════════════
-document.getElementById('login-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    var pwd = document.getElementById('login-pwd').value;
-    if(pwd === ADMIN_PASSWORD){
-        sessionStorage.setItem('fadm','1');
-        showApp();
-    } else {
-        var el = document.getElementById('login-err');
-        el.textContent = 'Mot de passe incorrect.';
-        document.getElementById('login-pwd').value = '';
-        setTimeout(function(){ el.textContent=''; }, 2500);
-    }
-});
-function logout(){
-    sessionStorage.removeItem('fadm');
-    location.reload();
-}
-function showApp(){
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-    restoreGhConfig();
-    initStatus();
-    buildTarifFields();
-}
-if(sessionStorage.getItem('fadm')==='1') showApp();
-
-// ════════════════════════════════════════════════════════════════
-// GITHUB CONFIG
-// ════════════════════════════════════════════════════════════════
-function saveGhConfig(){
-    gh.token  = document.getElementById('gh-token').value.trim();
-    gh.repo   = document.getElementById('gh-repo').value.trim();
-    gh.branch = document.getElementById('gh-branch').value.trim() || 'main';
-    gh.root   = document.getElementById('gh-root').value.trim() || 'Portfolio';
-    if(gh.token && gh.repo){
-        sessionStorage.setItem('fgh', JSON.stringify({r:gh.repo,b:gh.branch,root:gh.root}));
-        setConn(true);
-    } else {
-        setConn(false);
-    }
-}
-function restoreGhConfig(){
-    var s = sessionStorage.getItem('fgh');
-    if(s){ try{ var d=JSON.parse(s); gh.repo=d.r; gh.branch=d.b||'main'; gh.root=d.root||'Portfolio';
-        document.getElementById('gh-repo').value=gh.repo;
-        document.getElementById('gh-branch').value=gh.branch;
-        document.getElementById('gh-root').value=gh.root;
-    }catch(e){} }
-    // token not persisted for security
-}
-function setConn(ok){
-    document.getElementById('conn-dot').className = 'conn-dot' + (ok ? ' connected' : '');
-    document.getElementById('conn-label').textContent = ok ? 'Connecté — ' + gh.repo : 'Non connecté';
-}
-
-// ════════════════════════════════════════════════════════════════
-// TABS
-// ════════════════════════════════════════════════════════════════
-function switchTab(id){
-    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
-    document.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
-    document.getElementById('tab-'+id).classList.add('active');
-    event.currentTarget.classList.add('active');
-}
-
-// ════════════════════════════════════════════════════════════════
-// GITHUB API HELPERS
-// ════════════════════════════════════════════════════════════════
-function apiUrl(path){
-    return 'https://api.github.com/repos/' + gh.repo + '/contents/' + gh.root + '/' + path;
-}
-function ghHeaders(){
-    return {
-        'Authorization': 'token ' + gh.token,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-    };
-}
-function getFile(path){
-    return fetch(apiUrl(path), {headers: ghHeaders()}).then(function(r){
-        if(!r.ok) throw new Error('Erreur ' + r.status + ' — vérifie le token et le chemin du repo.');
-        return r.json();
-    });
-}
-function putFile(path, content, sha, message){
-    var encoded = btoa(unescape(encodeURIComponent(content)));
-    return fetch(apiUrl(path), {
-        method:'PUT', headers: ghHeaders(),
-        body: JSON.stringify({ message:message, content:encoded, sha:sha, branch:gh.branch })
-    }).then(function(r){
-        if(!r.ok) return r.json().then(function(d){ throw new Error(d.message || 'Erreur GitHub '+r.status); });
-        return r.json();
-    });
-}
-function parseHTML(b64){
-    var raw = decodeURIComponent(escape(atob(b64.replace(/\n/g,''))));
-    return (new DOMParser()).parseFromString(raw, 'text/html');
-}
-function serializeDoc(doc){
-    return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
-}
-function showResult(elId, ok, msg){
-    var el = document.getElementById(elId);
-    el.style.display = 'block';
-    el.className = 'result-msg ' + (ok ? 'ok' : 'err');
-    el.textContent = msg;
-}
-function hideResult(elId){
-    var el = document.getElementById(elId);
-    if(el){ el.style.display = 'none'; }
-}
-function checkConn(){
-    if(!gh.token || !gh.repo){
-        alert('Configure et connecte le token GitHub en haut de page d\'abord.');
-        return false;
-    }
-    return true;
-}
-
-// ════════════════════════════════════════════════════════════════
-// TAB: STATUT
-// ════════════════════════════════════════════════════════════════
-function initStatus(){
-    var s = (window.FLORES_STATUS || 'available');
-    selectedStatus = s;
-    document.querySelectorAll('.s-pill').forEach(function(p){
-        p.classList.toggle('active', p.getAttribute('data-status') === s);
-    });
-}
-function selectStatus(el){
-    selectedStatus = el.getAttribute('data-status');
-    document.querySelectorAll('.s-pill').forEach(function(p){ p.classList.remove('active'); });
-    el.classList.add('active');
-    hideResult('status-result');
-}
-function commitStatus(){
-    if(!checkConn()) return;
-    showResult('status-result','ok' /* reusing as info */, '⏳ Publication...');
-    getFile('js/status.js').then(function(data){
-        var newContent = buildStatusJS(selectedStatus);
-        return putFile('js/status.js', newContent, data.sha, 'chore: status → ' + selectedStatus);
-    }).then(function(){
-        showResult('status-result', true, '✓ Statut mis à jour : « ' + selectedStatus + ' ». Déploiement en cours...');
-    }).catch(function(e){
-        showResult('status-result', false, '✕ ' + e.message);
-    });
-}
-function buildStatusJS(s){
-    return "// Flores — Statut de disponibilité centralisé\n// OPTIONS : 'available' | 'limited' | 'off'\nwindow.FLORES_STATUS = '" + s + "';\n\n(function () {\n    var STATES = {\n        available: { emoji: '✅', label: 'Disponible', color: '#22c55e', pulse: true },\n        limited:   { emoji: '⏳', label: 'Momentanément indisponible', color: '#f59e0b', pulse: false },\n        off:       { emoji: '🔴', label: 'Actuellement en OFF', color: '#ef4444', pulse: false }\n    };\n    function applyStatus() {\n        var s = STATES[window.FLORES_STATUS] || STATES.available;\n        document.querySelectorAll('[data-status-label]').forEach(function (el) { el.textContent = s.emoji + ' ' + s.label; });\n        document.querySelectorAll('[data-status-short]').forEach(function (el) { el.textContent = s.label; });\n        document.querySelectorAll('[data-status-dot]').forEach(function (dot) {\n            dot.style.backgroundColor = s.color;\n            if (!s.pulse) { dot.style.animation = 'none'; dot.style.boxShadow = 'none'; }\n            else { dot.style.animation = ''; dot.style.boxShadow = ''; }\n        });\n        document.querySelectorAll('[data-status-badge]').forEach(function (el) { el.setAttribute('data-status', window.FLORES_STATUS); });\n    }\n    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', applyStatus); }\n    else { applyStatus(); }\n})();\n";
-}
-
-// ════════════════════════════════════════════════════════════════
-// TAB: BIOGRAPHIE
-// ════════════════════════════════════════════════════════════════
-var aboutSha = '';
-function loadAbout(){
-    if(!checkConn()) return;
-    showResult('about-load-result', true, '⏳ Chargement...');
-    getFile('about.html').then(function(data){
-        aboutSha = data.sha;
-        var doc = parseHTML(data.content);
-        setValue('about-tagline',  doc, '#admin-bio-tagline', 'textContent');
-        setValue('about-intro-1',  doc, '#admin-bio-intro-1', 'innerHTML');
-        setValue('about-intro-2',  doc, '#admin-bio-intro-2', 'innerHTML');
-        setValue('about-intro-3',  doc, '#admin-bio-intro-3', 'innerHTML');
-        setValue('about-chip-1',   doc, '#admin-bio-chip-1',  'textContent');
-        setValue('about-chip-2',   doc, '#admin-bio-chip-2',  'textContent');
-        setValue('about-chip-3',   doc, '#admin-bio-chip-3',  'textContent');
-        showResult('about-load-result', true, '✓ Contenu chargé.');
-    }).catch(function(e){ showResult('about-load-result', false, '✕ ' + e.message); });
-}
-function setValue(inputId, doc, selector, prop){
-    var el = doc.querySelector(selector);
-    var input = document.getElementById(inputId);
-    if(el && input) input.value = (prop === 'innerHTML') ? el.innerHTML : el.textContent;
-}
-function saveAbout(){
-    if(!checkConn() || !aboutSha){ alert('Charge d\'abord le contenu (bouton Charger).'); return; }
-    showResult('about-result', true, '⏳ Sauvegarde...');
-    getFile('about.html').then(function(data){
-        aboutSha = data.sha;
-        var doc = parseHTML(data.content);
-        setDocVal(doc, '#admin-bio-tagline',  'about-tagline',  'textContent');
-        setDocVal(doc, '#admin-bio-intro-1',  'about-intro-1',  'innerHTML');
-        setDocVal(doc, '#admin-bio-intro-2',  'about-intro-2',  'innerHTML');
-        setDocVal(doc, '#admin-bio-intro-3',  'about-intro-3',  'innerHTML');
-        setDocVal(doc, '#admin-bio-chip-1',   'about-chip-1',   'textContent');
-        setDocVal(doc, '#admin-bio-chip-2',   'about-chip-2',   'textContent');
-        setDocVal(doc, '#admin-bio-chip-3',   'about-chip-3',   'textContent');
-        return putFile('about.html', serializeDoc(doc), data.sha, 'content: update biographie');
-    }).then(function(){
-        showResult('about-result', true, '✓ Biographie sauvegardée et publiée !');
-    }).catch(function(e){ showResult('about-result', false, '✕ ' + e.message); });
-}
-function setDocVal(doc, selector, inputId, prop){
-    var el = doc.querySelector(selector);
-    var val = document.getElementById(inputId).value;
-    if(el){ if(prop === 'innerHTML') el.innerHTML = val; else el.textContent = val; }
-}
-
-// ════════════════════════════════════════════════════════════════
-// TAB: PROJETS
-// ════════════════════════════════════════════════════════════════
-function openProj(slug){
-    currentProjFile = slug + '.html';
-    document.getElementById('proj-list-view').style.display = 'none';
-    document.getElementById('proj-editor').classList.add('open');
-    document.getElementById('proj-editor-title').textContent = 'Édition — ' + slug;
-    // Clear fields
-    ['edit-proj-title','edit-proj-role','edit-proj-date','edit-proj-desc','edit-proj-link'].forEach(function(id){
-        document.getElementById(id).value = '';
-    });
-    hideResult('proj-load-result');
-    hideResult('proj-result');
-}
-function backToList(){
-    currentProjFile = '';
-    document.getElementById('proj-list-view').style.display = 'block';
-    document.getElementById('proj-editor').classList.remove('open');
-}
-var projSha = '';
-function loadCurrentProj(){
-    if(!checkConn() || !currentProjFile) return;
-    showResult('proj-load-result', true, '⏳ Chargement...');
-    getFile(currentProjFile).then(function(data){
-        projSha = data.sha;
-        var doc = parseHTML(data.content);
-        setValue('edit-proj-title', doc, '#admin-proj-title',  'textContent');
-        setValue('edit-proj-role',  doc, '#admin-proj-role',   'textContent');
-        setValue('edit-proj-date',  doc, '#admin-proj-date',   'textContent');
-        setValue('edit-proj-desc',  doc, '#admin-proj-desc',   'innerHTML');
-        // Link
-        var linkEl = doc.querySelector('.proj-meta-link');
-        if(linkEl) document.getElementById('edit-proj-link').value = linkEl.getAttribute('href') || '';
-        showResult('proj-load-result', true, '✓ Contenu chargé.');
-    }).catch(function(e){ showResult('proj-load-result', false, '✕ ' + e.message); });
-}
-function saveProj(){
-    if(!checkConn() || !currentProjFile){ alert('Aucun projet sélectionné.'); return; }
-    showResult('proj-result', true, '⏳ Sauvegarde...');
-    getFile(currentProjFile).then(function(data){
-        projSha = data.sha;
-        var doc = parseHTML(data.content);
-        setDocVal(doc, '#admin-proj-title', 'edit-proj-title', 'textContent');
-        setDocVal(doc, '#admin-proj-role',  'edit-proj-role',  'textContent');
-        setDocVal(doc, '#admin-proj-date',  'edit-proj-date',  'textContent');
-        setDocVal(doc, '#admin-proj-desc',  'edit-proj-desc',  'innerHTML');
-        var linkEl = doc.querySelector('.proj-meta-link');
-        var newHref = document.getElementById('edit-proj-link').value.trim();
-        if(linkEl && newHref) linkEl.setAttribute('href', newHref);
-        return putFile(currentProjFile, serializeDoc(doc), data.sha, 'content: update ' + currentProjFile);
-    }).then(function(){
-        showResult('proj-result', true, '✓ Projet sauvegardé et publié !');
-    }).catch(function(e){ showResult('proj-result', false, '✕ ' + e.message); });
-}
-
-// ── New project ──────────────────────────────────────────────
+// ═══ CONFIG ═══
+var PASS = 'flores2026';
+var gh = {};
+var currentStatus = 'available';
+var currentProjFile = null;
+var mediaFolder = 'images';
 var newProjOpen = false;
-function toggleNewProj(){
-    newProjOpen = !newProjOpen;
-    document.getElementById('new-proj-form').classList.toggle('open', newProjOpen);
-}
-function createNewProject(){
-    if(!checkConn()) return;
-    var slug  = document.getElementById('new-proj-slug').value.trim();
-    var title = document.getElementById('new-proj-title').value.trim();
-    var role  = document.getElementById('new-proj-role').value.trim();
-    var date  = document.getElementById('new-proj-date').value.trim();
-    var desc  = document.getElementById('new-proj-desc').value.trim();
-    var hero  = document.getElementById('new-proj-hero').value.trim();
-    var link  = document.getElementById('new-proj-link').value.trim();
-    var imgs  = document.getElementById('new-proj-images').value.trim().split('\n').filter(Boolean);
-    var nxt   = document.getElementById('new-proj-next').value.trim() || 'index-showcase-gallery.html';
-    var nxtImg= document.getElementById('new-proj-next-img').value.trim() || '';
-    if(!slug || !title){ alert('Nom du fichier et titre requis.'); return; }
-    showResult('new-proj-result', true, '⏳ Création...');
 
-    // Build image grid HTML
-    var gridHTML = '';
-    if(imgs.length === 2){
-        gridHTML = '<div class="proj-img-pair">\n' + imgs.map(function(u){ return '    <img src="'+u+'" alt="'+title+'">'; }).join('\n') + '\n</div>';
-    } else if(imgs.length >= 3){
-        var tri = imgs.slice(0,3);
-        gridHTML = '<div class="proj-img-triple">\n' + tri.map(function(u){ return '    <img src="'+u+'" alt="'+title+'">'; }).join('\n') + '\n</div>';
-        if(imgs.length > 3){
-            var rest = imgs.slice(3);
-            if(rest.length === 2){
-                gridHTML += '\n<div class="proj-img-pair" style="margin-top:3px;">\n' + rest.map(function(u){ return '    <img src="'+u+'" alt="'+title+'">'; }).join('\n') + '\n</div>';
-            }
-        }
-    } else if(imgs.length === 1){
-        gridHTML = '<img src="'+imgs[0]+'" alt="'+title+'" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">';
+// ═══ AUTH ═══
+function doLogin() {
+  var pw = document.getElementById('login-pass').value;
+  if (pw === PASS) {
+    sessionStorage.setItem('fadm','1');
+    showDashboard();
+  } else {
+    document.getElementById('login-error').textContent = 'Mot de passe incorrect.';
+  }
+}
+function doLogout() {
+  sessionStorage.removeItem('fadm');
+  location.reload();
+}
+function showDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'flex';
+  loadGhConfig();
+  buildTarifsUI();
+  loadStatus();
+}
+(function() {
+  if (sessionStorage.getItem('fadm') === '1') showDashboard();
+})();
+
+// ═══ GITHUB CONFIG ═══
+function loadGhConfig() {
+  gh.repo   = sessionStorage.getItem('gh-repo')   || '';
+  gh.branch = sessionStorage.getItem('gh-branch') || 'main';
+  gh.root   = sessionStorage.getItem('gh-root')   || '';
+  gh.token  = '';
+  document.getElementById('cfg-repo').value   = gh.repo;
+  document.getElementById('cfg-branch').value = gh.branch;
+  document.getElementById('cfg-root').value   = gh.root;
+}
+function saveGhConfig() {
+  gh.token  = document.getElementById('cfg-token').value.trim();
+  gh.repo   = document.getElementById('cfg-repo').value.trim();
+  gh.branch = document.getElementById('cfg-branch').value.trim() || 'main';
+  gh.root   = document.getElementById('cfg-root').value.trim();
+  sessionStorage.setItem('gh-repo',   gh.repo);
+  sessionStorage.setItem('gh-branch', gh.branch);
+  sessionStorage.setItem('gh-root',   gh.root);
+  toggleConfig(false);
+  toast('Configuration sauvegardée', 'ok');
+}
+function toggleConfig(force) {
+  var p = document.getElementById('gh-config-panel');
+  p.classList.toggle('open', force !== undefined ? force : !p.classList.contains('open'));
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#gh-config-panel') && !e.target.closest('[onclick*="toggleConfig"]')) {
+    document.getElementById('gh-config-panel').classList.remove('open');
+  }
+});
+
+function apiUrl(path) {
+  var base = 'https://api.github.com/repos/' + gh.repo + '/contents/';
+  var root = gh.root ? gh.root.replace(/\/$/, '') + '/' : '';
+  return base + root + path;
+}
+function ghHeaders() {
+  return { 'Authorization': 'token ' + gh.token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' };
+}
+function getFile(path) {
+  return fetch(apiUrl(path), { headers: ghHeaders() }).then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  });
+}
+function putFile(path, content, sha, message) {
+  var encoded = btoa(unescape(encodeURIComponent(content)));
+  var body = { message: message || 'admin: update ' + path, content: encoded, branch: gh.branch };
+  if (sha) body.sha = sha;
+  return fetch(apiUrl(path), { method:'PUT', headers: ghHeaders(), body: JSON.stringify(body) }).then(function(r) {
+    if (!r.ok) return r.json().then(function(e) { throw new Error(e.message || 'Erreur API'); });
+    return r.json();
+  });
+}
+function parseHTML(b64) {
+  var raw = decodeURIComponent(escape(atob(b64.replace(/\n/g,''))));
+  return (new DOMParser()).parseFromString(raw, 'text/html');
+}
+function serializeDoc(doc) {
+  return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+}
+
+// ═══ IMAGE UPLOAD ═══
+function uploadImageFile(repoPath, file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var base64 = e.target.result.split(',')[1];
+      getFile(repoPath).then(function(existing) {
+        return doPutImg(repoPath, base64, existing.sha);
+      }).catch(function() {
+        return doPutImg(repoPath, base64, null);
+      }).then(resolve).catch(reject);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function doPutImg(repoPath, base64, sha) {
+  var body = { message: 'media: ' + repoPath, content: base64, branch: gh.branch };
+  if (sha) body.sha = sha;
+  return fetch(apiUrl(repoPath), { method:'PUT', headers: ghHeaders(), body: JSON.stringify(body) }).then(function(r) {
+    if (!r.ok) return r.json().then(function(e) { throw new Error(e.message); });
+    return r.json();
+  });
+}
+
+// ═══ UI HELPERS ═══
+function toast(msg, type) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + (type || '');
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.className = ''; }, 3200);
+}
+function setSaving(id, loading) {
+  var btn = document.getElementById('save-btn-' + id);
+  var msg = document.getElementById('save-msg-' + id);
+  if (btn) btn.disabled = loading;
+  if (msg) { msg.className = 'save-msg' + (loading ? ' spin' : ''); msg.textContent = loading ? 'Enregistrement...' : ''; }
+}
+function setLoading(id, on) {
+  var el = document.getElementById('loading-' + id);
+  if (el) el.style.display = on ? 'block' : 'none';
+}
+function syncPreview(previewId, url) {
+  var el = document.getElementById(previewId);
+  if (el) el.src = url || '';
+}
+function toggleAcc(head) {
+  head.classList.toggle('open');
+  var body = head.nextElementSibling;
+  if (body) body.classList.toggle('open');
+}
+function getEl(doc, id) {
+  var el = doc.getElementById(id);
+  return el ? el.textContent.trim() : '';
+}
+function setEl(doc, id, val) {
+  var el = doc.getElementById(id);
+  if (el) el.textContent = val;
+}
+function setHTML(doc, id, val) {
+  var el = doc.getElementById(id);
+  if (el) el.innerHTML = val;
+}
+
+// ═══ TAB SWITCHING ═══
+function switchTab(tab) {
+  document.querySelectorAll('.nav-item').forEach(function(a) { a.classList.remove('active'); });
+  var navEl = document.querySelector('.nav-item[data-tab="' + tab + '"]');
+  if (navEl) navEl.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  var panel = document.getElementById('tab-' + tab);
+  if (panel) panel.classList.add('active');
+  if (tab === 'statut')  loadStatus();
+  else if (tab === 'accueil') loadAccueil();
+  else if (tab === 'apropos') loadAbout();
+  else if (tab === 'tarifs')  loadTarifs();
+  else if (tab === 'contact') loadContact();
+  else if (tab === 'projets') showProjList();
+  else if (tab === 'medias')  loadMedias();
+}
+
+// ═══ STATUT ═══
+function loadStatus() {
+  if (!gh.token) return;
+  getFile('js/status.js').then(function(data) {
+    var content = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
+    var match = content.match(/status\s*:\s*['"](\w+)['"]/);
+    if (match) selectStatus(match[1]);
+  }).catch(function() {});
+}
+function selectStatus(s) {
+  currentStatus = s;
+  document.querySelectorAll('.status-opt').forEach(function(el) {
+    el.classList.toggle('selected', el.dataset.status === s);
+  });
+  var map = { available: { dot:'#4caf50', label:'Disponible' }, busy: { dot:'#ff9800', label:'Projet en cours' }, unavailable: { dot:'#e05555', label:'Indisponible' } };
+  var c = map[s] || map.available;
+  document.getElementById('status-preview-dot').style.background = c.dot;
+  document.getElementById('status-preview-label').textContent = c.label;
+}
+function saveStatus() {
+  setSaving('statut', true);
+  var content = buildStatusJS(currentStatus);
+  getFile('js/status.js').then(function(data) {
+    return putFile('js/status.js', content, data.sha, 'status: ' + currentStatus);
+  }).then(function() {
+    setSaving('statut', false);
+    toast('Statut mis à jour', 'ok');
+  }).catch(function(e) { setSaving('statut', false); toast('Erreur: ' + e.message, 'err'); });
+}
+function buildStatusJS(status) {
+  var cfgs = {
+    available:   { status:'available',   label:'✦ Disponible',       short:'Disponible',       color:'#4caf50', text:'Disponible pour de nouveaux projets' },
+    busy:        { status:'busy',         label:'◈ Projet en cours',  short:'Projet en cours',  color:'#ff9800', text:'En cours de mission — prise de contact possible' },
+    unavailable: { status:'unavailable',  label:'✕ Indisponible',     short:'Indisponible',     color:'#e05555', text:'Actuellement indisponible' }
+  };
+  var c = cfgs[status] || cfgs.available;
+  return '(function(){\n  var cfg={status:"'+c.status+'",label:"'+c.label+'",short:"'+c.short+'",color:"'+c.color+'",text:"'+c.text+'"};\n  document.addEventListener("DOMContentLoaded",function(){\n    document.querySelectorAll("[data-status-badge]").forEach(function(el){el.dataset.status=cfg.status;});\n    document.querySelectorAll("[data-status-dot]").forEach(function(el){el.style.background=cfg.color;});\n    document.querySelectorAll("[data-status-label]").forEach(function(el){el.textContent=cfg.label;});\n    document.querySelectorAll("[data-status-short]").forEach(function(el){el.textContent=cfg.short;});\n  });\n})();';
+}
+
+// ═══ ACCUEIL ═══
+function loadAccueil() {
+  if (!gh.token) { toast('Configurez GitHub API d\'abord', 'err'); return; }
+  setLoading('accueil', true);
+  getFile('index.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    var ey = doc.getElementById('admin-home-eyebrow');
+    if (ey) document.getElementById('home-eyebrow').value = ey.textContent.trim();
+    var tg = doc.getElementById('admin-home-tagline');
+    if (tg) document.getElementById('home-tagline').value = tg.textContent.trim();
+    for (var i = 1; i <= 7; i++) {
+      var imgEl = doc.getElementById('admin-panel-'+i+'-img');
+      var catEl = doc.getElementById('admin-panel-'+i+'-cat');
+      var ttEl  = doc.getElementById('admin-panel-'+i+'-title');
+      var dscEl = doc.getElementById('admin-panel-'+i+'-desc');
+      if (imgEl) { var v=imgEl.getAttribute('src')||''; setField('panel-'+i+'-img',v); syncPreview('panel-'+i+'-preview',v); }
+      if (catEl) setField('panel-'+i+'-cat', catEl.textContent.trim());
+      if (ttEl)  { var t=ttEl.textContent.trim(); setField('panel-'+i+'-title',t); var lbl=document.getElementById('acc-lbl-panel-'+i); if(lbl) lbl.textContent=t||'Panel '+i; }
+      if (dscEl) setField('panel-'+i+'-desc', dscEl.textContent.trim());
     }
-
-    var linkBlock = link ? '<a class="proj-meta-link" href="'+link+'" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le projet</a>' : '';
-    var html = generateProjectHTML(slug, title, role, date, desc, hero, linkBlock, gridHTML, nxt, nxtImg);
-
-    fetch('https://api.github.com/repos/' + gh.repo + '/contents/' + gh.root + '/' + slug + '.html', {
-        method:'PUT', headers: ghHeaders(),
-        body: JSON.stringify({
-            message: 'feat: add ' + slug + ' — ' + title,
-            content: btoa(unescape(encodeURIComponent(html))),
-            branch: gh.branch
-        })
-    }).then(function(r){
-        if(!r.ok) return r.json().then(function(d){ throw new Error(d.message); });
-        return r.json();
-    }).then(function(){
-        showResult('new-proj-result', true, '✓ ' + slug + '.html créé et publié ! Pense à l\'ajouter dans la galerie (index-showcase-gallery.html).');
-        // Add to list display
-        var li = document.createElement('div');
-        li.className = 'proj-item';
-        li.onclick = function(){ openProj(slug); };
-        li.innerHTML = '<span class="proj-item-name">'+slug+' — '+title+'</span><span class="proj-item-arrow"><i class="fa-solid fa-chevron-right"></i></span>';
-        document.getElementById('proj-list').appendChild(li);
-    }).catch(function(e){ showResult('new-proj-result', false, '✕ ' + e.message); });
-}
-
-function generateProjectHTML(slug, title, role, date, desc, hero, linkBlock, gridHTML, nxt, nxtImg){
-    return '<!DOCTYPE html>\n<html lang="fr">\n<head>\n    <title>Flores — '+title+'</title>\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <meta charset="UTF-8" />\n    <link rel="icon" type="image/ico" href="favicon.ico" />\n    <link href="style.css" rel="stylesheet" />\n    <link href="css/content.css" rel="stylesheet" />\n    <link href="css/all.min.css" rel="stylesheet" />\n    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Six+Caps&display=swap" rel="stylesheet">\n</head>\n<body class="hidden hidden-ball smooth-scroll1 rounded-borders" data-primary-color="#8c6144">\n<main>\n    <div class="preloader-wrap" data-centerLine="Chargement..."><div class="outer"><div class="inner"><div class="trackbar"><div class="preloader-intro"><span>Chargement</span></div><div class="loadbar"></div><div class="percentage-wrapper"><div class="percentage" id="precent"></div></div></div><div class="percentage-intro">Veuillez patienter...</div></div></div></div>\n    <div class="cd-index cd-main-content">\n    <div id="clapat-page-content" class="light-content" data-bgcolor="#0c0c0c">\n        <header class="fullscreen-menu invert-header" data-menucolor="#0c0c0c"><div id="header-container"><div id="logo" class="hide-ball"><a class="ajax-link" data-type="page-transition" href="index.html"><img class="black-logo" src="images/logo.png" alt="Flores"><img class="white-logo" src="images/logo-white.png" alt="Flores"></a></div><nav><div class="nav-height"><div class="outer"><div class="inner"><ul data-breakpoint="10025" class="flexnav"><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="index.html"><div class="before-span"><span data-hover="Accueil">Accueil</span></div></a></li><li class="link menu-timeline"><a href="#"><div class="before-span"><span data-hover="Portfolio">Portfolio</span></div></a><ul><li><a class="ajax-link" href="index-showcase-gallery.html" data-type="page-transition">Galerie d\'archive</a></li></ul></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="tarifs.html"><div class="before-span"><span data-hover="Tarifs">Tarifs</span></div></a></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="about.html"><div class="before-span"><span data-hover="Presentation">Presentation</span></div></a></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="contact.html"><div class="before-span"><span data-hover="Contactez-moi">Contactez-moi</span></div></a></li></ul></div></div></div></nav><div class="button-wrap right menu burger-lines"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><div id="burger-wrapper"><div id="menu-burger"><span></span><span></span><span></span></div></div></div></div><div class="button-text sticky right"><span data-hover="Menu">Menu</span></div></div></div></header>\n        <div id="content-scroll"><div id="main">\n            <div id="hero" class="has-image"><div id="hero-styles"><div id="hero-caption" class="content-full-width height-title"><div class="inner"><h1 class="hero-title caption-timeline primary-font-title"><span id="admin-proj-title">'+title+'</span></h1></div></div><div id="hero-footer"><div class="hero-footer-left"><div class="button-wrap right scroll-down"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><i class="arrow-icon-down"></i></div></div><div class="button-text sticky right"><span data-hover="Scroll">Scroll</span></div></div></div><div class="hero-footer-right"><div id="share" class="page-action-content" data-text="Share:"></div></div></div></div></div>\n            <div id="hero-image-wrapper"><div id="hero-background-layer" class="parallax-scroll-image"><div id="hero-bg-image" style="background-image:url('+hero+')"></div></div></div>\n            <div id="main-content"><div id="main-page-content">\n                <div class="proj-intro-split">\n                    <div class="proj-meta-card">\n                        <p class="proj-meta-label">'+title+'</p>\n                        <div class="proj-meta-rule"></div>\n                        <div class="proj-meta-item"><span class="proj-meta-key">R&ocirc;le</span><span class="proj-meta-val" id="admin-proj-role">'+role+'</span></div>\n                        <div class="proj-meta-item"><span class="proj-meta-key">Date</span><span class="proj-meta-val" id="admin-proj-date">'+date+'</span></div>\n                        '+linkBlock+'\n                    </div>\n                    <div><p class="proj-desc-text" id="admin-proj-desc">'+desc+'</p></div>\n                </div>\n                '+gridHTML+'\n            </div></div>\n            <div id="project-nav"><div class="next-project-wrap"><div class="next-project-caption text-align-center content-full-width height-title"><div class="next-caption-wrapper"><div class="caption-wrapper"><a class="next-ajax-link-project auto-trigger" data-type="page-transition" href="'+nxt+'" data-color="#8c6144" data-firstline="Projet" data-secondline="Suivant"></a><div class="next-caption"><div class="next-hero-subtitle"><span></span></div><div class="next-hero-title primary-font-title"><span>Projet suivant.</span></div></div></div></div></div><div class="next-hero-progress"><span></span></div><div class="next-project-image-wrapper"><div class="next-project-image"><div class="next-project-image-bg" style="background-image:url('+nxtImg+')"></div></div></div></div></div>\n        </div></div>\n        <footer class="hidden"><div id="footer-container"><div id="backtotop" class="button-wrap left"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><i class="fa-solid fa-angle-up"></i></div></div><div class="button-text sticky left"><span data-hover="Retour en haut">Retour en haut</span></div></div><div class="footer-middle"><div class="copyright"><span onclick="window.location=\'admin.html\'" style="cursor:default;user-select:none;" title="">2024 &copy;</span> <a class="link" target="_blank" href="https://www.instagram.com/593floores/">Flores</a>. All rights reserved.</div></div><div class="socials-wrap"><div class="socials-icon"><i class="fa-solid fa-share-nodes"></i></div><div class="socials-text">Suivez-moi</div><ul class="socials"><li><span class="parallax-wrap"><a class="parallax-element" href="https://discord.gg/KbA57NM9sC" target="_blank"><i class="fa-brands fa-discord"></i></a></span></li><li><span class="parallax-wrap"><a class="parallax-element" href="https://www.tiktok.com/@593flores" target="_blank"><i class="fa-brands fa-tiktok"></i></a></span></li><li><span class="parallax-wrap"><a class="parallax-element" href="https://www.instagram.com/593floores/"><i class="fa-brands fa-instagram"></i></a></span></li></ul></div></div></footer>\n        <div id="app"></div>\n    </div></div>\n</main>\n<div class="cd-cover-layer"></div><div id="magic-cursor"><div id="ball"><div id="ball-drag-x"></div><div id="ball-drag-y"></div><div id="ball-loader"></div></div></div><div id="clone-image"><div class="hero-translate"></div></div><div id="rotate-device"></div>\n<script src="js/jquery.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/Flip.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/5.0.0/imagesloaded.pkgd.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.4.0/smooth-scrollbar.js"><\/script><script src="js/status.js"><\/script><script src="js/clapat.js"><\/script><script src="js/plugins.js"><\/script><script src="js/common.js"><\/script><script src="js/contact.js"><\/script><script src="js/scripts.js"><\/script>\n<div class="side-nav" role="navigation"><a href="index.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Accueil</span><span class="side-nav-dot"></span></a><a href="index-showcase-gallery.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Portfolio</span><span class="side-nav-dot"></span></a><a href="tarifs.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Tarifs</span><span class="side-nav-dot"></span></a><a href="about.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">&Agrave; Propos</span><span class="side-nav-dot"></span></a><a href="contact.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Contact</span><span class="side-nav-dot"></span></a></div>\n<script>(function(){function setActive(href){var p=href?href.split(\'/\').pop():(window.location.pathname.split(\'/\').pop()||\'index.html\');if(!p)p=\'index.html\';document.querySelectorAll(\'.side-nav-item\').forEach(function(a){a.classList.remove(\'is-active\');if(a.getAttribute(\'href\')===p)a.classList.add(\'is-active\');});if(!document.querySelector(\'.side-nav-item.is-active\')&&p&&/^project\\d+/.test(p)){var g=document.querySelector(\'.side-nav-item[href="index-showcase-gallery.html"]\');if(g)g.classList.add(\'is-active\');}}setActive();document.addEventListener(\'click\',function(e){var l=e.target.closest(\'[data-type="page-transition"]\');if(l){var h=l.getAttribute(\'href\');if(h&&h.indexOf(\'#\')!==0)setActive(h);}},true);window.addEventListener(\'popstate\',function(){setTimeout(setActive,80);});(function(){var o=history.pushState;history.pushState=function(){o.apply(this,arguments);setTimeout(setActive,60);};})();})();<\/script>\n</body></html>';
-}
-
-// ════════════════════════════════════════════════════════════════
-// TAB: TARIFS
-// ════════════════════════════════════════════════════════════════
-var tarifsSha = '';
-var NUM_TARIFS = 7;
-
-function buildTarifFields(){
-    var container = document.getElementById('tarifs-fields');
-    var html = '';
-    for(var i=1; i<=NUM_TARIFS; i++){
-        html += '<div class="tarif-row-card"><div class="tarif-row-num">Service 0'+i+'</div><div class="tarif-fields">'
-            + '<div class="field-row"><div class="field-wrap"><div class="field-label">Nom du service</div><input class="fi" type="text" id="tarif-'+i+'-title"></div></div>'
-            + '<div class="field-row"><div class="field-wrap"><div class="field-label">Description</div><textarea class="fi" id="tarif-'+i+'-desc" rows="2"></textarea></div></div>'
-            + '<div class="field-row" style="max-width:200px"><div class="field-wrap"><div class="field-label">Prix (ex: 250€)</div><input class="fi" type="text" id="tarif-'+i+'-price"></div></div>'
-            + '</div></div>';
+    for (var j = 1; j <= 6; j++) {
+      var st = doc.getElementById('admin-skill-'+j+'-title');
+      var sd = doc.getElementById('admin-skill-'+j+'-desc');
+      if (st) setField('skill-'+j+'-title', st.textContent.trim());
+      if (sd) setField('skill-'+j+'-desc',  sd.textContent.trim());
     }
-    container.innerHTML = html;
+    var ctaH = doc.getElementById('admin-home-cta-headline');
+    if (ctaH) document.getElementById('home-cta-headline').value = ctaH.innerHTML.trim();
+    var ctaP = doc.getElementById('admin-home-cta-pitch');
+    if (ctaP) document.getElementById('home-cta-pitch').value = ctaP.textContent.trim();
+    setLoading('accueil', false);
+  }).catch(function(e) { setLoading('accueil', false); toast('Erreur: ' + e.message, 'err'); });
 }
-function loadTarifs(){
-    if(!checkConn()) return;
-    showResult('tarifs-load-result', true, '⏳ Chargement...');
-    getFile('tarifs.html').then(function(data){
-        tarifsSha = data.sha;
-        var doc = parseHTML(data.content);
-        for(var i=1; i<=NUM_TARIFS; i++){
-            var titleEl = doc.querySelector('#admin-tarif-'+i+'-title');
-            var descEl  = doc.querySelector('#admin-tarif-'+i+'-desc');
-            var priceEl = doc.querySelector('#admin-tarif-'+i+'-price');
-            if(titleEl){
-                // Extract text before the icon span
-                var titleText = '';
-                titleEl.childNodes.forEach(function(node){ if(node.nodeType === 3) titleText += node.textContent; });
-                var inp = document.getElementById('tarif-'+i+'-title');
-                if(inp) inp.value = titleText.trim();
-            }
-            if(descEl){ var d = document.getElementById('tarif-'+i+'-desc'); if(d) d.value = descEl.textContent.trim(); }
-            if(priceEl){ var p = document.getElementById('tarif-'+i+'-price'); if(p) p.value = priceEl.textContent.trim(); }
-        }
-        showResult('tarifs-load-result', true, '✓ Tarifs chargés.');
-    }).catch(function(e){ showResult('tarifs-load-result', false, '✕ ' + e.message); });
+function saveAccueil() {
+  setSaving('accueil', true);
+  getFile('index.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    var ey = doc.getElementById('admin-home-eyebrow'); if (ey) ey.textContent = getField('home-eyebrow');
+    var tg = doc.getElementById('admin-home-tagline');  if (tg) tg.textContent = getField('home-tagline');
+    for (var i = 1; i <= 7; i++) {
+      var imgEl = doc.getElementById('admin-panel-'+i+'-img');
+      var catEl = doc.getElementById('admin-panel-'+i+'-cat');
+      var ttEl  = doc.getElementById('admin-panel-'+i+'-title');
+      var dscEl = doc.getElementById('admin-panel-'+i+'-desc');
+      var imgV = getField('panel-'+i+'-img');
+      var ttV  = getField('panel-'+i+'-title');
+      if (imgEl && imgV) { imgEl.setAttribute('src', imgV); imgEl.setAttribute('alt', ttV); }
+      if (catEl) catEl.textContent = getField('panel-'+i+'-cat');
+      if (ttEl)  ttEl.textContent  = ttV;
+      if (dscEl) dscEl.textContent = getField('panel-'+i+'-desc');
+    }
+    for (var j = 1; j <= 6; j++) {
+      var st = doc.getElementById('admin-skill-'+j+'-title'); if (st) st.textContent = getField('skill-'+j+'-title');
+      var sd = doc.getElementById('admin-skill-'+j+'-desc');  if (sd) sd.textContent = getField('skill-'+j+'-desc');
+    }
+    var ctaH = doc.getElementById('admin-home-cta-headline'); if (ctaH) ctaH.innerHTML = getField('home-cta-headline');
+    var ctaP = doc.getElementById('admin-home-cta-pitch');    if (ctaP) ctaP.textContent = getField('home-cta-pitch');
+    return putFile('index.html', serializeDoc(doc), data.sha, 'content: update accueil');
+  }).then(function() { setSaving('accueil', false); toast('Page Accueil mise à jour', 'ok'); })
+  .catch(function(e) { setSaving('accueil', false); toast('Erreur: ' + e.message, 'err'); });
 }
-function saveTarifs(){
-    if(!checkConn() || !tarifsSha){ alert('Charge d\'abord les tarifs.'); return; }
-    showResult('tarifs-result', true, '⏳ Sauvegarde...');
-    getFile('tarifs.html').then(function(data){
-        tarifsSha = data.sha;
-        var doc = parseHTML(data.content);
-        for(var i=1; i<=NUM_TARIFS; i++){
-            var titleEl = doc.querySelector('#admin-tarif-'+i+'-title');
-            var descEl  = doc.querySelector('#admin-tarif-'+i+'-desc');
-            var priceEl = doc.querySelector('#admin-tarif-'+i+'-price');
-            var newTitle = document.getElementById('tarif-'+i+'-title').value;
-            var newDesc  = document.getElementById('tarif-'+i+'-desc').value;
-            var newPrice = document.getElementById('tarif-'+i+'-price').value;
+function uploadPanelImg(input, idx) {
+  if (!input.files[0]) return;
+  var file = input.files[0];
+  var targetPath = 'images/' + file.name;
+  toast('Upload en cours...', '');
+  uploadImageFile(targetPath, file).then(function() {
+    setField('panel-'+idx+'-img', targetPath);
+    syncPreview('panel-'+idx+'-preview', targetPath);
+    toast('Image uploadée: ' + file.name, 'ok');
+  }).catch(function(e) { toast('Erreur upload: ' + e.message, 'err'); });
+}
 
-            if(titleEl && newTitle){
-                // Replace only the text node (keep icon spans)
-                var found = false;
-                titleEl.childNodes.forEach(function(node){ if(!found && node.nodeType === 3 && node.textContent.trim()){ node.textContent = newTitle + ' '; found = true; } });
-            }
-            if(descEl && newDesc) descEl.textContent = newDesc;
-            if(priceEl && newPrice) priceEl.textContent = newPrice;
-        }
-        return putFile('tarifs.html', serializeDoc(doc), data.sha, 'content: update tarifs');
-    }).then(function(){
-        showResult('tarifs-result', true, '✓ Tarifs sauvegardés et publiés !');
-    }).catch(function(e){ showResult('tarifs-result', false, '✕ ' + e.message); });
+// ═══ À PROPOS ═══
+function loadAbout() {
+  if (!gh.token) { toast('Configurez GitHub API d\'abord', 'err'); return; }
+  setLoading('apropos', true);
+  getFile('about.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    var tg = doc.getElementById('admin-bio-tagline');   if (tg) setField('about-tagline', tg.textContent.trim());
+    for (var i = 1; i <= 3; i++) {
+      var chip = doc.getElementById('admin-bio-chip-'+i);    if (chip) setField('about-chip-'+i, chip.textContent.trim());
+      var para = doc.getElementById('admin-bio-intro-'+i);   if (para) setField('about-intro-'+i, para.innerHTML.trim());
+    }
+    setLoading('apropos', false);
+  }).catch(function(e) { setLoading('apropos', false); toast('Erreur: ' + e.message, 'err'); });
 }
+function saveAbout() {
+  setSaving('apropos', true);
+  getFile('about.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    var tg = doc.getElementById('admin-bio-tagline'); if (tg) tg.textContent = getField('about-tagline');
+    for (var i = 1; i <= 3; i++) {
+      var chip = doc.getElementById('admin-bio-chip-'+i); if (chip) chip.textContent = getField('about-chip-'+i);
+      var para = doc.getElementById('admin-bio-intro-'+i); if (para) para.innerHTML = getField('about-intro-'+i);
+    }
+    return putFile('about.html', serializeDoc(doc), data.sha, 'content: update about');
+  }).then(function() { setSaving('apropos', false); toast('Page "À propos" mise à jour', 'ok'); })
+  .catch(function(e) { setSaving('apropos', false); toast('Erreur: ' + e.message, 'err'); });
+}
+
+// ═══ PROJETS ═══
+function showProjList() {
+  document.getElementById('proj-list-view').style.display = 'block';
+  document.getElementById('proj-editor').style.display = 'none';
+}
+function openProj(slug) {
+  currentProjFile = slug + '.html';
+  document.getElementById('proj-list-view').style.display = 'none';
+  document.getElementById('proj-editor').style.display = 'block';
+  document.getElementById('proj-editor-title').textContent = slug;
+  document.getElementById('proj-editor-file').textContent = currentProjFile;
+  loadCurrentProj();
+}
+function loadCurrentProj() {
+  if (!gh.token) { toast('Configurez GitHub API d\'abord', 'err'); return; }
+  setLoading('proj', true);
+  getFile(currentProjFile).then(function(data) {
+    var doc = parseHTML(data.content);
+    setField('proj-title', getEl(doc,'admin-proj-title'));
+    setField('proj-role',  getEl(doc,'admin-proj-role'));
+    setField('proj-date',  getEl(doc,'admin-proj-date'));
+    setField('proj-desc',  getEl(doc,'admin-proj-desc'));
+    var linkEl = doc.querySelector('.proj-meta-link');
+    if (linkEl) setField('proj-link', linkEl.getAttribute('href') || '');
+    var heroBg = doc.getElementById('hero-bg-image');
+    if (heroBg) {
+      var style = heroBg.getAttribute('style') || '';
+      var match = style.match(/url\(['"]?([^'")\s]+)['"]?\)/);
+      var heroUrl = match ? match[1] : '';
+      setField('proj-hero-url', heroUrl);
+      syncPreview('proj-hero-preview', heroUrl);
+    }
+    var galleryImgs = doc.querySelectorAll('.proj-img-pair img, .proj-img-triple img');
+    var container = document.getElementById('proj-gallery-items');
+    container.innerHTML = '';
+    galleryImgs.forEach(function(img, idx) {
+      var src = img.getAttribute('src') || '';
+      var type = img.parentElement.className.includes('pair') ? 'Paire' : 'Triple';
+      var item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = '<img class="gal-thumb" src="'+src+'" id="gal-prev-'+idx+'" onerror="this.style.opacity=0.2">'
+        + '<div class="gal-info"><div class="gal-type">'+type+' · image '+(idx+1)+'</div>'
+        + '<input class="field-input" id="gal-url-'+idx+'" value="'+src+'" style="margin-bottom:6px" oninput="var p=document.getElementById(\'gal-prev-'+idx+'\');if(p)p.src=this.value">'
+        + '<label class="btn-upload" style="display:inline-block;margin:0">↑ Remplacer'
+        + '<input type="file" accept="image/*" style="display:none" onchange="uploadGalleryImg(this,'+idx+',\''+src+'\')">'
+        + '</label></div>';
+      container.appendChild(item);
+    });
+    setLoading('proj', false);
+  }).catch(function(e) { setLoading('proj', false); toast('Erreur: ' + e.message, 'err'); });
+}
+function uploadHeroImg(input) {
+  if (!input.files[0]) return;
+  var file = input.files[0];
+  var targetPath = 'images/' + file.name;
+  toast('Upload en cours...', '');
+  uploadImageFile(targetPath, file).then(function() {
+    setField('proj-hero-url', targetPath);
+    syncPreview('proj-hero-preview', targetPath);
+    toast('Image uploadée: ' + file.name, 'ok');
+  }).catch(function(e) { toast('Erreur: ' + e.message, 'err'); });
+}
+function uploadGalleryImg(input, idx, oldSrc) {
+  if (!input.files[0]) return;
+  var file = input.files[0];
+  var folder = oldSrc.indexOf('projects/') !== -1 ? 'images/projects' : 'images';
+  var targetPath = folder + '/' + file.name;
+  toast('Upload en cours...', '');
+  uploadImageFile(targetPath, file).then(function() {
+    var urlField = document.getElementById('gal-url-'+idx);
+    var prev = document.getElementById('gal-prev-'+idx);
+    if (urlField) urlField.value = targetPath;
+    if (prev) prev.src = targetPath;
+    toast('Image uploadée: ' + file.name, 'ok');
+  }).catch(function(e) { toast('Erreur: ' + e.message, 'err'); });
+}
+function saveProj() {
+  setSaving('proj', true);
+  getFile(currentProjFile).then(function(data) {
+    var doc = parseHTML(data.content);
+    setEl(doc, 'admin-proj-title', getField('proj-title'));
+    setEl(doc, 'admin-proj-role',  getField('proj-role'));
+    setEl(doc, 'admin-proj-date',  getField('proj-date'));
+    setEl(doc, 'admin-proj-desc',  getField('proj-desc'));
+    var linkEl = doc.querySelector('.proj-meta-link');
+    if (linkEl) linkEl.setAttribute('href', getField('proj-link'));
+    var heroBg = doc.getElementById('hero-bg-image');
+    if (heroBg) heroBg.setAttribute('style', 'background-image:url(' + getField('proj-hero-url') + ')');
+    var galleryImgs = doc.querySelectorAll('.proj-img-pair img, .proj-img-triple img');
+    galleryImgs.forEach(function(img, idx) {
+      var urlField = document.getElementById('gal-url-'+idx);
+      if (urlField) img.setAttribute('src', urlField.value);
+    });
+    return putFile(currentProjFile, serializeDoc(doc), data.sha, 'content: update ' + currentProjFile);
+  }).then(function() { setSaving('proj', false); toast(currentProjFile + ' enregistré', 'ok'); })
+  .catch(function(e) { setSaving('proj', false); toast('Erreur: ' + e.message, 'err'); });
+}
+function toggleNewProj() {
+  newProjOpen = !newProjOpen;
+  document.getElementById('new-proj-form').style.display = newProjOpen ? 'block' : 'none';
+  document.getElementById('new-proj-toggle').textContent = newProjOpen ? '✕ Annuler' : '+ Nouveau projet';
+}
+function createProject() {
+  var slug  = getField('new-slug').trim();
+  var title = getField('new-title').trim();
+  if (!slug || !title) { toast('Slug et titre requis', 'err'); return; }
+  var role   = getField('new-role');
+  var date   = getField('new-date');
+  var desc   = getField('new-desc');
+  var hero   = getField('new-hero');
+  var link   = getField('new-link');
+  var imgs   = getField('new-imgs').split('\n').map(function(s){return s.trim();}).filter(Boolean);
+  var nxtF   = getField('new-nxt-file') || 'index-showcase-gallery.html';
+  var nxtImg = getField('new-nxt-img');
+  setSaving('proj', true);
+  var html = generateProjectHTML(slug, title, role, date, desc, hero, link, imgs, nxtF, nxtImg);
+  putFile(slug + '.html', html, null, 'feat: new project ' + slug).then(function() {
+    setSaving('proj', false);
+    toast('Projet ' + slug + ' créé !', 'ok');
+    toggleNewProj();
+  }).catch(function(e) { setSaving('proj', false); toast('Erreur: ' + e.message, 'err'); });
+}
+function generateProjectHTML(slug, title, role, date, desc, hero, link, imgUrls, nxtFile, nxtImg) {
+  var gridHTML = '', i = 0;
+  while (i < imgUrls.length) {
+    var rem = imgUrls.length - i;
+    if (rem >= 3) {
+      gridHTML += '\n<div class="proj-img-triple"><img src="'+imgUrls[i]+'" alt="'+title+'"><img src="'+imgUrls[i+1]+'" alt="'+title+'"><img src="'+imgUrls[i+2]+'" alt="'+title+'"></div>';
+      i += 3;
+    } else if (rem === 2) {
+      gridHTML += '\n<div class="proj-img-pair"><img src="'+imgUrls[i]+'" alt="'+title+'"><img src="'+imgUrls[i+1]+'" alt="'+title+'"></div>';
+      i += 2;
+    } else {
+      gridHTML += '\n<div style="width:100%"><img src="'+imgUrls[i]+'" alt="'+title+'" style="width:100%;display:block"></div>';
+      i++;
+    }
+  }
+  var linkBlock = link ? '<a class="proj-meta-link" href="'+link+'" target="_blank" rel="noopener">Voir le projet ↗</a>' : '';
+  var nxtImgBlock = nxtImg ? '<div class="proj-next-img-wrap"><img src="'+nxtImg+'" alt="Projet suivant"></div>' : '';
+  return '<!DOCTYPE html>\n<html lang="fr">\n<head>\n    <title>Flores — '+title+'</title>\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <meta charset="UTF-8" />\n    <link rel="icon" type="image/ico" href="favicon.ico" />\n    <link href="style.css" rel="stylesheet" />\n    <link href="css/all.min.css" rel="stylesheet" />\n    <link href="css/content.css" rel="stylesheet" />\n    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Six+Caps&display=swap" rel="stylesheet">\n</head>\n<body class="hidden hidden-ball smooth-scroll1 rounded-borders" data-primary-color="#8c6144">\n<main>\n    <div class="preloader-wrap"><div class="preloader-content"><div class="preloader-logo"><img src="images/logo-white.png" alt="Flores"></div><div class="preloader-line-wrap"><div class="loadbar"></div></div></div></div>\n    <div class="cd-index cd-main-content">\n    <div id="clapat-page-content" class="light-content" data-bgcolor="#0c0c0c">\n        <header class="fullscreen-menu invert-header" data-menucolor="#0c0c0c"><div id="header-container"><div id="logo" class="hide-ball"><a class="ajax-link" data-type="page-transition" href="index.html"><img class="black-logo" src="images/logo.png" alt="Flores Logo"><img class="white-logo" src="images/logo-white.png" alt="Flores Logo"></a></div><nav><div class="nav-height"><div class="outer"><div class="inner"><ul data-breakpoint="10025" class="flexnav"><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="index.html"><div class="before-span"><span data-hover="Accueil">Accueil</span></div></a></li><li class="link menu-timeline"><a class="" href="#"><div class="before-span"><span data-hover="Portfolio">Portfolio</span></div></a><ul><li><a class="ajax-link" href="index-showcase-gallery.html" data-type="page-transition">Galerie d\'archive</a></li></ul></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="tarifs.html"><div class="before-span"><span data-hover="Tarifs">Tarifs</span></div></a></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="about.html"><div class="before-span"><span data-hover="Presentation">Presentation</span></div></a></li><li class="link menu-timeline"><a class="ajax-link" data-type="page-transition" href="contact.html"><div class="before-span"><span data-hover="Contactez-moi">Contactez-moi</span></div></a></li></ul></div></div></div></nav><div class="button-wrap right menu burger-lines"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><div id="burger-wrapper"><div id="menu-burger"><span></span><span></span><span></span></div></div></div></div><div class="button-text sticky right"><span data-hover="Menu">Menu</span></div></div></div></header>\n        <div id="content-scroll"><div id="main">\n            <div id="hero" class="has-image"><div id="hero-styles"><div id="hero-caption" class="content-full-width height-title"><div class="inner"><h1 class="hero-title caption-timeline primary-font-title"><span id="admin-proj-title">'+title+'</span></h1></div></div></div></div>\n            <div id="hero-image-wrapper"><div id="hero-background-layer" class="parallax-scroll-image"><div id="hero-bg-image" style="background-image:url('+hero+')"></div></div></div>\n            <div class="proj-intro-split"><div class="proj-meta-card"><p class="proj-meta-label">'+title+'</p><div class="proj-meta-rule"></div><div class="proj-meta-item"><span class="proj-meta-key">Rôle</span><span class="proj-meta-val" id="admin-proj-role">'+role+'</span></div><div class="proj-meta-item"><span class="proj-meta-key">Date</span><span class="proj-meta-val" id="admin-proj-date">'+date+'</span></div>'+linkBlock+'</div><div><p class="proj-desc-text" id="admin-proj-desc">'+desc+'</p></div></div>\n            '+gridHTML+'\n            <div class="proj-next-wrap"><a class="ajax-link proj-next-link" data-type="page-transition" href="'+nxtFile+'"><span class="proj-next-label">Projet suivant</span>'+nxtImgBlock+'</a></div>\n            <footer class="hidden"><div id="footer-container"><div id="backtotop" class="button-wrap left"><div class="icon-wrap parallax-wrap"><div class="button-icon parallax-element"><i class="fa-solid fa-angle-up"></i></div></div><div class="button-text sticky left"><span data-hover="Retour en haut">Retour en haut</span></div></div><div class="footer-middle"><div class="copyright"><span onclick="window.location=\'admin.html\'" style="cursor:default;user-select:none;" title="">2024 ©</span> <a class="link" target="_blank" href="https://www.instagram.com/593floores/">Flores</a>. All rights reserved.</div></div><div class="socials-wrap"><div class="socials-icon"><i class="fa-solid fa-share-nodes"></i></div><div class="socials-text">Suivez-moi</div><ul class="socials"><li><span class="parallax-wrap"><a class="parallax-element" href="https://discord.gg/KbA57NM9sC" target="_blank"><i class="fa-brands fa-discord"></i></a></span></li><li><span class="parallax-wrap"><a class="parallax-element" href="https://www.behance.net/flores_notion" target="_blank"><i class="fa-brands fa-behance"></i></a></span></li><li><span class="parallax-wrap"><a class="parallax-element" href="https://www.tiktok.com/@593flores" target="_blank"><i class="fa-brands fa-tiktok"></i></a></span></li><li><span class="parallax-wrap"><a class="parallax-element" href="https://www.instagram.com/593floores/"><i class="fa-brands fa-instagram"></i></a></span></li></ul></div></div></footer>\n        </div></div>\n    </div></div>\n</main>\n<div class="cd-cover-layer"></div>\n<div id="magic-cursor"><div id="ball"><div id="ball-drag-x"></div><div id="ball-drag-y"></div><div id="ball-loader"></div></div></div>\n<div id="clone-image"><div class="hero-translate"></div></div>\n<div id="rotate-device"></div>\n<script src="js/jquery.min.js"><\/script>\n<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"><\/script>\n<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"><\/script>\n<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/Flip.min.js"><\/script>\n<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>\n<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/5.0.0/imagesloaded.pkgd.min.js"><\/script>\n<script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.4.0/smooth-scrollbar.js"><\/script>\n<script src="js/status.js"><\/script>\n<script src="js/clapat.js"><\/script>\n<script src="js/plugins.js"><\/script>\n<script src="js/common.js"><\/script>\n<script src="js/scripts.js"><\/script>\n<div class="side-nav" role="navigation" aria-label="Navigation principale"><a href="index.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Accueil</span><span class="side-nav-dot"></span></a><a href="index-showcase-gallery.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Portfolio</span><span class="side-nav-dot"></span></a><a href="tarifs.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Tarifs</span><span class="side-nav-dot"></span></a><a href="about.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">À Propos</span><span class="side-nav-dot"></span></a><a href="contact.html" class="ajax-link side-nav-item" data-type="page-transition"><span class="side-nav-label">Contact</span><span class="side-nav-dot"></span></a></div>\n<script>(function(){function setActive(href){var p=href?href.split(\'/\').pop():(window.location.pathname.split(\'/\').pop()||\'index.html\');if(!p)p=\'index.html\';document.querySelectorAll(\'.side-nav-item\').forEach(function(a){a.classList.remove(\'is-active\');if(a.getAttribute(\'href\')===p)a.classList.add(\'is-active\');});if(!document.querySelector(\'.side-nav-item.is-active\')&&p&&/^project\\d+/.test(p)){var g=document.querySelector(\'.side-nav-item[href="index-showcase-gallery.html"]\');if(g)g.classList.add(\'is-active\');}}setActive();document.addEventListener(\'click\',function(e){var link=e.target.closest(\'[data-type="page-transition"]\');if(link){var href=link.getAttribute(\'href\');if(href&&href.indexOf(\'#\')!==0)setActive(href);}},true);window.addEventListener(\'popstate\',function(){setTimeout(setActive,80);});(function(){var orig=history.pushState;history.pushState=function(){orig.apply(this,arguments);setTimeout(setActive,60);};})();})();<\/script>\n</body>\n</html>';
+}
+
+// ═══ TARIFS ═══
+var TARIF_LABELS = ['Identité Visuelle','Site Vitrine','Cover Art','Pack Stream','D.A. Musicale','Charte Graphique','Accompagnement'];
+function buildTarifsUI() {
+  var container = document.getElementById('tarifs-cards');
+  if (!container) return;
+  container.innerHTML = '';
+  for (var i = 1; i <= 7; i++) {
+    var label = TARIF_LABELS[i-1] || ('Prestation '+i);
+    var card = document.createElement('div');
+    card.className = 'admin-card';
+    card.innerHTML = '<div class="card-label">'+String(i).padStart(2,'0')+' — <span id="tarif-lbl-'+i+'">'+label+'</span></div>'
+      + '<div class="field-row-3">'
+      + '<div class="field-row"><label class="field-label">Nom</label><input class="field-input" id="tarif-'+i+'-title" oninput="document.getElementById(\'tarif-lbl-'+i+'\').textContent=this.value||\''+label+'\'"></div>'
+      + '<div class="field-row"><label class="field-label">Prix</label><input class="field-input" id="tarif-'+i+'-price" placeholder="À partir de 120€"></div>'
+      + '</div>'
+      + '<div class="field-row"><label class="field-label">Description</label><textarea class="field-textarea" id="tarif-'+i+'-desc" style="min-height:60px"></textarea></div>';
+    container.appendChild(card);
+  }
+}
+function loadTarifs() {
+  if (!gh.token) { toast('Configurez GitHub API d\'abord', 'err'); return; }
+  setLoading('tarifs', true);
+  getFile('tarifs.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    for (var i = 1; i <= 7; i++) {
+      var titleEl = doc.getElementById('admin-tarif-'+i+'-title');
+      var descEl  = doc.getElementById('admin-tarif-'+i+'-desc');
+      var priceEl = doc.getElementById('admin-tarif-'+i+'-price');
+      if (titleEl) {
+        var txt = '';
+        titleEl.childNodes.forEach(function(n) { if (n.nodeType === 3) txt += n.textContent; });
+        txt = txt.trim();
+        setField('tarif-'+i+'-title', txt);
+        var lbl = document.getElementById('tarif-lbl-'+i);
+        if (lbl && txt) lbl.textContent = txt;
+      }
+      if (descEl)  setField('tarif-'+i+'-desc',  descEl.textContent.trim());
+      if (priceEl) setField('tarif-'+i+'-price', priceEl.textContent.trim());
+    }
+    setLoading('tarifs', false);
+  }).catch(function(e) { setLoading('tarifs', false); toast('Erreur: ' + e.message, 'err'); });
+}
+function saveTarifs() {
+  setSaving('tarifs', true);
+  getFile('tarifs.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    for (var i = 1; i <= 7; i++) {
+      var titleEl = doc.getElementById('admin-tarif-'+i+'-title');
+      var descEl  = doc.getElementById('admin-tarif-'+i+'-desc');
+      var priceEl = doc.getElementById('admin-tarif-'+i+'-price');
+      if (titleEl) {
+        var iconSpan = titleEl.querySelector('.pricing-toggle-icon');
+        titleEl.textContent = getField('tarif-'+i+'-title');
+        if (iconSpan) titleEl.appendChild(iconSpan);
+      }
+      if (descEl)  descEl.textContent  = getField('tarif-'+i+'-desc');
+      if (priceEl) priceEl.textContent = getField('tarif-'+i+'-price');
+    }
+    return putFile('tarifs.html', serializeDoc(doc), data.sha, 'content: update tarifs');
+  }).then(function() { setSaving('tarifs', false); toast('Tarifs mis à jour', 'ok'); })
+  .catch(function(e) { setSaving('tarifs', false); toast('Erreur: ' + e.message, 'err'); });
+}
+
+// ═══ CONTACT ═══
+function loadContact() {
+  if (!gh.token) { toast('Configurez GitHub API d\'abord', 'err'); return; }
+  setLoading('contact', true);
+  getFile('contact.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    var emailEl = doc.getElementById('admin-contact-email');
+    if (emailEl) setField('contact-email', emailEl.textContent.trim());
+    var subEl = doc.getElementById('admin-contact-sub');
+    if (subEl) setField('contact-sub', subEl.innerHTML.trim());
+    ['discord','instagram','tiktok','behance'].forEach(function(s) {
+      var el = doc.getElementById('admin-contact-'+s);
+      if (el) setField('contact-'+s, el.getAttribute('href') || '');
+    });
+    setLoading('contact', false);
+  }).catch(function(e) { setLoading('contact', false); toast('Erreur: ' + e.message, 'err'); });
+}
+function saveContact() {
+  setSaving('contact', true);
+  getFile('contact.html').then(function(data) {
+    var doc = parseHTML(data.content);
+    var newEmail = getField('contact-email').trim();
+    var emailEl = doc.getElementById('admin-contact-email');
+    if (emailEl) { emailEl.textContent = newEmail; emailEl.setAttribute('href', 'mailto:' + newEmail); }
+    var subEl = doc.getElementById('admin-contact-sub');
+    if (subEl) subEl.innerHTML = getField('contact-sub');
+    ['discord','instagram','tiktok','behance'].forEach(function(s) {
+      var el = doc.getElementById('admin-contact-'+s);
+      if (el) el.setAttribute('href', getField('contact-'+s).trim());
+    });
+    return putFile('contact.html', serializeDoc(doc), data.sha, 'content: update contact');
+  }).then(function() { setSaving('contact', false); toast('Page Contact mise à jour', 'ok'); })
+  .catch(function(e) { setSaving('contact', false); toast('Erreur: ' + e.message, 'err'); });
+}
+
+// ═══ MÉDIAS ═══
+function loadMedias() {
+  if (!gh.token) { toast('Configurez GitHub API d\'abord', 'err'); return; }
+  switchMediaFolder(mediaFolder);
+}
+function switchMediaFolder(folder) {
+  mediaFolder = folder;
+  document.querySelectorAll('.mf-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.folder === folder);
+  });
+  loadMediaGrid();
+}
+function loadMediaGrid() {
+  var grid = document.getElementById('media-grid');
+  grid.innerHTML = '<div class="loading-text" style="grid-column:1/-1">⏳ Chargement...</div>';
+  fetch(apiUrl(mediaFolder), { headers: ghHeaders() }).then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).then(function(items) {
+    if (!Array.isArray(items)) { grid.innerHTML = '<div class="loading-text" style="grid-column:1/-1">Dossier vide ou inaccessible.</div>'; return; }
+    var imgs = items.filter(function(f) { return f.type === 'file' && /\.(jpg|jpeg|png|gif|webp|svg|avif|ico)$/i.test(f.name); });
+    if (!imgs.length) { grid.innerHTML = '<div class="loading-text" style="grid-column:1/-1">Aucune image trouvée.</div>'; return; }
+    var parts = gh.repo.split('/');
+    var owner = parts[0], repo = parts[1];
+    grid.innerHTML = '';
+    imgs.forEach(function(img) {
+      var rawUrl = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + gh.branch + '/' + img.path;
+      var rootPrefix = gh.root ? gh.root.replace(/\/$/, '') + '/' : '';
+      var htmlPath = rootPrefix ? img.path.replace(rootPrefix, '') : img.path;
+      var div = document.createElement('div');
+      div.className = 'media-item';
+      div.innerHTML = '<img class="media-thumb" src="'+rawUrl+'" alt="'+img.name+'" loading="lazy" onerror="this.style.opacity=.2">'
+        + '<button class="media-copy" onclick="copyMediaPath(\''+htmlPath+'\')">Copier</button>'
+        + '<div class="media-name" title="'+img.name+'">'+img.name+'</div>';
+      grid.appendChild(div);
+    });
+  }).catch(function(e) { grid.innerHTML = '<div class="loading-text" style="grid-column:1/-1">Erreur: ' + e.message + '</div>'; });
+}
+function copyMediaPath(path) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(path).then(function() { toast('Copié: ' + path, 'ok'); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = path; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    toast('Copié: ' + path, 'ok');
+  }
+}
+function handleMediaDrop(e) {
+  e.preventDefault();
+  document.getElementById('media-zone').classList.remove('drag-over');
+  uploadMediaFiles(e.dataTransfer.files);
+}
+function handleMediaFileSelect(input) {
+  if (input.files.length) uploadMediaFiles(input.files);
+}
+function uploadMediaFiles(files) {
+  var promises = [], names = [];
+  Array.from(files).forEach(function(file) {
+    if (!/\.(jpg|jpeg|png|gif|webp|svg|avif)$/i.test(file.name)) return;
+    promises.push(uploadImageFile(mediaFolder + '/' + file.name, file));
+    names.push(file.name);
+  });
+  if (!promises.length) { toast('Aucun fichier image valide', 'err'); return; }
+  toast('Upload de ' + promises.length + ' fichier(s)...', '');
+  Promise.all(promises).then(function() {
+    toast(names.join(', ') + ' uploadé(s)', 'ok');
+    loadMediaGrid();
+  }).catch(function(e) { toast('Erreur: ' + e.message, 'err'); });
+}
+
+// ═══ FIELD HELPERS ═══
+function getField(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+function setField(id, val) { var el = document.getElementById(id); if (el) el.value = val; }
 </script>
 </body>
 </html>
