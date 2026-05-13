@@ -20,6 +20,20 @@
     <link href="css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Six+Caps&display=swap" rel="stylesheet">
+<style>
+.about-skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:48px;text-align:left;background:#1a1a1a}
+.about-skill-card{padding:36px 32px;background:#0c0c0c;display:flex;flex-direction:column;transition:background .2s}
+.about-skill-card:hover{background:#111}
+.ask-num{font-size:11px;color:#333;font-weight:600;letter-spacing:.1em;margin-bottom:20px}
+.ask-title{font-family:'Six Caps',sans-serif;font-size:40px;color:#fff;letter-spacing:.06em;text-transform:uppercase;line-height:1;margin-bottom:12px}
+.ask-sub{font-size:10px;color:#444;text-transform:uppercase;letter-spacing:.07em;line-height:1.6;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #1e1e1e}
+.ask-list{list-style:none;padding:0;margin:0;flex:1}
+.ask-list li{font-size:12px;color:#777;padding:9px 0;border-bottom:1px solid #181818;letter-spacing:.02em;line-height:1.5}
+.ask-list li:last-child{border-bottom:none}
+.ask-list li strong{color:#aaa;font-weight:500}
+@media(max-width:900px){.about-skills-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.about-skills-grid{grid-template-columns:1fr}}
+</style>
 </head>
 
 <body class="hidden hidden-ball smooth-scroll1 rounded-borders page-about" data-primary-color="#8c6144">
@@ -212,25 +226,80 @@
                                             <p>Design, développement, direction artistique — les outils que je maîtrise au service de vos projets.</p>
                                         </div>
 
-                                        <div class="skills-img-grid">
-                                            <div class="skills-img-item has-animation" data-delay="0">
-                                                <div class="section-image"><img src="images/aw01.jpg" class="item-image" alt=""></div>
+                                        <div class="about-skills-grid">
+
+                                            <div class="about-skill-card has-animation" data-delay="0" id="admin-ask-1">
+                                                <div class="ask-num">01</div>
+                                                <div class="ask-title" id="admin-ask-1-title">Identité Visuelle</div>
+                                                <div class="ask-sub" id="admin-ask-1-sub">Construire une image de marque cohérente & mémorable</div>
+                                                <ul class="ask-list" id="admin-ask-1-list">
+                                                    <li><strong>Logo & variantes</strong> — déclinaisons couleur, fond clair/sombre</li>
+                                                    <li><strong>Charte graphique</strong> — couleurs, typographies, règles d'usage</li>
+                                                    <li><strong>Overlays & assets</strong> — éléments réutilisables pour tous supports</li>
+                                                    <li><strong>Direction artistique</strong> — univers visuel cohérent sur la durée</li>
+                                                </ul>
                                             </div>
-                                            <div class="skills-img-item has-animation" data-delay="60">
-                                                <div class="section-image"><img src="images/aw02.jpg" class="item-image" alt=""></div>
+
+                                            <div class="about-skill-card has-animation" data-delay="60" id="admin-ask-2">
+                                                <div class="ask-num">02</div>
+                                                <div class="ask-title" id="admin-ask-2-title">Print & Supports</div>
+                                                <div class="ask-sub" id="admin-ask-2-sub">Des supports physiques et numériques prêts à l'emploi</div>
+                                                <ul class="ask-list" id="admin-ask-2-list">
+                                                    <li><strong>Affiches & flyers</strong> — événements, annonces, promotions</li>
+                                                    <li><strong>Cartes de visite</strong> — format standard ou premium</li>
+                                                    <li><strong>Bannières & roll-ups</strong> — signalétique et stand</li>
+                                                    <li><strong>Fichiers print-ready</strong> — PDF HD, ICC, traits de coupe</li>
+                                                </ul>
                                             </div>
-                                            <div class="skills-img-item has-animation" data-delay="120">
-                                                <div class="section-image"><img src="images/aw03.jpg" class="item-image" alt=""></div>
+
+                                            <div class="about-skill-card has-animation" data-delay="120" id="admin-ask-3">
+                                                <div class="ask-num">03</div>
+                                                <div class="ask-title" id="admin-ask-3-title">Dév. Web</div>
+                                                <div class="ask-sub" id="admin-ask-3-sub">Sites vitrines conçus sur mesure, légers et impactants</div>
+                                                <ul class="ask-list" id="admin-ask-3-list">
+                                                    <li><strong>Site vitrine</strong> — HTML/CSS/JS, responsive, optimisé</li>
+                                                    <li><strong>Intégration maquette</strong> — pixel-perfect depuis Figma ou XD</li>
+                                                    <li><strong>Performance & SEO</strong> — Core Web Vitals, accessibilité</li>
+                                                    <li><strong>Déploiement</strong> — mise en ligne & nom de domaine</li>
+                                                </ul>
                                             </div>
-                                            <div class="skills-img-item has-animation" data-delay="60">
-                                                <div class="section-image"><img src="images/aw04.jpg" class="item-image" alt=""></div>
+
+                                            <div class="about-skill-card has-animation" data-delay="0" id="admin-ask-4">
+                                                <div class="ask-num">04</div>
+                                                <div class="ask-title" id="admin-ask-4-title">Cover Art</div>
+                                                <div class="ask-sub" id="admin-ask-4-sub">Visuels musicaux & artistiques à forte identité</div>
+                                                <ul class="ask-list" id="admin-ask-4-list">
+                                                    <li><strong>Pochettes</strong> — single, EP, album — tous formats DSP</li>
+                                                    <li><strong>Thumbnails YouTube</strong> — lisibles, cliquables, brandées</li>
+                                                    <li><strong>Visuels promo</strong> — annonces de sortie pour réseaux sociaux</li>
+                                                    <li><strong>Formats exportés</strong> — JPEG, PNG, TIFF selon plateforme</li>
+                                                </ul>
                                             </div>
-                                            <div class="skills-img-item has-animation" data-delay="120">
-                                                <div class="section-image"><img src="images/aw05.jpg" class="item-image" alt=""></div>
+
+                                            <div class="about-skill-card has-animation" data-delay="60" id="admin-ask-5">
+                                                <div class="ask-num">05</div>
+                                                <div class="ask-title" id="admin-ask-5-title">Suivi Créateurs</div>
+                                                <div class="ask-sub" id="admin-ask-5-sub">Accompagnement long terme pour streamers & vidéastes</div>
+                                                <ul class="ask-list" id="admin-ask-5-list">
+                                                    <li><strong>Pack stream complet</strong> — overlays, alertes, transitions, panels</li>
+                                                    <li><strong>Thumbnails récurrentes</strong> — gabarit cohérent sur la durée</li>
+                                                    <li><strong>Évolutions graphiques</strong> — mise à jour de l'identité au fil du temps</li>
+                                                    <li><strong>Priorité & réactivité</strong> — suivi dédié, retours rapides</li>
+                                                </ul>
                                             </div>
-                                            <div class="skills-img-item has-animation" data-delay="180">
-                                                <div class="section-image"><img src="images/aw06.jpg" class="item-image" alt=""></div>
+
+                                            <div class="about-skill-card has-animation" data-delay="120" id="admin-ask-6">
+                                                <div class="ask-num">06</div>
+                                                <div class="ask-title" id="admin-ask-6-title">Suivi Artistes</div>
+                                                <div class="ask-sub" id="admin-ask-6-sub">Accompagnement visuel dédié aux artistes musicaux</div>
+                                                <ul class="ask-list" id="admin-ask-6-list">
+                                                    <li><strong>Couvertures de sorties</strong> — cohérence sur toute la discographie</li>
+                                                    <li><strong>Visuels réseaux</strong> — posts, stories, bannières multiplateforme</li>
+                                                    <li><strong>Press kit</strong> — dossier de presse et EPK visuel</li>
+                                                    <li><strong>Accompagnement continu</strong> — disponible à chaque nouvelle sortie</li>
+                                                </ul>
                                             </div>
+
                                         </div>
 
                                     </div>
