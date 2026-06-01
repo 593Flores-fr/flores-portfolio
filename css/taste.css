@@ -1,0 +1,170 @@
+/*------------------------------------------------------------------
+  TASTE-SKILL — Anti-slop refinements
+  Applied: redesign-existing-projects + design-taste-frontend
+  Mode: Redesign - Preserve | Dials: VARIANCE 8 / MOTION 7 / DENSITY 3
+-------------------------------------------------------------------*/
+
+/* ─── 1. DESIGN TOKENS ─── */
+:root {
+  --accent: #3ddc84;        /* single accent colour – status / availability only */
+  --bg-primary:   #0c0c0c;
+  --bg-secondary: #111111;
+  --bg-tertiary:  #1a1a1a;
+  --text-primary:   #ffffff;
+  --text-secondary: #aaaaaa;
+  --text-muted:     #555555;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── 2. TYPOGRAPHY — text-wrap & orphan prevention ─── */
+h1, h2, h3, h4, h5, h6,
+.primary-font-title,
+.hero-title,
+.cta-headline,
+.about-intro-title,
+.about-bio-tagline,
+.ask-title {
+  text-wrap: balance;
+}
+
+p, .cta-pitch, .about-intro-text, .vto-card-desc {
+  text-wrap: pretty;
+  max-width: 65ch;
+}
+
+/* ─── 3. GRAIN OVERLAY — fixed, pointer-events-none ─── */
+/* Applied via body::before so it never triggers GPU repaint on scroll */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+
+/* ─── 4. FOCUS RINGS — accessibility ─── */
+:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── 5. HOVER & ACTIVE STATES ─── */
+
+/* Page CTA strip button */
+.page-cta-btn {
+  transition:
+    background 0.22s var(--ease-out),
+    color 0.22s var(--ease-out),
+    transform 0.22s var(--ease-out),
+    box-shadow 0.22s var(--ease-out) !important;
+}
+.page-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.page-cta-btn:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* Competences cards */
+.about-skill-card {
+  transition:
+    background 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out) !important;
+  will-change: transform;
+}
+.about-skill-card:hover {
+  background: #141414 !important;
+  transform: translateY(-3px);
+}
+
+/* VTO card */
+.vto-card {
+  transition: border-color 0.2s ease, transform 0.2s var(--ease-out);
+}
+.vto-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Intro actions link */
+.about-intro-vto {
+  transition: opacity 0.18s ease, transform 0.18s var(--ease-out);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.about-intro-vto:hover {
+  opacity: 0.75;
+  transform: translateX(3px);
+}
+
+/* Nav link active indicator */
+.flexnav li a.active-page span {
+  opacity: 1 !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ─── 6. PANEL LINKS — pointer & transition ─── */
+a.panel {
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: opacity 0.18s ease;
+}
+
+/* ─── 7. SELECTION ─── */
+::selection {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+::-moz-selection {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ─── 8. SCROLL BEHAVIOUR ─── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── 9. CTA SPLIT — vertical centering guard ─── */
+.cta-split {
+  align-items: center !important;
+}
+
+/* ─── 10. SKILLS SECTION — tighter sub text ─── */
+.skills-grid-header p {
+  max-width: 52ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ─── 11. BIO SECTION — long paragraph max-width ─── */
+.about-intro-right p.about-intro-text {
+  max-width: 62ch;
+  line-height: 1.75;
+}
+
+/* ─── 12. MOVING GALLERY CAPTION ─── */
+.moving-gallery-caption {
+  letter-spacing: 0.04em;
+}
+
+/* ─── 13. REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  body::before {
+    display: none;  /* skip grain render on reduced-motion */
+  }
+}
