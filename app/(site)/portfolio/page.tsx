@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteShell from "@/components/site/SiteShell";
 
@@ -18,7 +17,6 @@ export default function PortfolioPage() {
         <div className="cd-index cd-main-content">
           {/* Page Content */}
           <div id="clapat-page-content" className="light-content" data-bgcolor="#0c0c0c">
-            <SiteHeader />
 
             {/* Content Scroll */}
             <div id="content-scroll">
