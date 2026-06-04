@@ -1,0 +1,58 @@
+[
+  {
+    "id": "identite-visuelle",
+    "num": "01",
+    "title": "Identité Visuelle",
+    "price": "250",
+    "description": "Identité graphique complète et unique — logo, charte graphique, assets visuels, devanture, carte de visite.",
+    "specs": ["Logo principal + variantes", "Charte graphique complète", "Assets visuels & icônes", "Supports physiques (carte de visite…)", "Fichiers sources livrés (AI/PSD)"]
+  },
+  {
+    "id": "identite-digitale",
+    "num": "02",
+    "title": "Identité Digitale",
+    "price": "100",
+    "description": "Charte graphique pour usage numérique — logo, bannières, visuels réseaux sociaux.",
+    "specs": ["Logo + variantes numériques", "Palette & typographies", "Bannières réseaux", "Stories & posts", "Exports PNG/SVG"]
+  },
+  {
+    "id": "papeterie",
+    "num": "03",
+    "title": "Conception Papeterie",
+    "price": "60",
+    "description": "Supports imprimés — flyers, affiches, posters, cartes de visite.",
+    "specs": ["Flyer A4/A5 recto-verso", "Affiche/Poster", "Carte de visite", "Fichiers print-ready PDF HD", "Conseil impression"]
+  },
+  {
+    "id": "site-vitrine",
+    "num": "04",
+    "title": "Site Web Vitrine",
+    "price": "400",
+    "description": "Site moderne et responsive, pensé pour valoriser votre image.",
+    "specs": ["Design custom sur-mesure", "Jusqu'à 5 pages", "Formulaire de contact", "SEO de base", "Déploiement inclus"]
+  },
+  {
+    "id": "site-ecommerce",
+    "num": "05",
+    "title": "Site Web E-Commerce",
+    "price": "650",
+    "description": "Site sur mesure avec système d'achat intégré, paiement en ligne inclus.",
+    "specs": ["Design e-commerce responsive", "Catalogue produits", "Panier & paiement (Stripe)", "Tableau de bord admin", "Formation à l'utilisation"]
+  },
+  {
+    "id": "cover-digital",
+    "num": "06",
+    "title": "Covers Digital",
+    "price": "100",
+    "description": "Création de covers pour plateformes de streaming (Spotify, Deezer, Apple Music…).",
+    "specs": ["Visuel 3000×3000px", "2 révisions incluses", "JPEG + PNG HD", "Variantes sur demande", "Délai 5–10 jours"]
+  },
+  {
+    "id": "cover-physique",
+    "num": "07",
+    "title": "Covers Physique",
+    "price": "350",
+    "description": "Édition physique complète — cover, tracklisting, communications autour du projet.",
+    "specs": ["Couverture + verso", "Tracklisting typographié", "Livrets sur devis", "Fichiers print-ready 300 DPI", "Communication sortie"]
+  }
+]

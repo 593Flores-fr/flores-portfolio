@@ -1,0 +1,72 @@
+[
+  {
+    "slug": "yevta",
+    "title": "Yevta",
+    "category": "Direction artistique",
+    "year": "2024",
+    "image": "/images/01hero.jpg",
+    "description": "Identité visuelle complète pour un artiste musical émergent — covers, charte graphique et assets de communication.",
+    "visible": true,
+    "order": 1
+  },
+  {
+    "slug": "vzx-build",
+    "title": "VZX Build",
+    "category": "D.A. & Développement Web",
+    "year": "2024",
+    "image": "/images/jjj.jpg",
+    "description": "Branding moderne et site vitrine pour un assembleur PC. Identité forte, palette sombre et typographie percutante.",
+    "visible": true,
+    "order": 2
+  },
+  {
+    "slug": "vto-studio",
+    "title": "V.T.O Studio",
+    "category": "Association",
+    "year": "2024",
+    "image": "/images/vto.jpg",
+    "description": "Direction artistique pour un collectif créatif. Logo, supports de communication et présence digitale cohérente.",
+    "visible": true,
+    "order": 3
+  },
+  {
+    "slug": "cover-art",
+    "title": "CoverArt",
+    "category": "Covers musicales",
+    "year": "2021–2024",
+    "image": "/images/wuk.png",
+    "description": "Sélection de covers réalisées pour différents artistes. Illustrations sur mesure pour streaming et éditions physiques.",
+    "visible": true,
+    "order": 4
+  },
+  {
+    "slug": "monica-dlr",
+    "title": "Monica DLR",
+    "category": "Charte graphique",
+    "year": "2024",
+    "image": "/images/Mdlr.png",
+    "description": "Identité visuelle pour une créatrice & couturière. Logo, univers de marque et visuels réseaux sociaux.",
+    "visible": true,
+    "order": 5
+  },
+  {
+    "slug": "213-huma",
+    "title": "213 HUMA",
+    "category": "Projet associatif",
+    "year": "2024",
+    "image": "/images/projects/huma.png",
+    "description": "Direction artistique pour un projet associatif humanitaire. Identité visuelle engagée et supports imprimés.",
+    "visible": true,
+    "order": 6
+  },
+  {
+    "slug": "muzey",
+    "title": "Muzey",
+    "category": "Charte graphique",
+    "year": "2024",
+    "image": "/images/pdv1.png",
+    "description": "Identité visuelle complète pour un projet musical. Logotype, palette chromatique et assets digitaux.",
+    "visible": true,
+    "order": 7
+  }
+]
